@@ -55,15 +55,15 @@ class ClockPainter extends AnimatedPainter {
 
   // These are my paintbrushes
   final Paint standardPaint = Paint()..color = Colors.black;
-  final Paint sunBasePaint = Paint()..color = Colors.deepOrange;
-  final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.lighten;
-  final Paint sunLayer2Paint = Paint()..blendMode = BlendMode.multiply;
-  final Paint sunLayer3Paint = Paint()..blendMode = BlendMode.softLight;
+  Paint get sunBasePaint => Paint()..color = Colors.orange;
+  Paint get sunLayer1Paint => Paint()..blendMode = BlendMode.hardLight;
+  Paint get sunLayer2Paint => Paint()..blendMode = BlendMode.multiply;
+  Paint get sunLayer3Paint => Paint()..blendMode = BlendMode.softLight;
   final Paint starsPaint = Paint()
     ..color = Colors.white
     ..strokeWidth = 1;
 
-  final List<Star> stars = List.generate(1000, (idx) => Star());
+  final List<Star> stars = List.generate(3000, (idx) => Star());
 
   bool get loaded => imageMap.length == images.length;
   double time = 0;
@@ -186,21 +186,29 @@ class ClockPainter extends AnimatedPainter {
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * -50,
+        rotation: earthOrbit * 4,
+        paint: sunLayer1Paint);
+
+imageMap["sun_1"].drawRotatedSquare(
+        canvas: canvas,
+        size: sunDiameter,
+        offset: sunOffset,
+        rotation: earthOrbit * -4,
         paint: sunLayer1Paint);
 
     imageMap["sun_2"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * 15,
+        rotation: earthOrbit * 3,
         paint: sunLayer2Paint);
+    
 
     imageMap["sun_3"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * 30,
+        rotation: earthOrbit * -3,
         paint: sunLayer3Paint);
   }
 
