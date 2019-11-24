@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 
 typedef AnimatedPainter PainterBuilder();
+
+///
+/// AnimatedPainter
+///
+/// Implement this interface to get an animated Canvas.
+/// Use with AnimatedPaint() widget
+///
+abstract class AnimatedPainter {
+  void init();
+  void paint(Canvas canvas, Size size);
+}
+
+///
+/// AnimatedPaint
+///
+///
 class AnimatedPaint extends StatefulWidget {
   final PainterBuilder painter;
 
@@ -14,8 +30,6 @@ class _AnimatedPainterState extends State<AnimatedPaint>
     with SingleTickerProviderStateMixin {
   AnimatedPainter painter;
   AnimationController controller;
-  double frameTime = DateTime.now().millisecondsSinceEpoch / 1000.0;
-  double frameDelta;
   @override
   void initState() {
     super.initState();
@@ -40,29 +54,21 @@ class _AnimatedPainterState extends State<AnimatedPaint>
         height: double.infinity,
         child: AnimatedBuilder(
             animation: Tween<double>(begin: 0, end: 1).animate(controller),
-            builder: (BuildContext context, Widget child) {
-              final newFrameTime =
-                  DateTime.now().millisecondsSinceEpoch / 1000.0;
-              frameDelta = newFrameTime - frameTime;
-              frameTime = newFrameTime;
-              return CustomPaint(painter: CustomPaintProxy(painter));
-            }));
+            builder: (BuildContext context, Widget child) =>
+                CustomPaint(painter: _CustomPaintProxy(painter))));
   }
 }
 
-abstract class AnimatedPainter {
-  void init();
-  void paint(Canvas canvas, Size size);
-}
-
-class CustomPaintProxy extends CustomPainter {
+/// 
+/// _CustomPaintProxy
+/// 
+/// Adapts a CustomPaint to the AnimatedPaint interface
+class _CustomPaintProxy extends CustomPainter {
   final AnimatedPainter painter;
-  CustomPaintProxy(this.painter);
+  _CustomPaintProxy(this.painter);
 
   @override
-  void paint(Canvas canvas, Size size) {
-    painter.paint(canvas, size);
-  }
+  void paint(Canvas canvas, Size size) => painter.paint(canvas, size);
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;

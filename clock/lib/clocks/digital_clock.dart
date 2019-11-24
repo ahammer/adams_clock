@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
-import 'package:adams_clock/extensions.dart';
+import 'package:adams_clock/util/extensions.dart';
 
 ///
 /// This is the Widget-Based, Themed, Clock display
@@ -99,25 +99,32 @@ class _TimeWidgetState extends State<TimeWidget> {
       digits[4] = '0';
       digits[5] = secondsString.substring(0, 1);
     }
-
+ final theme = Theme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        DigitView(digit: digits[0]),
-        DigitView(digit: digits[1]),
-        Container(width: 4, height: 1),
-        DigitView(digit: digits[2]),
-        DigitView(digit: digits[3]),
-        Container(width: 4, height: 1),
-        DigitView(digit: digits[4]),
-        DigitView(digit: digits[5]),
+        ...getDigitArray(digits[0],digits[1],digits[2],digits[3],digits[4],digits[5],theme.colorScheme.primary, theme.colorScheme.onPrimary)
       ],
     );
   }
 }
 
+
+List<Widget> getDigitArray(String a, b, c, d, e, f, Color bgColor, Color textColor) => [
+        DigitView(digit: a),
+        DigitView(digit: b),
+        Container(width: 4, height: 1),
+        DigitView(digit: c),
+        DigitView(digit: c),
+        Container(width: 4, height: 1),
+        DigitView(digit: d),
+        DigitView(digit: e),
+
+];
+
 class DigitView extends StatefulWidget {
   final String digit;
+  
 
   const DigitView({Key key, this.digit}) : super(key: key);
 

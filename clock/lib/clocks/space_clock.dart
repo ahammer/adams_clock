@@ -1,14 +1,12 @@
 import 'dart:math';
 import 'dart:ui';
-
-import 'package:adams_clock/animated_painter.dart';
+import 'package:adams_clock/util/animated_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
-import 'extensions.dart';
-import 'package:adams_clock/extensions.dart';
+import 'package:adams_clock/util/extensions.dart';
 import 'dart:ui' as ui;
 import 'package:vector_math/vector_math_64.dart' as vector;
-import 'package:adams_clock/image_loader.dart';
+import 'package:adams_clock/util/image_loader.dart';
 
 const List<String> images = [
   "earth",
@@ -46,7 +44,6 @@ class ClockScene extends StatelessWidget {
         painter: () => ClockPainter(),
       );
 }
-
 
 class ClockPainter extends AnimatedPainter {
   final Map<String, ui.Image> imageMap = Map();
@@ -225,8 +222,8 @@ class ClockPainter extends AnimatedPainter {
 
     List.generate(steps, (idx) => idx / steps.toDouble()).forEach((interval) {
       starsPaint
-      ..color = Colors.white.withOpacity(1 - interval)
-      ..strokeWidth = interval*2+1;
+        ..color = Colors.white.withOpacity(1 - interval)
+        ..strokeWidth = interval * 2 + 1;
 
       canvas.drawPoints(
           PointMode.points,
