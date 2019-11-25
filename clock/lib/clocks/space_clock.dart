@@ -144,8 +144,8 @@ class ClockPainter extends AnimatedPainter {
     double osunx = cos(sunOrbit - angleOffset) * size.width * 1.2;
     double osuny = sin(sunOrbit - angleOffset) * size.height * 1.7;
 
-    double oearthx = cos(earthOrbit - angleOffset) * size.width / 3;
-    double oearthy = sin(earthOrbit - angleOffset) * size.height / 3;
+    double oearthx = cos(earthOrbit - angleOffset) * size.width / 4;
+    double oearthy = sin(earthOrbit - angleOffset) * size.height / 4;
 
     double omoonx = cos(moonOrbit - angleOffset) * size.width / 4;
     double omoony = sin(moonOrbit - angleOffset) * size.height / 4;
@@ -164,7 +164,7 @@ class ClockPainter extends AnimatedPainter {
       double oy2, double earthOrbit) {
     imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width / 3,
+        size: size.width / 4,
         offset: Offset(size.width / 2 + ox + ox2, size.height / 2 + oy + oy2),
         rotation: earthOrbit * 20,
         paint: standardPaint);
@@ -174,7 +174,7 @@ class ClockPainter extends AnimatedPainter {
       Canvas canvas, Size size, double ox, double oy, double earthOrbit) {
     imageMap["earth"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * 0.75,
+        size: size.width * 0.50,
         offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
         rotation: earthOrbit * 4,
         paint: standardPaint);

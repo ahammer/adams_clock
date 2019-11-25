@@ -15,15 +15,13 @@ import 'package:intl/intl.dart';
 final DateFormat timeFormat = DateFormat("HH:mm:ss");
 final DateFormat dateFormat = DateFormat.yMd();
 
-class TextClock extends StatelessWidget {
+class LocationWidget extends StatelessWidget {
   final ClockModel model;
 
-  const TextClock({Key key, @required this.model}) : super(key: key);
+  const LocationWidget({Key key, @required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Card(
       color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
       child: Container(
@@ -32,51 +30,71 @@ class TextClock extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(model.location, style: Theme.of(context).textTheme.subhead),
-              Container(width: 4, height: 2),
+              Text(model.location,
+                  style: Theme.of(context).textTheme.subhead.copyWith(
+                      fontWeight: FontWeight.bold, shadows: [Shadow()])),
               Text("${model.temperatureString} ${model.weatherEmoji}",
                   style: Theme.of(context).textTheme.subhead),
-              Container(width: 4, height: 2),
               Text("${model.lowString} - ${model.highString}",
                   style:
                       Theme.of(context).textTheme.body1.copyWith(fontSize: 10)),
-              Container(width: 4, height: 6),
-              TickerWidget(
-                builder: () => timeFormat.format(DateTime.now()),
-                digitBuilder: (glyph) => Material(
-                    elevation: 2,
-                    key: ValueKey(glyph),
-                    child: Container(
-                        width: 16,
-                        child: Center(
-                            child: Text(
-                          glyph,
-                          style: theme.textTheme.subhead.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Glegoo"),
-                        )))),
-              ),
-              Container(width: 4, height: 2),
-              TickerWidget(
-                builder: () =>
-                    dateFormat.format(DateTime.now()).replaceRange(6, 8, ""),
-                digitBuilder: (glyph) => Material(
-                    elevation: 2,
-                    key: ValueKey(glyph),
-                    child: Container(
-                        width: 16,
-                        child: Center(
-                            child: Text(
-                          glyph,
-                          style: theme.textTheme.subhead
-                              .copyWith(fontFamily: "Glegoo"),
-                        )))),
-              ),
-              Container(width: 4, height: 2),
+              
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+
+class DateWidget extends StatelessWidget {
+  const DateWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return TickerWidget(
+      builder: () => dateFormat.format(DateTime.now()).replaceRange(6, 8, ""),
+      digitBuilder: (glyph) => Material(
+          elevation: 2,
+          key: ValueKey(glyph),
+          child: Container(
+              width: 16,
+              child: Center(
+                  child: Text(
+                glyph,
+                style: theme.textTheme.subhead.copyWith(fontFamily: "Glegoo"),
+              )))),
+    );
+  }
+}
+
+class TimeWidget extends StatelessWidget {
+  const TimeWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return TickerWidget(
+      builder: () => timeFormat.format(DateTime.now()),
+      digitBuilder: (glyph) => Material(
+          elevation: 2,
+          key: ValueKey(glyph),
+          child: Container(
+              width: 16,
+              child: Center(
+                  child: Text(
+                glyph,
+                style: theme.textTheme.subhead.copyWith(
+                    fontWeight: FontWeight.bold, fontFamily: "Glegoo"),
+              )))),
     );
   }
 }

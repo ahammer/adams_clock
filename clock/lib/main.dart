@@ -5,17 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/customizer.dart';
 
 void main() {
-  /// 
+  ///
   ///  For windows dev
-  /// 
+  ///
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
 
-  
   runApp(ClockCustomizer((model) => Stack(
         children: <Widget>[
           ClockScene(model: model),
           Align(
-              alignment: Alignment.bottomRight, child: TextClock(model: model))
+              alignment: Alignment.topRight,
+              child: LocationWidget(model: model)),
+          Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Opacity(opacity:0.75, child: Container(height:32, child: TimeWidget())),
+              )),
+          Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Opacity(opacity:0.75, child: Container(height:32, child: DateWidget())),
+              ))
         ],
       )));
 }
