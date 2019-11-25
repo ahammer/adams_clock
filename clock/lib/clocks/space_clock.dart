@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:adams_clock/util/animated_painter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_clock_helper/model.dart';
 import 'package:adams_clock/util/extensions.dart';
 import 'dart:ui' as ui;
 import 'package:vector_math/vector_math_64.dart' as vector;
@@ -65,9 +64,9 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   final Paint standardPaint = Paint()..color = Colors.black;
   final Paint sunBasePaint = Paint()..color = Colors.orange;
-  final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.hardLight;
-  final Paint sunLayer2Paint = Paint()..blendMode = BlendMode.multiply;
-  final Paint sunLayer3Paint = Paint()..blendMode = BlendMode.multiply;
+  final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.lighten;
+  final Paint sunLayer2Paint = Paint()..blendMode = BlendMode.overlay;
+  final Paint sunLayer3Paint = Paint()..blendMode = BlendMode.lighten;
   final Paint starsPaint = Paint()
     ..color = Colors.white
     ..strokeWidth = 1;
