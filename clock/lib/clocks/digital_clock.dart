@@ -1,4 +1,4 @@
-import 'package:adams_clock/clocks/ticker.dart';
+import 'package:adams_clock/util/ticker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
@@ -13,12 +13,11 @@ import 'package:intl/intl.dart';
 final DateFormat _timeFormat = DateFormat("HH:mm:ss");
 final DateFormat _dateFormat = DateFormat.yMd();
 
-
 ///
 /// LocationWidget
-/// 
+///
 /// Shows the City/Temp/Min/Max and Current Weather
-/// 
+///
 class LocationWidget extends StatelessWidget {
   final ClockModel model;
 
@@ -26,35 +25,35 @@ class LocationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-      color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(model.location,
-                  style: Theme.of(context).textTheme.subhead.copyWith(
-                      fontWeight: FontWeight.bold, shadows: [Shadow()])),
-              Text("${model.temperatureString} ${model.weatherEmoji}",
-                  style: Theme.of(context).textTheme.subhead),
-              Text("${model.lowString} - ${model.highString}",
-                  style:
-                      Theme.of(context).textTheme.body1.copyWith(fontSize: 10)),
-              
-            ],
+        color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(model.location,
+                    style: Theme.of(context).textTheme.subhead.copyWith(
+                        fontWeight: FontWeight.bold, shadows: [Shadow()])),
+                Text("${model.temperatureString} ${model.weatherEmoji}",
+                    style: Theme.of(context).textTheme.subhead),
+                Text("${model.lowString} - ${model.highString}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .body1
+                        .copyWith(fontSize: 10)),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
 }
-
 
 ///
 /// Date Widget
-/// 
+///
 /// A Ticker Widget for the Date in MM/DD/YYY format
-/// 
+///
 class DateWidget extends StatelessWidget {
   const DateWidget({
     Key key,
@@ -82,9 +81,9 @@ class DateWidget extends StatelessWidget {
 
 ///
 /// Time Widget
-/// 
+///
 /// A Ticker widget for the time in HH:MM:SS format
-/// 
+///
 class TimeWidget extends StatelessWidget {
   const TimeWidget({
     Key key,
