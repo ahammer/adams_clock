@@ -183,8 +183,28 @@ class SpaceClockPainter extends AnimatedPainter {
         paint: standardPaint);
   }
 
+final Gradient gradient = new RadialGradient(
+      colors: <Color>[
+        Colors.green.withOpacity(1.0),
+        Colors.green.withOpacity(0.3),
+        Colors.yellow.withOpacity(0.2),
+        Colors.red.withOpacity(0.1),
+        Colors.red.withOpacity(0.0),
+      ],
+      stops: [
+        0.0,
+        0.5,
+        0.7,
+        0.9,
+        1.0,
+      ],
+    );
+
+ 
+
   void drawEarth(
       Canvas canvas, Size size, double ox, double oy, double earthOrbit) {
+        standardPaint.shader = gradient.createShader(Rect.fromCircle(center: Offset(ox,oy), radius: size.width * 0.25));
     imageMap["earth"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * 0.50,

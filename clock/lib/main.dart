@@ -27,7 +27,7 @@ void main() {
                 padding: const EdgeInsets.all(4.0),
                 child: Opacity(
                     opacity: 0.75,
-                    child: Container(height: 32, child: TimeWidget())),
+                    child: Container(height: 32, child: TimeWidget(model: model,))),
               )),
 
           // The Date Widget

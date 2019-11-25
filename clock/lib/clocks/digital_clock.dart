@@ -10,7 +10,8 @@ import 'package:intl/intl.dart';
 ///
 /// It shows actual easy to read information
 ///
-final DateFormat _timeFormat = DateFormat("HH:mm:ss");
+final DateFormat _timeFormat24 = DateFormat("HH:mm:ss");
+final DateFormat _timeFormat12 = DateFormat("hh:mm:ss");
 final DateFormat _dateFormat = DateFormat.yMd();
 
 ///
@@ -85,8 +86,9 @@ class DateWidget extends StatelessWidget {
 /// A Ticker widget for the time in HH:MM:SS format
 ///
 class TimeWidget extends StatelessWidget {
+  final ClockModel model;
   const TimeWidget({
-    Key key,
+    Key key, @required this.model,
   }) : super(key: key);
 
   @override
@@ -94,7 +96,7 @@ class TimeWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return TickerWidget(
-      builder: () => _timeFormat.format(DateTime.now()),
+      builder: () => (model.is24HourFormat?_timeFormat24:_timeFormat12).format(DateTime.now()),
       digitBuilder: (glyph) => Material(
           elevation: 2,
           key: ValueKey(glyph),
