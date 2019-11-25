@@ -6,20 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:adams_clock/util/extensions.dart';
 import 'package:intl/intl.dart';
+
 ///
 /// This is the Widget-Based, Themed, Clock display
 ///
 /// It shows actual easy to read information
 ///
-final DateFormat format = DateFormat("HHmmss");
+final DateFormat timeFormat = DateFormat("HH:mm:ss");
+final DateFormat dateFormat = DateFormat.yMd();
+
 class TextClock extends StatelessWidget {
   final ClockModel model;
 
   const TextClock({Key key, @required this.model}) : super(key: key);
 
-  
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
       color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
       child: Container(
@@ -37,7 +41,38 @@ class TextClock extends StatelessWidget {
                   style:
                       Theme.of(context).textTheme.body1.copyWith(fontSize: 10)),
               Container(width: 4, height: 6),
-              TickerWidget(()=> format.format(DateTime.now()))
+              TickerWidget(
+                builder: () => timeFormat.format(DateTime.now()),
+                digitBuilder: (glyph) => Material(
+                    elevation: 2,
+                    key: ValueKey(glyph),
+                    child: Container(
+                        width: 16,
+                        child: Center(
+                            child: Text(
+                          glyph,
+                          style: theme.textTheme.subhead.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Glegoo"),
+                        )))),
+              ),
+              Container(width: 4, height: 2),
+              TickerWidget(
+                builder: () =>
+                    dateFormat.format(DateTime.now()).replaceRange(6, 8, ""),
+                digitBuilder: (glyph) => Material(
+                    elevation: 2,
+                    key: ValueKey(glyph),
+                    child: Container(
+                        width: 16,
+                        child: Center(
+                            child: Text(
+                          glyph,
+                          style: theme.textTheme.subhead
+                              .copyWith(fontFamily: "Glegoo"),
+                        )))),
+              ),
+              Container(width: 4, height: 2),
             ],
           ),
         ),

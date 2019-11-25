@@ -14,6 +14,7 @@ const List<String> images = [
   "sun_1",
   "sun_2",
   "sun_3",
+  "sun_4",
   "stars"
 ];
 
@@ -58,7 +59,7 @@ class ClockPainter extends AnimatedPainter {
   Paint get sunBasePaint => Paint()..color = Colors.orange;
   Paint get sunLayer1Paint => Paint()..blendMode = BlendMode.hardLight;
   Paint get sunLayer2Paint => Paint()..blendMode = BlendMode.multiply;
-  Paint get sunLayer3Paint => Paint()..blendMode = BlendMode.softLight;
+  Paint get sunLayer3Paint => Paint()..blendMode = BlendMode.multiply;
   final Paint starsPaint = Paint()
     ..color = Colors.white
     ..strokeWidth = 1;
@@ -186,29 +187,28 @@ class ClockPainter extends AnimatedPainter {
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * 4,
+        rotation: earthOrbit * 5 ,
         paint: sunLayer1Paint);
 
-imageMap["sun_1"].drawRotatedSquare(
+    imageMap["sun_4"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * -4,
+        rotation: earthOrbit * -5,
         paint: sunLayer1Paint);
 
     imageMap["sun_2"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * 3,
+        rotation: earthOrbit * 4,
         paint: sunLayer2Paint);
-    
 
     imageMap["sun_3"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * -3,
+        rotation: earthOrbit * -4,
         paint: sunLayer3Paint);
   }
 

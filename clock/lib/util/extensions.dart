@@ -6,6 +6,9 @@ import 'package:vector_math/vector_math_64.dart' as vector;
 
 final kTargetRect = Rect.fromCenter(center: Offset.zero, width: 1, height: 1);
 
+extension StringHelpers on String {
+  String charAt(int idx) => this.substring(idx, idx+1);
+}
 ///
 /// Image Helpers
 ///

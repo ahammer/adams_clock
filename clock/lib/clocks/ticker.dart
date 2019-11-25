@@ -2,23 +2,30 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:adams_clock/util/extensions.dart';
 
 typedef String StringBuilder();
+
 class TickerWidget extends StatefulWidget {
-  TickerWidget(this.builder);
+  final BuildDigitWidget digitBuilder;
   final StringBuilder builder;
 
-  
+  TickerWidget({this.builder, this.digitBuilder});
+
   @override
   _TickerWidgetState createState() => _TickerWidgetState();
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(ObjectFlagProperty<StringBuilder>.has('builder', builder));
+  }
 }
 
 class _TickerWidgetState extends State<TickerWidget> {
   Timer _timer;
-  
+
   @override
-  void initState() {    
+  void initState() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {});
     });
@@ -31,39 +38,29 @@ class _TickerWidgetState extends State<TickerWidget> {
     super.dispose();
   }
 
-  final DateFormat format = DateFormat("HHmmss");
   @override
   Widget build(BuildContext context) {
-    
-    final theme = Theme.of(context);    
+    final string = widget.builder();
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[        
-        ...getDigitArray(widget.builder(), theme.colorScheme.primary, theme.colorScheme.onPrimary)
+      children: <Widget>[
+        ...List.generate(
+            string.length,
+            (idx) => DigitView(
+                builder: widget.digitBuilder, digit: string.charAt(idx)))
       ],
     );
   }
 }
 
-
-List<Widget> getDigitArray(
-        String digits, Color bgColor, Color textColor) =>
-    [
-
-      DigitView(digit: digits.substring(0,1)),
-      DigitView(digit: digits.substring(1,2)),
-      Container(width: 4, height: 1),
-      DigitView(digit: digits.substring(2,3)),
-      DigitView(digit: digits.substring(3,4)),
-      Container(width: 4, height: 1),
-      DigitView(digit: digits.substring(4,5)),
-      DigitView(digit: digits.substring(5,6)),
-    ];
+typedef Widget BuildDigitWidget(String value);
 
 class DigitView extends StatelessWidget {
   final String digit;
+  final BuildDigitWidget builder;
 
-  const DigitView({Key key, this.digit}) : super(key: key);
+  const DigitView({Key key, @required this.digit, @required this.builder})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,40 +69,9 @@ class DigitView extends StatelessWidget {
         AnimatedSwitcher(
             transitionBuilder: (child, animation) => DigitTransition(
                 child: child, scale: animation, alignment: Alignment.center),
-            child: Digit(key: ValueKey(digit), digit: digit),                
-            duration: Duration(milliseconds: 200)),
+            child: builder(digit),
+            duration: Duration(milliseconds: 500)),
       ],
-    );
-  }
-}
-
-class Digit extends StatelessWidget {
-  final String digit;
-  const Digit({
-    Key key,
-    this.digit,
-    this.widget,
-  }) : super(key: key);
-
-  final DigitView widget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.5),
-      child: Material(
-          elevation: 3,
-          child: Container(
-              width: 20,
-              height: 20,
-              color: Theme.of(context).colorScheme.secondary,
-              child: Center(
-                  child: Text(
-                digit,
-                style: Theme.of(context).textTheme.subhead.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSecondary),
-              )))),
     );
   }
 }
