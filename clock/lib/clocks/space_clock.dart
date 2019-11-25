@@ -201,28 +201,28 @@ class SpaceClockPainter extends AnimatedPainter {
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * 60,
+        rotation: sunRotation * 120,
         paint: sunLayer1Paint);
 
     imageMap["sun_4"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * -30,
+        rotation: sunRotation * -60,
         paint: sunLayer1Paint);
 
     imageMap["sun_2"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * 45,
+        rotation: sunRotation * 90,
         paint: sunLayer2Paint);
 
     imageMap["sun_3"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * -50,
+        rotation: sunRotation * -100,
         paint: sunLayer3Paint);
   }
 
