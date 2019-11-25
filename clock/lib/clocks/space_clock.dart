@@ -19,16 +19,20 @@ const List<String> images = [
 ];
 
 final kRandom = Random();
+const kNumberStars = 1000;
 
+///
+/// Represents a Star
 class Star {
+  //Randomly positioned (and transformed to be between -0.5 and 0.5 to make the perspective transform look good)
   final x = kRandom.nextDouble() - 0.5,
       y = kRandom.nextDouble() - 0.5,
       z = kRandom.nextDouble();
 
-  // Z changes over time
-  // Time is a double represent time in ms since the epoch
+  //Z position changes over time (we are travelling through space)
   double zForTime(double time) => (z - (time / 24)).fraction();
 
+  //Projects to 2D space, into an offset (still in the -0.5 to 0.5 range)
   Offset project(double time, vector.Matrix4 perspective) {
     vector.Vector3 v = vector.Vector3(x, y, zForTime(time))
       ..applyProjection(perspective);
@@ -36,25 +40,30 @@ class Star {
   }
 }
 
-class ClockScene extends StatelessWidget {
-  final ClockModel model;
-  ClockScene({Key key, @required this.model}) : super(key: key);
+class SpaceClockScene extends StatelessWidget {
+  
+  SpaceClockScene({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => AnimatedPaint(
-        painter: () => ClockPainter(),
+        painter: () => SpaceClockPainter(),
       );
 }
 
-class ClockPainter extends AnimatedPainter {
+class SpaceClockPainter extends AnimatedPainter {
   final Map<String, ui.Image> imageMap = Map();
 
+  ///
+  /// The paint for the "Loading" screen text
+  /// 
   final TextPainter loadingTextPaint = TextPainter(
     text: TextSpan(
         text: "Loading", style: TextStyle(color: Colors.white, fontSize: 10)),
   );
 
-  // These are my paintbrushes
+  ///
+  /// These paints serve as the brushes
+  /// 
   final Paint standardPaint = Paint()..color = Colors.black;
   final Paint sunBasePaint = Paint()..color = Colors.orange;
   final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.hardLight;
@@ -64,7 +73,10 @@ class ClockPainter extends AnimatedPainter {
     ..color = Colors.white
     ..strokeWidth = 1;
 
-  final List<Star> stars = List.generate(1000, (idx) => Star());
+  ///
+  /// The stars we want to draw
+  /// 
+  final List<Star> stars = List.generate(kNumberStars, (idx) => Star());
 
   bool get loaded => imageMap.length == images.length;
   double time = 0;

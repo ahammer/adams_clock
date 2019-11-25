@@ -12,21 +12,32 @@ void main() {
 
   runApp(ClockCustomizer((model) => Stack(
         children: <Widget>[
-          ClockScene(model: model),
+          //The space clock
+          SpaceClockScene(),
+
+          // The Location/Temp widget
           Align(
               alignment: Alignment.topRight,
               child: LocationWidget(model: model)),
+
+          // The Time widget
           Align(
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: Opacity(opacity:0.75, child: Container(height:32, child: TimeWidget())),
+                child: Opacity(
+                    opacity: 0.75,
+                    child: Container(height: 32, child: TimeWidget())),
               )),
+
+          // The Date Widget
           Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: Opacity(opacity:0.75, child: Container(height:32, child: DateWidget())),
+                child: Opacity(
+                    opacity: 0.75,
+                    child: Container(height: 32, child: DateWidget())),
               ))
         ],
       )));

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:adams_clock/clocks/ticker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,17 +10,22 @@ import 'package:intl/intl.dart';
 ///
 /// It shows actual easy to read information
 ///
-final DateFormat timeFormat = DateFormat("HH:mm:ss");
-final DateFormat dateFormat = DateFormat.yMd();
+final DateFormat _timeFormat = DateFormat("HH:mm:ss");
+final DateFormat _dateFormat = DateFormat.yMd();
 
+
+///
+/// LocationWidget
+/// 
+/// Shows the City/Temp/Min/Max and Current Weather
+/// 
 class LocationWidget extends StatelessWidget {
   final ClockModel model;
 
   const LocationWidget({Key key, @required this.model}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
       child: Container(
         child: Padding(
@@ -44,10 +47,14 @@ class LocationWidget extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 
+///
+/// Date Widget
+/// 
+/// A Ticker Widget for the Date in MM/DD/YYY format
+/// 
 class DateWidget extends StatelessWidget {
   const DateWidget({
     Key key,
@@ -58,7 +65,7 @@ class DateWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return TickerWidget(
-      builder: () => dateFormat.format(DateTime.now()).replaceRange(6, 8, ""),
+      builder: () => _dateFormat.format(DateTime.now()).replaceRange(6, 8, ""),
       digitBuilder: (glyph) => Material(
           elevation: 2,
           key: ValueKey(glyph),
@@ -73,6 +80,11 @@ class DateWidget extends StatelessWidget {
   }
 }
 
+///
+/// Time Widget
+/// 
+/// A Ticker widget for the time in HH:MM:SS format
+/// 
 class TimeWidget extends StatelessWidget {
   const TimeWidget({
     Key key,
@@ -83,7 +95,7 @@ class TimeWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return TickerWidget(
-      builder: () => timeFormat.format(DateTime.now()),
+      builder: () => _timeFormat.format(DateTime.now()),
       digitBuilder: (glyph) => Material(
           elevation: 2,
           key: ValueKey(glyph),
