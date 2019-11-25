@@ -14,7 +14,8 @@ const List<String> images = [
   "sun_2",
   "sun_3",
   "sun_4",
-  "stars"
+  "stars",
+  "shadow"
 ];
 
 final kRandom = Random();
@@ -63,7 +64,7 @@ class SpaceClockPainter extends AnimatedPainter {
   /// These paints serve as the brushes
   ///
   final Paint standardPaint = Paint()..color = Colors.black;
-  final Paint sunBasePaint = Paint()..color = Colors.orange;
+  final Paint sunBasePaint = Paint()..color = Color.fromARGB(255, 128, 48, 24);
   final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.lighten;
   final Paint sunLayer2Paint = Paint()..blendMode = BlendMode.overlay;
   final Paint sunLayer3Paint = Paint()..blendMode = BlendMode.lighten;
@@ -152,8 +153,8 @@ class SpaceClockPainter extends AnimatedPainter {
     // They travel in an Oval, in proportion to screen size
 
     //Sun orbits slightly outside the screen, because it's huge
-    double osunx = cos(sunOrbit - angleOffset) * size.width * 1.7;
-    double osuny = sin(sunOrbit - angleOffset) * size.height * 1.7;
+    double osunx = cos(sunOrbit - angleOffset) * size.width * 1.1;
+    double osuny = sin(sunOrbit - angleOffset) * size.height * 1.4;
 
     //Earth orbits 1/4 the screen dimension around the center
     double oearthx = cos(earthOrbit - angleOffset) * size.width / 4;
@@ -166,49 +167,43 @@ class SpaceClockPainter extends AnimatedPainter {
     final sunDiameter = size.width * 2;
 
     drawBackground(canvas, size, earthOrbit);
-    drawStars(canvas, size);
+    drawStars(canvas, size, earthOrbit);
     drawSun(canvas, size, osunx, osuny, sunDiameter, sunOrbit);
-    drawEarth(canvas, size, oearthx, oearthy, earthOrbit);
-    drawMoon(canvas, size, oearthx, omoonx, oearthy, omoony, earthOrbit);
+    drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit);
+    drawMoon(
+        canvas, size, oearthx, omoonx, oearthy, omoony, earthOrbit, sunOrbit);
   }
 
   void drawMoon(Canvas canvas, Size size, double ox, double ox2, double oy,
-      double oy2, double earthOrbit) {
+      double oy2, double earthOrbit, double sunOrbit) {
     imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
         size: size.width / 4,
         offset: Offset(size.width / 2 + ox + ox2, size.height / 2 + oy + oy2),
         rotation: earthOrbit * 20,
         paint: standardPaint);
+
+    imageMap["shadow"].drawRotatedSquare(
+        canvas: canvas,
+        size: size.width / 4 ,
+        offset: Offset(size.width / 2 + ox + ox2, size.height / 2 + oy + oy2),
+        rotation: sunOrbit,
+        paint: standardPaint);
   }
 
-final Gradient gradient = new RadialGradient(
-      colors: <Color>[
-        Colors.green.withOpacity(1.0),
-        Colors.green.withOpacity(0.3),
-        Colors.yellow.withOpacity(0.2),
-        Colors.red.withOpacity(0.1),
-        Colors.red.withOpacity(0.0),
-      ],
-      stops: [
-        0.0,
-        0.5,
-        0.7,
-        0.9,
-        1.0,
-      ],
-    );
-
- 
-
-  void drawEarth(
-      Canvas canvas, Size size, double ox, double oy, double earthOrbit) {
-        standardPaint.shader = gradient.createShader(Rect.fromCircle(center: Offset(ox,oy), radius: size.width * 0.25));
+  void drawEarth(Canvas canvas, Size size, double ox, double oy,
+      double earthOrbit, double sunOrbit) {
     imageMap["earth"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * 0.50,
         offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
         rotation: earthOrbit * 4,
+        paint: standardPaint);
+    imageMap["shadow"].drawRotatedSquare(
+        canvas: canvas,
+        size: size.width * 0.485,
+        offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
+        rotation: sunOrbit,
         paint: standardPaint);
   }
 
@@ -250,13 +245,14 @@ final Gradient gradient = new RadialGradient(
         canvas: canvas,
         size: size.width + size.height,
         offset: Offset(size.width / 2, size.height / 2),
-        rotation: earthOrbit * -5,
+        rotation: earthOrbit * -20,
         paint: standardPaint);
   }
 
-  void drawStars(Canvas canvas, Size size) {
+  void drawStars(Canvas canvas, Size size, double rotation) {
     final projection =
         vector.makePerspectiveMatrix(140, size.width / size.height, 0, 1);
+    projection.rotateZ(rotation * -20);
     final time = DateTime.now().millisecondsSinceEpoch / 1000.0;
     final int steps = 16;
     final double intervalSize = 1.0 / steps;

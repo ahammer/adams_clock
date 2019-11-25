@@ -48,6 +48,7 @@ flutter:
    - assets/sun_3.png
    - assets/sun_4.png
    - assets/earth.png
+   - assets/shadow.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
