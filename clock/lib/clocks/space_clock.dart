@@ -41,7 +41,6 @@ class Star {
 }
 
 class SpaceClockScene extends StatelessWidget {
-  
   SpaceClockScene({Key key}) : super(key: key);
 
   @override
@@ -55,7 +54,7 @@ class SpaceClockPainter extends AnimatedPainter {
 
   ///
   /// The paint for the "Loading" screen text
-  /// 
+  ///
   final TextPainter loadingTextPaint = TextPainter(
     text: TextSpan(
         text: "Loading", style: TextStyle(color: Colors.white, fontSize: 10)),
@@ -63,7 +62,7 @@ class SpaceClockPainter extends AnimatedPainter {
 
   ///
   /// These paints serve as the brushes
-  /// 
+  ///
   final Paint standardPaint = Paint()..color = Colors.black;
   final Paint sunBasePaint = Paint()..color = Colors.orange;
   final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.hardLight;
@@ -75,7 +74,7 @@ class SpaceClockPainter extends AnimatedPainter {
 
   ///
   /// The stars we want to draw
-  /// 
+  ///
   final List<Star> stars = List.generate(kNumberStars, (idx) => Star());
 
   bool get loaded => imageMap.length == images.length;
@@ -152,22 +151,24 @@ class SpaceClockPainter extends AnimatedPainter {
 
     // These are the offsets from center for the earth/sun/moon
     // They travel in an Oval, in proportion to screen size
-    // The moon also travels
-    double osunx = cos(sunOrbit - angleOffset) * size.width * 1.2;
+
+    //Sun orbits slightly outside the screen, because it's huge
+    double osunx = cos(sunOrbit - angleOffset) * size.width * 1.7;
     double osuny = sin(sunOrbit - angleOffset) * size.height * 1.7;
 
+    //Earth orbits 1/4 the screen dimension around the center
     double oearthx = cos(earthOrbit - angleOffset) * size.width / 4;
     double oearthy = sin(earthOrbit - angleOffset) * size.height / 4;
 
+    //Moon orbits 1/4 a screen distance away from the earth as well
     double omoonx = cos(moonOrbit - angleOffset) * size.width / 4;
     double omoony = sin(moonOrbit - angleOffset) * size.height / 4;
 
-    final sunOffset = Offset(size.width / 2 + osunx, size.height / 2 + osuny);
     final sunDiameter = size.width * 2;
 
     drawBackground(canvas, size, earthOrbit);
     drawStars(canvas, size);
-    drawSun(canvas, sunOffset, sunDiameter, sunOrbit, earthOrbit);
+    drawSun(canvas, size, osunx, osuny, sunDiameter, sunOrbit);
     drawEarth(canvas, size, oearthx, oearthy, earthOrbit);
     drawMoon(canvas, size, oearthx, omoonx, oearthy, omoony, earthOrbit);
   }
@@ -192,35 +193,36 @@ class SpaceClockPainter extends AnimatedPainter {
         paint: standardPaint);
   }
 
-  void drawSun(Canvas canvas, Offset sunOffset, double sunDiameter,
-      double sunRotation, double earthOrbit) {
+  void drawSun(Canvas canvas, Size size, double x, double y, double sunDiameter,
+      double sunRotation) {
+    final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
     canvas.drawCircle(sunOffset, sunDiameter / 2 * 0.95, sunBasePaint);
     imageMap["sun_1"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * 5 ,
+        rotation: sunRotation * 60,
         paint: sunLayer1Paint);
 
     imageMap["sun_4"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * -5,
+        rotation: sunRotation * -30,
         paint: sunLayer1Paint);
 
     imageMap["sun_2"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * 4,
+        rotation: sunRotation * 45,
         paint: sunLayer2Paint);
 
     imageMap["sun_3"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: earthOrbit * -4,
+        rotation: sunRotation * -50,
         paint: sunLayer3Paint);
   }
 
