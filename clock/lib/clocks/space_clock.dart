@@ -56,15 +56,15 @@ class ClockPainter extends AnimatedPainter {
 
   // These are my paintbrushes
   final Paint standardPaint = Paint()..color = Colors.black;
-  Paint get sunBasePaint => Paint()..color = Colors.orange;
-  Paint get sunLayer1Paint => Paint()..blendMode = BlendMode.hardLight;
-  Paint get sunLayer2Paint => Paint()..blendMode = BlendMode.multiply;
-  Paint get sunLayer3Paint => Paint()..blendMode = BlendMode.multiply;
+  final Paint sunBasePaint = Paint()..color = Colors.orange;
+  final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.hardLight;
+  final Paint sunLayer2Paint = Paint()..blendMode = BlendMode.multiply;
+  final Paint sunLayer3Paint = Paint()..blendMode = BlendMode.multiply;
   final Paint starsPaint = Paint()
     ..color = Colors.white
     ..strokeWidth = 1;
 
-  final List<Star> stars = List.generate(3000, (idx) => Star());
+  final List<Star> stars = List.generate(1000, (idx) => Star());
 
   bool get loaded => imageMap.length == images.length;
   double time = 0;
@@ -225,8 +225,8 @@ class ClockPainter extends AnimatedPainter {
     final projection =
         vector.makePerspectiveMatrix(140, size.width / size.height, 0, 1);
     final time = DateTime.now().millisecondsSinceEpoch / 1000.0;
-    int steps = 10;
-    double intervalSize = 1.0 / steps;
+    final int steps = 16;
+    final double intervalSize = 1.0 / steps;
 
     List.generate(steps, (idx) => idx / steps.toDouble()).forEach((interval) {
       starsPaint
