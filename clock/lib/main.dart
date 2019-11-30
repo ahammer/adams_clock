@@ -1,8 +1,11 @@
-import 'package:adams_clock/clocks/digital_clock.dart';
+import 'package:flutter_clock_helper/model.dart';
+import 'package:intl/intl.dart';
 import 'package:adams_clock/clocks/space_clock.dart';
+import 'package:adams_clock/util/ticker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/customizer.dart';
+import 'package:adams_clock/util/extensions.dart';
 
 void main() {
   ///
@@ -10,36 +13,63 @@ void main() {
   ///
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
 
+  final DateFormat _timeFormat24 = DateFormat("HH:mm:ss");
+  final DateFormat _timeFormat12 = DateFormat("hh:mm:ss");
+  final DateFormat _dateFormat = DateFormat.yMd();
+
+  final StringBuilder buildTime24String =
+      () => _timeFormat24.format(DateTime.now());
+  final StringBuilder buildTime12String =
+      () => _timeFormat12.format(DateTime.now());
+  final StringBuilder buildDateString =
+      () => _dateFormat.format(DateTime.now());
+  String buildWeatherTickerText(ClockModel model) {
+    final phase = (DateTime.now().second/5).round() % 3;
+    
+    String currentPart;
+    if (phase == 0) {
+      currentPart = "now ${model.temperatureString}";
+    } else if (phase == 1) {
+      currentPart = "low ${model.lowString}";      
+    } else if (phase == 2) {
+      currentPart = "high ${model.highString}";
+    }
+
+    String buffer = "           ";
+    String output = "$currentPart";
+
+    return model.weatherEmoji+buffer.replaceRange(buffer.length-output.length, buffer.length, output);
+  }
+
   runApp(ClockCustomizer((model) => Stack(
         children: <Widget>[
           //The space clock
           SpaceClockScene(),
 
-          // The Location/Temp widget
+          // The Time widget
           Align(
               alignment: Alignment.topRight,
-              child: LocationWidget(model: model)),
+              child: StyledTicker(
+                  builder: () => buildWeatherTickerText(model))),
+
+          // The Location
+          Align(
+              alignment: Alignment.topLeft,
+              child: StyledTicker(
+                  builder: () => model.location)),
 
           // The Time widget
           Align(
               alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Opacity(
-                    opacity: 0.75,
-                    child:
-                        Container(height: 32, child: TimeWidget(model: model))),
-              )),
+              child: StyledTicker(
+                  builder: model.is24HourFormat
+                      ? buildTime24String
+                      : buildTime12String)),
 
           // The Date Widget
           Align(
               alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Opacity(
-                    opacity: 0.75,
-                    child: Container(height: 32, child: DateWidget())),
-              ))
+              child: StyledTicker(builder: buildDateString))
         ],
       )));
 }

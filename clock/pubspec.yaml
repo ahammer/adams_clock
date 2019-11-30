@@ -63,10 +63,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Glegoo
+    - family: NovaMono
       fonts:
-        - asset: assets/Glegoo-Regular.ttf
-        - asset: assets/Glegoo-Bold.ttf
+        - asset: assets/NovaMono-Regular.ttf        
           weight: 700
   #
   # For details regarding fonts from package dependencies,

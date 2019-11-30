@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
@@ -80,3 +81,25 @@ extension ClockModelHelpers on ClockModel {
     return "";
   }
 }
+
+extension TextStyleHelpers on TextStyle {
+    withNovaMono() => this.copyWith(fontFamily: "NovaMono");
+}
+
+///
+/// Pull arguments out of a ModalRoute and pass them to a builder function
+///
+/// Usage:
+/// 
+/// ArgumentBuilder<YourType>((context, yourtype) => Text(yourtype.getSomeField())
+/// 
+typedef ArgumentBuilder<T>(BuildContext context, T argument);
+class PassNamedArguments<T> extends StatelessWidget {  
+  final ArgumentBuilder<T> builder;
+
+  const PassNamedArguments(this.builder, {Key key}) : super(key: key);
+
+  @override
+  build(BuildContext context) => builder(context, ModalRoute.of(context).settings.arguments);
+}
+
