@@ -13,63 +13,75 @@ void main() {
   ///
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
 
-  final DateFormat _timeFormat24 = DateFormat("HH:mm:ss");
-  final DateFormat _timeFormat12 = DateFormat("hh:mm:ss");
-  final DateFormat _dateFormat = DateFormat.yMd();
+  runApp(ClockCustomizer((model) => AdamsSpaceClock(model: model)));
+}
 
-  final StringBuilder buildTime24String =
-      () => _timeFormat24.format(DateTime.now());
-  final StringBuilder buildTime12String =
-      () => _timeFormat12.format(DateTime.now());
-  final StringBuilder buildDateString =
-      () => _dateFormat.format(DateTime.now());
-  String buildWeatherTickerText(ClockModel model) {
-    final phase = (DateTime.now().second/5).round() % 3;
-    
-    String currentPart;
-    if (phase == 0) {
-      currentPart = "now ${model.temperatureString}";
-    } else if (phase == 1) {
-      currentPart = "low ${model.lowString}";      
-    } else if (phase == 2) {
-      currentPart = "high ${model.highString}";
-    }
+final DateFormat _timeFormat24 = DateFormat("HH:mm:ss");
+final DateFormat _timeFormat12 = DateFormat("hh:mm:ss");
+final DateFormat _dateFormat = DateFormat.yMd();
+final StringBuilder buildTime24String =
+    () => _timeFormat24.format(DateTime.now());
+final StringBuilder buildTime12String =
+    () => _timeFormat12.format(DateTime.now());
+final StringBuilder buildDateString = () => _dateFormat.format(DateTime.now());
 
-    String buffer = "           ";
-    String output = "$currentPart";
+String buildWeatherTickerText(ClockModel model) {
+  final phase = (DateTime.now().second / 5).round() % 3;
 
-    return model.weatherEmoji+buffer.replaceRange(buffer.length-output.length, buffer.length, output);
+  String currentPart;
+  if (phase == 0) {
+    currentPart = "NOW ${model.temperatureString}";
+  } else if (phase == 1) {
+    currentPart = "LOW ${model.lowString}";
+  } else if (phase == 2) {
+    currentPart = "HIGH ${model.highString}";
   }
 
-  runApp(ClockCustomizer((model) => Stack(
-        children: <Widget>[
-          //The space clock
-          SpaceClockScene(),
+  String buffer = "           ";
+  String output = "$currentPart";
 
-          // The Time widget
-          Align(
-              alignment: Alignment.topRight,
-              child: StyledTicker(
-                  builder: () => buildWeatherTickerText(model))),
+  return model.weatherEmoji +
+      buffer.replaceRange(buffer.length - output.length, buffer.length, output);
+}
 
-          // The Location
-          Align(
-              alignment: Alignment.topLeft,
-              child: StyledTicker(
-                  builder: () => model.location)),
+class AdamsSpaceClock extends StatelessWidget {
+  final ClockModel model;
+  const AdamsSpaceClock({Key key, @required this.model}) : super(key: key);
 
-          // The Time widget
-          Align(
-              alignment: Alignment.bottomRight,
-              child: StyledTicker(
-                  builder: model.is24HourFormat
-                      ? buildTime24String
-                      : buildTime12String)),
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        //The space clock
+        SpaceClockScene(),
 
-          // The Date Widget
-          Align(
-              alignment: Alignment.bottomLeft,
-              child: StyledTicker(builder: buildDateString))
-        ],
-      )));
+        // The Time widget
+        Align(
+            alignment: Alignment.topRight,
+            child: StyledTicker(
+                fontSize: 14,
+                height: 24,
+                builder: () => buildWeatherTickerText(model))),
+
+        // The Location
+        Align(
+            alignment: Alignment.topLeft,
+            child: StyledTicker(
+                fontSize: 14, height: 24, builder: () => model.location)),
+
+        // The Time widget
+        Align(
+            alignment: Alignment.bottomRight,
+            child: StyledTicker(
+                builder: model.is24HourFormat
+                    ? buildTime24String
+                    : buildTime12String)),
+
+        // The Date Widget
+        Align(
+            alignment: Alignment.bottomLeft,
+            child: StyledTicker(builder: buildDateString))
+      ],
+    );
+  }
 }

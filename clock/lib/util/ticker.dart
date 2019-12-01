@@ -134,14 +134,17 @@ class _TickerCharacterTransition extends AnimatedWidget {
 ///
 class StyledTicker extends StatelessWidget {
   final StringBuilder builder;
+  final double height;
+  final double fontSize;
 
-  const StyledTicker({Key key, @required this.builder}) : super(key: key);
+  const StyledTicker({Key key, @required this.builder, this.height = 32, this.fontSize = 18}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(
-          height: 36,
+
+          height: height,
           child: Opacity(
             opacity: 0.5,
             child: TickerWidget(
@@ -166,7 +169,7 @@ class StyledTicker extends StatelessWidget {
                         child: Text(
                       glyph,
                       style:
-                          Theme.of(context).textTheme.headline.withNovaMono(),
+                          Theme.of(context).textTheme.subhead.withNovaMono().copyWith(fontSize: fontSize),
                     )),
                   )),
             ),
