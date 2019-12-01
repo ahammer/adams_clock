@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -137,41 +138,45 @@ class StyledTicker extends StatelessWidget {
   final double height;
   final double fontSize;
 
-  const StyledTicker({Key key, @required this.builder, this.height = 32, this.fontSize = 18}) : super(key: key);
+  const StyledTicker(
+      {Key key, @required this.builder, this.height = 32, this.fontSize = 18})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(
 
+          decoration: BoxDecoration(            
+            border: Border.all(),
+            color: Theme.of(context).cardColor.withOpacity(0.5)),
           height: height,
-          child: Opacity(
-            opacity: 0.5,
-            child: TickerWidget(
-              builder: builder,
-              digitBuilder: (glyph, first, last) => Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor.withOpacity(1.0),
-                    borderRadius: first
-                        ? BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft: Radius.circular(8))
-                        : last
-                            ? BorderRadius.only(
-                                topRight: Radius.circular(8),
-                                bottomRight: Radius.circular(8))
-                            : null,
-                  ),
-                  key: ValueKey(glyph),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                    child: Center(
-                        child: Text(
-                      glyph,
-                      style:
-                          Theme.of(context).textTheme.subhead.withNovaMono().copyWith(fontSize: fontSize),
-                    )),
-                  )),
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: Opacity(
+                opacity: 1.0,
+                child: TickerWidget(
+                  builder: builder,
+                  digitBuilder: (glyph, first, last) => Container(
+                      decoration: BoxDecoration(
+                          //color: Theme.of(context).cardColor.withOpacity(1.0),
+                          ),
+                      key: ValueKey(glyph),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                        child: Center(
+                            child: Text(
+                          glyph,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subhead
+                              .withNovaMono()
+                              .copyWith(fontSize: fontSize),
+                        )),
+                      )),
+                ),
+              ),
             ),
           ),
         ),
