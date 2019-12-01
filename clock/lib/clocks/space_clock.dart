@@ -211,7 +211,8 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Earth
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
-    final time = DateTime.now();
+    //final time = DateTime.now();
+    final time = DateTime.utc(2000,1,1,6,30,0);
 
     ///
     /// We prepare all the math of the clock layout/orientation here
@@ -262,23 +263,27 @@ class SpaceClockPainter extends AnimatedPainter {
     drawSun(canvas, size, osunx, osuny, sunDiameter, sunOrbit);
     drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit);
     drawMoon(
-        canvas, size, oearthx, omoonx, oearthy, omoony, earthOrbit, sunOrbit);
+        canvas, size, oearthx,oearthy, omoonx, omoony, osunx, osuny, earthOrbit);
   }
 
-  void drawMoon(Canvas canvas, Size size, double ox, double ox2, double oy,
-      double oy2, double earthOrbit, double sunOrbit) {
+  void drawMoon(Canvas canvas, Size size, double ox, double oy,double ox2,
+      double oy2,  double sunx, double suny, double earthOrbit) {
+        double x = size.width / 2 + ox + ox2;
+        double y = size.height / 2 + oy + oy2;
+        final offset = Offset(x,y );
+    double shadowRotation = atan2(oy+oy2-suny, ox+ox2-sunx) - pi/2;
     imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
         size: size.width / 4,
-        offset: Offset(size.width / 2 + ox + ox2, size.height / 2 + oy + oy2),
+        offset: offset,
         rotation: earthOrbit * 20,
         paint: standardPaint);
 
     imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
         size: size.width / 4,
-        offset: Offset(size.width / 2 + ox + ox2, size.height / 2 + oy + oy2),
-        rotation: sunOrbit,
+        offset: offset,
+        rotation: shadowRotation,
         paint: standardPaint);
   }
 
