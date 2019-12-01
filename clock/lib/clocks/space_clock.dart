@@ -220,7 +220,7 @@ class SpaceClockPainter extends AnimatedPainter {
 
   void drawSun(Canvas canvas, Size size, double x, double y, double sunDiameter,
       double sunRotation) {
-    final speedMultiplier = 2;
+    final speedMultiplier = 2.5;
     int phase = 1;
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
     canvas.drawCircle(sunOffset, sunDiameter / 2 * 0.95, sunBasePaint);
