@@ -146,7 +146,6 @@ class StyledTicker extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(
-
           decoration: BoxDecoration(            
             border: Border.all(),
             color: Theme.of(context).cardColor.withOpacity(0.5)),

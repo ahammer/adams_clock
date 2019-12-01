@@ -1,7 +1,7 @@
 import 'package:flutter_clock_helper/model.dart';
 import 'package:intl/intl.dart';
 import 'package:adams_clock/clocks/space_clock.dart';
-import 'package:adams_clock/util/ticker.dart';
+import 'package:adams_clock/clocks/ticker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/customizer.dart';

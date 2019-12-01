@@ -8,8 +8,9 @@ import 'package:vector_math/vector_math_64.dart' as vector;
 final kTargetRect = Rect.fromCenter(center: Offset.zero, width: 1, height: 1);
 
 extension StringHelpers on String {
-  String charAt(int idx) => this.substring(idx, idx+1);
+  String charAt(int idx) => this.substring(idx, idx + 1);
 }
+
 ///
 /// Image Helpers
 ///
@@ -22,9 +23,16 @@ extension ImageHelpers on ui.Image {
       double size,
       Offset offset,
       double rotation,
-      Paint paint}) {
+      Paint paint,
+      bool flip = false}) {
+
     canvas.save();
     canvas.translate(offset.dx, offset.dy);
+    
+    if (flip) {
+      canvas.scale(-1, 1);
+    }
+
     canvas.save();
     canvas.rotate(rotation);
     canvas.scale(size);
@@ -57,25 +65,24 @@ extension VectorHelpers on vector.Vector3 {
 
 ///
 /// Helpers for the ClockModel
-/// 
+///
 extension ClockModelHelpers on ClockModel {
-
   // Want to show the weather as a Emoji
-  String  get weatherEmoji {
-    switch (this.weatherCondition) {      
+  String get weatherEmoji {
+    switch (this.weatherCondition) {
       case WeatherCondition.cloudy:
-       return '☁️';
-      case WeatherCondition.foggy:      
+        return '☁️';
+      case WeatherCondition.foggy:
         return '🌫️';
-      case WeatherCondition.rainy:      
+      case WeatherCondition.rainy:
         return '🌧️';
-      case WeatherCondition.snowy:      
+      case WeatherCondition.snowy:
         return '🌨️';
-      case WeatherCondition.sunny:      
+      case WeatherCondition.sunny:
         return '☀️';
-      case WeatherCondition.thunderstorm:      
+      case WeatherCondition.thunderstorm:
         return '⛈️';
-      case WeatherCondition.windy:      
+      case WeatherCondition.windy:
         return '🌬️';
     }
     return "";
@@ -83,23 +90,24 @@ extension ClockModelHelpers on ClockModel {
 }
 
 extension TextStyleHelpers on TextStyle {
-    TextStyle withNovaMono() => this.copyWith(fontFamily: "NovaMono");
+  TextStyle withNovaMono() => this.copyWith(fontFamily: "NovaMono");
 }
 
 ///
 /// Pull arguments out of a ModalRoute and pass them to a builder function
 ///
 /// Usage:
-/// 
+///
 /// ArgumentBuilder<YourType>((context, yourtype) => Text(yourtype.getSomeField())
-/// 
+///
 typedef ArgumentBuilder<T>(BuildContext context, T argument);
-class PassNamedArguments<T> extends StatelessWidget {  
+
+class PassNamedArguments<T> extends StatelessWidget {
   final ArgumentBuilder<T> builder;
 
   const PassNamedArguments(this.builder, {Key key}) : super(key: key);
 
   @override
-  build(BuildContext context) => builder(context, ModalRoute.of(context).settings.arguments);
+  build(BuildContext context) =>
+      builder(context, ModalRoute.of(context).settings.arguments);
 }
-

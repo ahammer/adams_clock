@@ -62,12 +62,15 @@ class SpaceClockPainter extends AnimatedPainter {
 
   ///
   /// These paints serve as the brushes
+  /// 
+  /// They are getters and not final so I can change them as 
   ///
-  final Paint standardPaint = Paint()..color = Colors.black;
-  final Paint sunBasePaint = Paint()..color = Color.fromARGB(255, 128, 48, 24);
-  final Paint sunLayer1Paint = Paint()..blendMode = BlendMode.lighten;
-  final Paint sunLayer2Paint = Paint()..blendMode = BlendMode.overlay;
-  final Paint sunLayer3Paint = Paint()..blendMode = BlendMode.lighten;
+  Paint get standardPaint => Paint()..color = Colors.black;
+  Paint get sunBasePaint => Paint()..color = Colors.white;
+  Paint get sunLayer1Paint => Paint()..blendMode = BlendMode.multiply;
+  Paint get sunLayer2Paint => Paint()..blendMode = BlendMode.plus;
+  Paint get sunLayer3Paint => Paint()..blendMode = BlendMode.multiply;
+  Paint get sunLayer4Paint => Paint()..blendMode = BlendMode.softLight;
   final Paint starsPaint = Paint()
     ..color = Colors.white
     ..strokeWidth = 1;
@@ -132,42 +135,49 @@ class SpaceClockPainter extends AnimatedPainter {
     ///
     /// We prepare all the math of the clock layout/orientation here
     ///
+    /// Since some bodies are relative to others it's useful to calculate this all at once
+    /// e.g.
+    ///  - Moon rotates the earth
+    ///  - Shadows rotate with sun
+    ///
+    /// So we pass various rotation to various draw functions
 
     // This offset aligns the rotation so 12:00:00am everything will be at the top.
-    double angleOffset = pi / 2;
+    final angleOffset = pi / 2;
 
     // The moon Orbit Angle, it rotates the earth once per minute
-    double moonOrbit = (time.second * 1000 + time.millisecond) / 60000 * 2 * pi;
+    final double moonOrbit =
+        (time.second * 1000 + time.millisecond) / 60000 * 2 * pi;
 
     // The earth orbit, once per hour (millis precision for animations to not be choppy)
-    double earthOrbit =
+    final double earthOrbit =
         (time.minute * 60 * 1000 + time.second * 1000 + time.millisecond) /
             3600000 *
             2 *
             pi;
 
     // The suns orbit of the screen once per day
-    double sunOrbit = (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
+    final double sunOrbit =
+        (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
 
     // These are the offsets from center for the earth/sun/moon
     // They travel in an Oval, in proportion to screen size
 
     //Sun orbits slightly outside the screen, because it's huge
-    double osunx = cos(sunOrbit - angleOffset) * size.width * 1.1;
-    double osuny = sin(sunOrbit - angleOffset) * size.height * 1.4;
+    final sunDiameter = size.width * 1.4;
+    final double osunx = cos(sunOrbit - angleOffset) * size.width;
+    final double osuny = sin(sunOrbit - angleOffset) * size.height;
 
     //Earth orbits 1/4 the screen dimension around the center
-    double oearthx = cos(earthOrbit - angleOffset) * size.width / 4;
-    double oearthy = sin(earthOrbit - angleOffset) * size.height / 4;
+    final double oearthx = cos(earthOrbit - angleOffset) * size.width / 4;
+    final double oearthy = sin(earthOrbit - angleOffset) * size.height / 4;
 
     //Moon orbits 1/4 a screen distance away from the earth as well
-    double omoonx = cos(moonOrbit - angleOffset) * size.width / 4;
-    double omoony = sin(moonOrbit - angleOffset) * size.height / 4;
-
-    final sunDiameter = size.width * 2;
+    final double omoonx = cos(moonOrbit - angleOffset) * size.width / 4;
+    final double omoony = sin(moonOrbit - angleOffset) * size.height / 4;
 
     drawBackground(canvas, size, earthOrbit);
-    drawStars(canvas, size, earthOrbit);
+    drawStars(canvas, size, earthOrbit, time.millisecondsSinceEpoch / 1000.0);
     drawSun(canvas, size, osunx, osuny, sunDiameter, sunOrbit);
     drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit);
     drawMoon(
@@ -185,7 +195,7 @@ class SpaceClockPainter extends AnimatedPainter {
 
     imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width / 4 ,
+        size: size.width / 4,
         offset: Offset(size.width / 2 + ox + ox2, size.height / 2 + oy + oy2),
         rotation: sunOrbit,
         paint: standardPaint);
@@ -199,6 +209,7 @@ class SpaceClockPainter extends AnimatedPainter {
         offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
         rotation: earthOrbit * 4,
         paint: standardPaint);
+
     imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * 0.485,
@@ -209,35 +220,41 @@ class SpaceClockPainter extends AnimatedPainter {
 
   void drawSun(Canvas canvas, Size size, double x, double y, double sunDiameter,
       double sunRotation) {
+    final speedMultiplier = 2;
+    int phase = 1;
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
     canvas.drawCircle(sunOffset, sunDiameter / 2 * 0.95, sunBasePaint);
-    imageMap["sun_1"].drawRotatedSquare(
+    [true, false].forEach((shouldFlip) => imageMap["sun_1"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * 120,
-        paint: sunLayer1Paint);
+        rotation: sunRotation * (phase++ * 5) * speedMultiplier,
+        paint: sunLayer1Paint,
+        flip: shouldFlip));
 
-    imageMap["sun_4"].drawRotatedSquare(
+    [true, false].forEach((shouldFlip) => imageMap["sun_2"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * -60,
-        paint: sunLayer1Paint);
+        rotation: sunRotation * (phase++ * 7) * speedMultiplier,
+        flip: shouldFlip,
+        paint: sunLayer2Paint));
 
-    imageMap["sun_2"].drawRotatedSquare(
+    [true, false].forEach((shouldFlip) => imageMap["sun_3"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * 90,
-        paint: sunLayer2Paint);
+        rotation: sunRotation * (phase++ * 9) * speedMultiplier,
+        flip: shouldFlip,
+        paint: sunLayer3Paint));
 
-    imageMap["sun_3"].drawRotatedSquare(
+    [true, false].forEach((shouldFlip) => imageMap["sun_4"].drawRotatedSquare(
         canvas: canvas,
         size: sunDiameter,
         offset: sunOffset,
-        rotation: sunRotation * -100,
-        paint: sunLayer3Paint);
+        rotation: sunRotation * (phase++ * 11) * speedMultiplier,
+        flip: shouldFlip,
+        paint: sunLayer4Paint));
   }
 
   void drawBackground(Canvas canvas, Size size, double earthOrbit) {
@@ -249,11 +266,10 @@ class SpaceClockPainter extends AnimatedPainter {
         paint: standardPaint);
   }
 
-  void drawStars(Canvas canvas, Size size, double rotation) {
+  void drawStars(Canvas canvas, Size size, double rotation, double time) {
     final projection =
         vector.makePerspectiveMatrix(140, size.width / size.height, 0, 1);
     projection.rotateZ(rotation * -20);
-    final time = DateTime.now().millisecondsSinceEpoch / 1000.0;
     final int steps = 16;
     final double intervalSize = 1.0 / steps;
 
