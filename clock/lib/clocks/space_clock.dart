@@ -7,6 +7,102 @@ import 'dart:ui' as ui;
 import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:adams_clock/util/image_loader.dart';
 
+///
+/// Sun Clock
+///
+/// Draws the Actual Sun/Moon/Earth/Stars Clock
+///
+/// A general explanation is as follows
+///
+/// Draws in order
+/// - Fixed star background (rotating over time, for motion effect)
+///
+/// - Star Simulation
+///   - Matrix math for projecting and transforming to "time space" and screen space
+///   - Batched by Z distance to set size/color and draw with drawPoints() to reduce draw calls
+///
+/// - Sun
+///   - "Hour Hand".
+///   - First draws a circle (Base Layer) in white
+///   - Drawn in layers (4 images)
+///   - The layers have varying blend modes (Multiply/Plus/SoftLight)
+///     - Multiply to emulate sunspots
+///     - Plus/Softlight to emulate light/glowing
+///   - Layers rotate slowly in varying directions
+///   - Each layer is drawn twice, once flipped and rotated in opposite direction
+///   - The effective 8 layers do a Perlin compose a perlin noise that looks a lot like the sun.
+///
+/// - Earth
+///   - "Minute Hand"
+///   - Rotates around the center of the screen once per hour.
+///   - Shadow layer is drawn over the earth, opposite the sun
+///
+/// - Moon
+///   - "Seconds Hand"
+///   - Rotates around earth once a minute
+///   - Shadow layer is drawn over the moon, opposite the sun
+///
+
+// A random generator for the Stars to use
+final _random = Random();
+
+// The default number of stars we will generate
+const kNumberStars = 1500;
+
+// The bigger this number, the slower the stars
+const kStarSlowdown = 30;
+
+/// Star
+/// Represents a Star
+///
+/// It will be in the range of [-0.5->0.5, -0.5->0.5, 0.0->1.0]
+/// This range makes it easy to get a correct perspective transform
+class Star {
+  final x = _random.nextDouble() - 0.5,
+      y = _random.nextDouble() - 0.5,
+      z = _random.nextDouble();
+
+  /// zForTime(time)
+  /// Adjusts Z for current time to simulate travelling
+  ///
+  /// We adjust Z for time, but always take the 0-1 range
+  /// Assisted by our Extension function on double .fraction()
+  double zForTime(double time) => (z - (time / kStarSlowdown)).fraction();
+
+  /// Project(time, perspective)
+  ///
+  /// Takes the 3D point and Projects it to 2D space for Time and Perspective
+  /// Screen Space translation is handled on the other side
+  ///
+  /// Psuedo:
+  ///   Make Vector3(x,y,zForTime)
+  ///   Apply Projection to Vector
+  ///   Convert to Offset (discard Z)
+  ///
+  Offset project(double time, vector.Matrix4 perspective) =>
+      (vector.Vector3(x, y, zForTime(time))..applyProjection(perspective))
+          .toOffset();
+}
+
+/// SpaceClockScene
+/// The actual widget that draws this scene
+///
+/// Delegates out the actual Work to an AnimatedPaint with our SpaceClockPainter
+///
+class SpaceClockScene extends StatelessWidget {
+  SpaceClockScene({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => AnimatedPaint(
+        painter: () => SpaceClockPainter(),
+      );
+}
+
+///
+/// Pngs in the Asset folder used in this scene
+///
+/// Images are all either hand-made (like the sun)
+/// or public domain (Earth/Moon/Space thanks courtesy of Nasa)
 const List<String> images = [
   "earth",
   "moon",
@@ -18,71 +114,43 @@ const List<String> images = [
   "shadow"
 ];
 
-final kRandom = Random();
-const kNumberStars = 1000;
-
+/// SpaceClockPainter
 ///
-/// Represents a Star
-class Star {
-  //Randomly positioned (and transformed to be between -0.5 and 0.5 to make the perspective transform look good)
-  final x = kRandom.nextDouble() - 0.5,
-      y = kRandom.nextDouble() - 0.5,
-      z = kRandom.nextDouble();
-
-  //Z position changes over time (we are travelling through space)
-  double zForTime(double time) => (z - (time / 24)).fraction();
-
-  //Projects to 2D space, into an offset (still in the -0.5 to 0.5 range)
-  Offset project(double time, vector.Matrix4 perspective) {
-    vector.Vector3 v = vector.Vector3(x, y, zForTime(time))
-      ..applyProjection(perspective);
-    return v.toOffset();
-  }
-}
-
-class SpaceClockScene extends StatelessWidget {
-  SpaceClockScene({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => AnimatedPaint(
-        painter: () => SpaceClockPainter(),
-      );
-}
-
+/// Implementation of the Canvas Drawing of the Space Clock
+///
+/// Psuedo:
+///   Load Images
+///   While Loading
+///     Draw Loading Screen
+///   When done Loading
+///     Calculate Gears and Rotations
+///     Draw Background
+///     Draw Stars
+///     Draw Sun
+///     Draw Earth
+///     Draw Moon
+///
 class SpaceClockPainter extends AnimatedPainter {
   final Map<String, ui.Image> imageMap = Map();
 
   ///
-  /// The paint for the "Loading" screen text
-  ///
-  final TextPainter loadingTextPaint = TextPainter(
-    text: TextSpan(
-        text: "Loading", style: TextStyle(color: Colors.white, fontSize: 10)),
-  );
-
-  ///
   /// These paints serve as the brushes
-  /// 
-  /// They are getters and not final so I can change them as 
   ///
+  /// Most are getters as they like to be tweaked  
   Paint get standardPaint => Paint()..color = Colors.black;
   Paint get sunBasePaint => Paint()..color = Colors.white;
   Paint get sunLayer1Paint => Paint()..blendMode = BlendMode.multiply;
   Paint get sunLayer2Paint => Paint()..blendMode = BlendMode.plus;
   Paint get sunLayer3Paint => Paint()..blendMode = BlendMode.multiply;
   Paint get sunLayer4Paint => Paint()..blendMode = BlendMode.softLight;
-  final Paint starsPaint = Paint()
-    ..color = Colors.white
-    ..strokeWidth = 1;
 
-  ///
-  /// The stars we want to draw
-  ///
+  /// For drawing the stars, we mutate this. Color/Opacity changes with Z distance
+  final Paint starsPaint = Paint();
+
+  // Generate a List of Stars
   final List<Star> stars = List.generate(kNumberStars, (idx) => Star());
 
   bool get loaded => imageMap.length == images.length;
-  double time = 0;
-  double lastFrameTime;
 
   @override
   void init() async {
@@ -95,15 +163,6 @@ class SpaceClockPainter extends AnimatedPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    if (lastFrameTime == null) {
-      lastFrameTime = DateTime.now().microsecondsSinceEpoch / 1000000.0;
-    }
-    double timeNow = DateTime.now().microsecondsSinceEpoch / 1000000.0;
-    double deltaTime = timeNow - lastFrameTime;
-
-    time += deltaTime;
-
     if (!loaded) {
       drawLoadingScreen(canvas, size);
     } else {
@@ -111,24 +170,46 @@ class SpaceClockPainter extends AnimatedPainter {
     }
   }
 
-  ///
-  /// A very simple loading scree
+  /// drawLoadingScreen
+  /// 
+  /// Psuedo
+  ///   Build String "Loading ${PercentComplete}"
+  ///   Draw String at the center of the screen
   ///
   void drawLoadingScreen(Canvas canvas, Size size) {
+    // Fill the screen Black
     canvas.drawRect(
         Rect.fromLTWH(0, 0, size.width, size.height), standardPaint);
+
+    // Set up the TextSpan (Specifies Text, Font, Etc)
     TextSpan span = new TextSpan(
-        style: new TextStyle(color: Colors.white),
+        style: new TextStyle(color: Colors.white, fontSize: 24).withNovaMono(),
         text:
             "Loading (${(imageMap.length / images.length.toDouble() * 100).toInt()}%)....");
-    TextPainter tp = new TextPainter(
+    
+    // Set up the TextPainter, which decides how to draw the span
+    TextPainter tp = new TextPainter(      
         text: span,
         textAlign: TextAlign.left,
-        textDirection: TextDirection.ltr);
+        textDirection: TextDirection.ltr);        
+
+    // Layouter the Text (Measure it, etc)   
     tp.layout();
-    tp.paint(canvas, new Offset(5.0, 5.0));
+
+    // Paint the Loading Text in the middle of the screen
+    tp.paint(canvas, new Offset(size.width/2-tp.width/2, size.height/2-tp.height/2));
   }
 
+  /// drawSpace
+  /// 
+  /// Draws everything in space
+  /// Psuedo:
+  ///  Calculate Orbital Rotations
+  ///  Draw the Background
+  ///  Draw the Stars
+  ///  Draw the Sun
+  ///  Draw the Earth
+  ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = DateTime.now();
 
