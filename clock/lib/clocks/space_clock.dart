@@ -69,12 +69,12 @@ const kAngleOffset = pi / 2;
 const kEarthOrbitDivisor = 5; //ScreenWidth / X
 const kMoonOrbitDivisor = 4; //ScreenWidth / X
 const kMoonRotationSpeed = 40;
-const SunLayerSpeed = [12, -13, 7, -6, 5, -4, 3, -1];
+const SunLayerSpeed = [2, -3, 7, -6, 5, -4, 3, -1];
 
 const List<BlendMode> blendModes = [
   BlendMode.multiply,
-  BlendMode.hardLight,
-  BlendMode.hardLight,
+  BlendMode.plus,
+  BlendMode.multiply,
   BlendMode.multiply,
   BlendMode.plus,
   BlendMode.multiply,
