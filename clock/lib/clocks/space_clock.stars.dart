@@ -6,10 +6,11 @@ part of 'space_clock.dart';
 
 
 // The default number of stars we will generate
-const kNumberStars = 2000;
+const kNumberStars = 1000;
+const kStarsRotationSpeed = 15;
 
 // The bigger this number, the slower the stars
-const kStarSlowdown = 100;
+const kStarSlowdown = 25;
 
 final _random = Random();
 final Paint _starsPaint = Paint();
@@ -51,7 +52,7 @@ class Star {
 void drawStars(Canvas canvas, Size size, double rotation, double time) {
   final projection =
       vector.makePerspectiveMatrix(140, size.width / size.height, 0, 1);
-  projection.rotateZ(rotation * -20);
+  projection.rotateZ(rotation * kStarsRotationSpeed);
   final int steps = 16;
   final double intervalSize = 1.0 / steps;
 

@@ -8,6 +8,7 @@ import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:adams_clock/util/image_loader.dart';
 
 part 'space_clock.stars.dart';
+
 ///
 /// Sun Clock
 ///
@@ -47,18 +48,42 @@ part 'space_clock.stars.dart';
 ///
 /// Configuration Constants
 ///
+
+/// The earth and shadow images don't sync automatically, this is to scale them the same
 const kEarthShadowShrink = 0.963;
+
+// The size of earth as a ratio of screen width
 const kEarthSize = 0.50;
+
+// The size of the sun as a rat
 const kSunSize = 1.8;
+const kSunBaseSize = 0.96;
+
+
 const kMoonSize = 0.24;
 const kEarthShadowSize = 1.0;
 const kEarthRotationSpeed = -20.0;
+const kSunOrbitMultiplierX = 1.1;
+const kSunOrbitMultiplierY = 1.6;
+
 const kAngleOffset = pi / 2;
 const kEarthOrbitDivisor = 5; //ScreenWidth / X
 const kMoonOrbitDivisor = 4; //ScreenWidth / X
 const kMoonRotationSpeed = 40;
+const SunLayerSpeed = [-1, 3, -4, 5, -6, 7, -8, 9];
 
+const List<BlendMode> blendModes = [
+  BlendMode.multiply,
+  BlendMode.hardLight,
+  BlendMode.hardLight,
+  BlendMode.multiply,
+  BlendMode.plus,
+  BlendMode.multiply,
+  BlendMode.multiply,
+  BlendMode.multiply,
+];
 
+const kSunSpeed = 10;
 
 /// SpaceClockScene
 /// The actual widget that draws this scene
@@ -117,10 +142,6 @@ class SpaceClockPainter extends AnimatedPainter {
   final Paint sunBasePaint = Paint()..color = Colors.white;
   final Paint sunLayerPaint = Paint();
 
-  
-  
-
-  
   bool get loaded => imageMap.length == images.length;
 
   @override
@@ -186,9 +207,12 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = DateTime.now();
+    
 
     // Use this if you want to test a particular time
-    // final time = DateTime.utc(2000,1,1,6,30,0);
+     //final time = DateTime.utc(2000,1,1,9,0,0);
+     // Or just want to see it really fast
+     //final time = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch * 60*60);
 
     ///
     /// We prepare all the math of the clock layout/orientation here
@@ -224,8 +248,8 @@ class SpaceClockPainter extends AnimatedPainter {
 
     //Sun orbits slightly outside the screen, because it's huge
     final sunDiameter = size.width * kSunSize;
-    final double osunx = cos(sunOrbit - kAngleOffset) * size.width;
-    final double osuny = sin(sunOrbit - kAngleOffset) * size.height;
+    final double osunx = cos(sunOrbit - kAngleOffset) * size.width * kSunOrbitMultiplierX;
+    final double osuny = sin(sunOrbit - kAngleOffset) * size.height* kSunOrbitMultiplierY;
 
     //Earth orbits 1/4 the screen dimension around the center
     final double oearthx =
@@ -248,81 +272,36 @@ class SpaceClockPainter extends AnimatedPainter {
         earthOrbit);
   }
 
+  ///
+  /// Draws the Background
+  ///
+  /// It's size is "big enough" to cover the screen
+  /// it's centered and rotated at the same speed as the star layer
+  ///
+  ///
+  void drawBackground(Canvas canvas, Size size, double earthOrbit) =>
+      imageMap["stars"].drawRotatedSquare(
+          canvas: canvas,
+          size: size.width + size.height,
+          offset: Offset(size.width / 2, size.height / 2),
+          rotation: earthOrbit * kStarsRotationSpeed,
+          paint: standardPaint);
 
-  void drawMoon(
-      Canvas canvas,
-      Size size,
-      double oEarthX,
-      double oEarthY,
-      double oMoonX,
-      double oMoonY,
-      double oSunX,
-      double oSunY,
-      double earthOrbit) {
-    double x = size.width / 2 + oEarthX + oMoonX;
-    double y = size.height / 2 + oEarthY + oMoonY;
-    final offset = Offset(x, y);
-    double shadowRotation = atan2(oEarthY + oMoonY - oSunY, oEarthX + oMoonX - oSunX) - pi / 2;
-    imageMap["moon"].drawRotatedSquare(
-        canvas: canvas,
-        size: size.width * kMoonSize,
-        offset: offset,
-        rotation: earthOrbit * kMoonRotationSpeed,
-        paint: standardPaint);
-
-    imageMap["shadow"].drawRotatedSquare(
-        canvas: canvas,
-        size: size.width * kMoonSize,
-        offset: offset,
-        rotation: shadowRotation,
-        paint: standardPaint);
-  }
-
-  void drawBackground(Canvas canvas, Size size, double earthOrbit) {
-    imageMap["stars"].drawRotatedSquare(
-        canvas: canvas,
-        size: size.width + size.height,
-        offset: Offset(size.width / 2, size.height / 2),
-        rotation: earthOrbit * -20,
-        paint: standardPaint);
-  }
-
-  void drawEarth(Canvas canvas, Size size, double ox, double oy,
-      double earthOrbit, double sunOrbit) {
-    imageMap["earth"].drawRotatedSquare(
-        canvas: canvas,
-        size: size.width * kEarthSize,
-        offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
-        rotation: earthOrbit * kEarthRotationSpeed,
-        paint: standardPaint);
-
-    imageMap["shadow"].drawRotatedSquare(
-        canvas: canvas,
-        size: size.width * kEarthSize * kEarthShadowShrink,
-        offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
-        rotation: sunOrbit,
-        paint: standardPaint);
-  }
-
-  static const SunLayerSpeed = [-1, 3, -3, 5, -5, 7, -7, 9];
-  static const List<BlendMode> blendModes = [
-    BlendMode.multiply,
-    BlendMode.hardLight,
-    BlendMode.hardLight,
-    BlendMode.multiply,
-    BlendMode.plus,
-    BlendMode.multiply,
-    BlendMode.multiply,
-    BlendMode.multiply,
-  ];
-
-  static const kSunSpeed = 25;
-
+  ///
+  /// Draw the Sun
+  /// 
+  /// We have 4 Layers, we can draw them 8 times (flipped once) to increase randomness
+  /// 
+  /// The layers are Blended/Transformed based on the kernels/arrays in the config
+  /// This was just experimented with until I liked the way it looks
+  /// 
+  /// The idea was to have it look bright and gaseous, with the occasional sunspot
+  /// 
   void drawSun(Canvas canvas, Size size, double x, double y, double sunDiameter,
       double sunRotation) {
     int phase = 0;
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
-    canvas.drawCircle(sunOffset, sunDiameter / 2 * 0.95, sunBasePaint);
+    canvas.drawCircle(sunOffset, sunDiameter / 2 * kSunBaseSize, sunBasePaint);
     [true, false].forEach((shouldFlip) {
       imageMap["sun_1"].drawRotatedSquare(
           canvas: canvas,
@@ -355,5 +334,67 @@ class SpaceClockPainter extends AnimatedPainter {
     });
   }
 
+  ///
+  /// Draws the Moon
+  ///
+  /// Most tweakable params should be accessible in the constants at the top
+  ///
+  /// We draw the moon, offset the earth, around it's rotation
+  /// The shadow is calculated by looking at the suns position
+  /// And figuring out the opposite angle.
+  ///
+  void drawMoon(
+      Canvas canvas,
+      Size size,
+      double oEarthX,
+      double oEarthY,
+      double oMoonX,
+      double oMoonY,
+      double oSunX,
+      double oSunY,
+      double earthOrbit) {
+    double x = size.width / 2 + oEarthX + oMoonX;
+    double y = size.height / 2 + oEarthY + oMoonY;
+    final offset = Offset(x, y);
+    double shadowRotation =
+        atan2(oEarthY + oMoonY - oSunY, oEarthX + oMoonX - oSunX) - pi / 2;
+    imageMap["moon"].drawRotatedSquare(
+        canvas: canvas,
+        size: size.width * kMoonSize,
+        offset: offset,
+        rotation: earthOrbit * kMoonRotationSpeed,
+        paint: standardPaint);
 
+    imageMap["shadow"].drawRotatedSquare(
+        canvas: canvas,
+        size: size.width * kMoonSize,
+        offset: offset,
+        rotation: shadowRotation,
+        paint: standardPaint);
+  }
+
+  ///
+  /// DrawEarth
+  ///
+  /// Draws the earth
+  ///
+  /// Draws the earth based on it's calculated position
+  /// Shadow is drawn as a overlay, opposite the sun's position
+  ///
+  void drawEarth(Canvas canvas, Size size, double ox, double oy,
+      double earthOrbit, double sunOrbit) {
+    imageMap["earth"].drawRotatedSquare(
+        canvas: canvas,
+        size: size.width * kEarthSize,
+        offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
+        rotation: earthOrbit * kEarthRotationSpeed,
+        paint: standardPaint);
+
+    imageMap["shadow"].drawRotatedSquare(
+        canvas: canvas,
+        size: size.width * kEarthSize * kEarthShadowShrink,
+        offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
+        rotation: sunOrbit,
+        paint: standardPaint);
+  }
 }
