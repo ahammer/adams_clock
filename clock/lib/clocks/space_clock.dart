@@ -50,27 +50,26 @@ part 'space_clock.stars.dart';
 ///
 
 /// The earth and shadow images don't sync automatically, this is to scale them the same
-const kEarthShadowShrink = 0.963;
 
 // The size of earth as a ratio of screen width
 const kEarthSize = 0.50;
+const kEarthShadowShrink = 0.963;
+const kEarthRotationSpeed = -20.0;
 
 // The size of the sun as a rat
-const kSunSize = 1.8;
+const kSunSize = 2.0;
 const kSunBaseSize = 0.96;
-
+const kSunOrbitMultiplierX = 1.25;
+const kSunOrbitMultiplierY = 1.7;
+const kSunSpeed = 12;
 
 const kMoonSize = 0.24;
-const kEarthShadowSize = 1.0;
-const kEarthRotationSpeed = -20.0;
-const kSunOrbitMultiplierX = 1.1;
-const kSunOrbitMultiplierY = 1.6;
 
 const kAngleOffset = pi / 2;
 const kEarthOrbitDivisor = 5; //ScreenWidth / X
 const kMoonOrbitDivisor = 4; //ScreenWidth / X
 const kMoonRotationSpeed = 40;
-const SunLayerSpeed = [-1, 3, -4, 5, -6, 7, -8, 9];
+const SunLayerSpeed = [12, -13, 7, -6, 5, -4, 3, -1];
 
 const List<BlendMode> blendModes = [
   BlendMode.multiply,
@@ -82,8 +81,6 @@ const List<BlendMode> blendModes = [
   BlendMode.multiply,
   BlendMode.multiply,
 ];
-
-const kSunSpeed = 10;
 
 /// SpaceClockScene
 /// The actual widget that draws this scene
@@ -207,12 +204,11 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = DateTime.now();
-    
 
     // Use this if you want to test a particular time
-     //final time = DateTime.utc(2000,1,1,9,0,0);
-     // Or just want to see it really fast
-     //final time = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch * 60*60);
+    //final time = DateTime.utc(2000,1,1,9,0,0);
+    // Or just want to see it really fast
+    //final time = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch * 60*60);
 
     ///
     /// We prepare all the math of the clock layout/orientation here
@@ -248,8 +244,10 @@ class SpaceClockPainter extends AnimatedPainter {
 
     //Sun orbits slightly outside the screen, because it's huge
     final sunDiameter = size.width * kSunSize;
-    final double osunx = cos(sunOrbit - kAngleOffset) * size.width * kSunOrbitMultiplierX;
-    final double osuny = sin(sunOrbit - kAngleOffset) * size.height* kSunOrbitMultiplierY;
+    final double osunx =
+        cos(sunOrbit - kAngleOffset) * size.width * kSunOrbitMultiplierX;
+    final double osuny =
+        sin(sunOrbit - kAngleOffset) * size.height * kSunOrbitMultiplierY;
 
     //Earth orbits 1/4 the screen dimension around the center
     final double oearthx =
@@ -289,14 +287,14 @@ class SpaceClockPainter extends AnimatedPainter {
 
   ///
   /// Draw the Sun
-  /// 
+  ///
   /// We have 4 Layers, we can draw them 8 times (flipped once) to increase randomness
-  /// 
+  ///
   /// The layers are Blended/Transformed based on the kernels/arrays in the config
   /// This was just experimented with until I liked the way it looks
-  /// 
+  ///
   /// The idea was to have it look bright and gaseous, with the occasional sunspot
-  /// 
+  ///
   void drawSun(Canvas canvas, Size size, double x, double y, double sunDiameter,
       double sunRotation) {
     int phase = 0;
