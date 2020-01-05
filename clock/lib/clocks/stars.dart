@@ -104,11 +104,10 @@ class Star {
 void drawStars(Canvas canvas, Size size, double rotation, double time) {
 
   /// 📷 Creates a 140 degree projection matrix for our size, with a near of 0 and a far of 1
-  final projection = vector.makePerspectiveMatrix(140, size.width / size.height, 0, 1);
-
-  // Rotates around the Z axis by rotation degrees
-  projection.rotateZ(rotation);
-
+  /// and rotates around the Z axis by rotation degrees
+  final projection = vector.makePerspectiveMatrix(140, size.width / size.height, 0, 1)
+  ..rotateZ(rotation);
+  
 
   /// 🧮 Generates a "page" of stars (back to front) of varying opacities
   /// We draw pages to minimize draw calls
@@ -119,10 +118,14 @@ void drawStars(Canvas canvas, Size size, double rotation, double time) {
   ///   This allows me to artistically handle distance variations without tanking performance.
   List.generate(kSteps, (idx) => idx / kSteps.toDouble()).forEach((interval) {
     
-    // 🎨 Generate star color based on the current page
+    /// 🎨 Generate star color based on the current page
+    /// We fade the opacity with distance to camera
+    /// 
+    /// We also adjust the size based on distance (between 1-2 px)
     _starsPaint
       ..color = Colors.white.withOpacity(1 - interval)
-      ..strokeWidth = (1 - interval) * 2 + 1;
+      ..strokeWidth = (1 - interval)  + 1;      
+      
 
     // 🖌️ Draw the points
     canvas.drawPoints(
