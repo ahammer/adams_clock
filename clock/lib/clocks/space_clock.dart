@@ -4,10 +4,9 @@ import 'package:adams_clock/util/animated_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:adams_clock/util/extensions.dart';
 import 'dart:ui' as ui;
-import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:adams_clock/util/image_loader.dart';
+import 'package:adams_clock/clocks/stars.dart';
 
-part 'space_clock.stars.dart';
 
 ///
 /// Sun Clock
@@ -70,6 +69,13 @@ const kEarthOrbitDivisor = 5; //ScreenWidth / X
 const kMoonOrbitDivisor = 4; //ScreenWidth / X
 const kMoonRotationSpeed = 40;
 const SunLayerSpeed = [2, -3, 7, -6, 5, -4, 3, -1];
+
+/// Background Rotation Speed
+/// 
+/// The background rotates
+/// 
+const kBackgroundRotationSpeedMultiplier = 15;
+
 
 const List<BlendMode> blendModes = [
   BlendMode.multiply,
@@ -262,8 +268,8 @@ class SpaceClockPainter extends AnimatedPainter {
         sin(moonOrbit - kAngleOffset) * size.height / kMoonOrbitDivisor;
 
     // Draw the various layers, back to front
-    drawBackground(canvas, size, earthOrbit);
-    drawStars(canvas, size, earthOrbit, time.millisecondsSinceEpoch / 1000.0);
+    drawBackground(canvas, size, earthOrbit  * kBackgroundRotationSpeedMultiplier);
+    drawStars(canvas, size, earthOrbit * kBackgroundRotationSpeedMultiplier, time.millisecondsSinceEpoch / 1000.0);
     drawSun(canvas, size, osunx, osuny, sunDiameter, sunOrbit);
     drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit);
     drawMoon(canvas, size, oearthx, oearthy, omoonx, omoony, osunx, osuny,
@@ -282,7 +288,7 @@ class SpaceClockPainter extends AnimatedPainter {
           canvas: canvas,
           size: size.width + size.height,
           offset: Offset(size.width / 2, size.height / 2),
-          rotation: earthOrbit * kStarsRotationSpeed,
+          rotation: earthOrbit,
           paint: standardPaint);
 
   ///

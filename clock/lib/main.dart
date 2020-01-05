@@ -19,6 +19,7 @@ void main() {
 final DateFormat _timeFormat24 = DateFormat("HH:mm:ss");
 final DateFormat _timeFormat12 = DateFormat("hh:mm:ss");
 final DateFormat _dateFormat = DateFormat.yMd();
+
 final StringBuilder buildTime24String =
     () => _timeFormat24.format(DateTime.now());
 final StringBuilder buildTime12String =
