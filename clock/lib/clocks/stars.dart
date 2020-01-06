@@ -4,22 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:adams_clock/util/extensions.dart';
 
+/*
+✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
+🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠
+🌠
+🌠 The StarField portion of the Space Clock
+🌠 
+🌠 This is really basic and performance minded
+🌠 I want to be able to draw a starfield on a canvas.
+🌠 
+🌠 The interface is very simple. From a CustomPainter
+🌠 call
+🌠 
+🌠 drawStars(canvas, size, rotation, time)
+🌠 
+🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠
+✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
+*/
 
-///✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
-///🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠
-///
-/// The StarField portion of the Space Clock
-/// 
-/// This is really basic and performance minded
-/// I want to be able to draw a starfield on a canvas.
-/// 
-/// The interface is very simple. From a CustomPainter
-/// call
-/// 
-/// drawStars(canvas, size, rotation, time)
-/// 
-///🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠🌠
-///✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
 
 // ============== 📖📒 Constants 📒📖 ==============
 
