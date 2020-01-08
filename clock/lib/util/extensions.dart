@@ -7,37 +7,36 @@ import 'package:vector_math/vector_math_64.dart' as vector;
 
 ///
 /// General Extension Method Helpers
-/// 
+///
 /// No real organization, just Extension functions that make my life easier
-/// 
+///
 /// Some things you'll find here.
 /// Each one should have a bit of documentation explaining more.
-/// 
+///
 /// Extensions to String
 ///   - chartAt()
-/// 
+///
 /// Extensions to ui.Image
 ///   - getBounds()
 ///   - drawRotateSquare
-/// 
+///
 /// Extensions to double
-///   - fraction() 
-/// 
+///   - fraction()
+///
 /// General Extensions
 ///   - Map()
-/// 
+///
 /// Extensions to ClockModel
 ///   - get weatherEmoji
-/// 
+///
 /// Extensions to TextStyle
-///   - withNovaMono() 
-
+///   - withNovaMono()
 
 ///📝📝📝📝📝📝📝📝📝📝
 /// String Helpers
-/// 
+///
 /// Things I use on strings to help coding
-/// 
+///
 extension StringHelpers on String {
   String charAt(int idx) => this.substring(idx, idx + 1);
 }
@@ -46,9 +45,9 @@ extension StringHelpers on String {
 /// Image Helpers
 /// Extending ui.Image to make it easier to draw to the screen
 final kTargetRect = Rect.fromCenter(center: Offset.zero, width: 1, height: 1);
-extension ImageHelpers on ui.Image {  
 
-  // Draws a Square Image rotated at offset around it's axis  
+extension ImageHelpers on ui.Image {
+  // Draws a Square Image rotated at offset around it's axis
   void drawRotatedSquare(
       {Canvas canvas,
       double size,
@@ -56,16 +55,15 @@ extension ImageHelpers on ui.Image {
       double rotation,
       Paint paint,
       bool flip = false}) {
-
     canvas.save();
     canvas.translate(offset.dx, offset.dy);
-    
+
     if (flip) {
       canvas.scale(-1, 1);
     }
 
     canvas.save();
-    canvas.rotate(flip?-rotation:rotation);
+    canvas.rotate(flip ? -rotation : rotation);
     canvas.scale(size);
     canvas.drawImageRect(this, bounds(), kTargetRect, paint);
     canvas.restore();
@@ -75,8 +73,6 @@ extension ImageHelpers on ui.Image {
   Rect bounds() =>
       Rect.fromLTRB(0, 0, this.width.toDouble(), this.height.toDouble());
 }
-
-
 
 ///🧮🧮🧮🧮🧮🧮🧮🧮🧮🧮
 /// Math Helpers
@@ -88,25 +84,24 @@ extension DoubleHelpers on double {
   double fraction() => this - this.floorToDouble();
 }
 
-
 ///🗺️🗺️🗺️🗺️🗺️🗺️🗺️🗺️🗺️🗺️
-/// Global .map((in)=>out) 
-/// 
+/// Global .chain((in)=>out)
+///
 /// I = Input Type
 /// O = output Type
-/// 
+///
 /// Usage:
 ///  "test"
-///    .map((val)=>val.length)      -> 4      
-///    .map((val)=>val*val)         -> 16
-/// 
+///    .chain((val)=>val.length)      -> 4
+///    .chain((val)=>val*val)         -> 16
+///
 /// Just like you'd map in a collection
-/// 
-/// Useful for scoping a value without 
+///
+/// Useful for scoping a value without
 /// creating a variable.
 
-extension MapHelper<IN,OUT> on IN {
-  OUT map(OUT mapFunc(IN input)) => mapFunc(this);
+extension ChainHelper<IN, OUT> on IN {  
+  OUT chain<OUT>(OUT mapFunc(IN input)) => mapFunc(this);
 }
 
 ///📏📏📏📏📏📏📏📏📏📏
@@ -116,31 +111,24 @@ extension VectorHelpers on vector.Vector3 {
   Offset toOffset() => Offset(this.x, this.y);
 }
 
-
 ///🕓🕓🕓🕓🕓🕓🕓🕓🕓
 /// Helpers for the ClockModel
-extension ClockModelHelpers on ClockModel {
+///
 
+//Map of Weather to Emoji
+const weatherMap = {
+  WeatherCondition.cloudy: '☁️',
+  WeatherCondition.foggy: '🌫️',
+  WeatherCondition.rainy: '🌧️',
+  WeatherCondition.snowy: '🌨️',
+  WeatherCondition.sunny: '☀️',
+  WeatherCondition.thunderstorm: '⛈️',
+  WeatherCondition.windy: '🌬️'
+};
+
+extension ClockModelHelpers on ClockModel {
   // Want to show the weather as a Emoji
-  String get weatherEmoji {
-    switch (this.weatherCondition) {
-      case WeatherCondition.cloudy:
-        return '☁️';
-      case WeatherCondition.foggy:
-        return '🌫️';
-      case WeatherCondition.rainy:
-        return '🌧️';
-      case WeatherCondition.snowy:
-        return '🌨️';
-      case WeatherCondition.sunny:
-        return '☀️';
-      case WeatherCondition.thunderstorm:
-        return '⛈️';
-      case WeatherCondition.windy:
-        return '🌬️';
-    }
-    return "";
-  }
+  String get weatherEmoji => weatherMap[this.weatherCondition];
 }
 
 extension TextStyleHelpers on TextStyle {

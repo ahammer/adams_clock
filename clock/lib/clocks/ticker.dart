@@ -31,19 +31,21 @@ class TickerWidget extends StatefulWidget {
 
   @override
   _TickerWidgetState createState() => _TickerWidgetState();
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(ObjectFlagProperty<StringBuilder>.has('builder', builder));
-  }
 }
 
+///
+/// Handles the rebuilding of this widget
+///
+/// It'll rebuild once a second.
+///
 class _TickerWidgetState extends State<TickerWidget> {
   Timer _timer;
 
   @override
   void initState() {
+    //Each ticker should run once a second
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      //Trigger a rebuild
       setState(() {});
     });
     super.initState();
@@ -55,24 +57,30 @@ class _TickerWidgetState extends State<TickerWidget> {
     super.dispose();
   }
 
+  ///  Build the Widget for the Ticker
+  ///
+  ///  1) Get the current string to show
+  ///  2) Build a row full of _TickerCharacterViews
+  ///  3) Return that row.
   @override
-  Widget build(BuildContext context) {
-    final string = widget.builder();
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        ...List.generate(
-            string.length,
-            (idx) => _TickerCharacterView(
-                first: idx == 0,
-                last: idx == (string.length - 1),
-                builder: widget.digitBuilder,
-                digit: string.charAt(idx)))
-      ],
-    );
-  }
+  Widget build(BuildContext context) =>
+      widget.builder().chain((currentString) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ...List.generate(
+                  currentString.length,
+                  (idx) => _TickerCharacterView(
+                      first: idx == 0,
+                      last: idx == (currentString.length - 1),
+                      builder: widget.digitBuilder,
+                      digit: currentString.charAt(idx)))
+            ],
+          ));
 }
 
+/// Ticker Character View
+///
+///
 class _TickerCharacterView extends StatelessWidget {
   final String digit;
   final bool first, last;
@@ -87,17 +95,18 @@ class _TickerCharacterView extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        AnimatedSwitcher(
-            transitionBuilder: (child, animation) => _TickerCharacterTransition(
-                child: child, scale: animation, alignment: Alignment.center),
-            child: builder(digit, first, last),
-            duration: Duration(milliseconds: 500)),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Stack(
+        children: <Widget>[
+          AnimatedSwitcher(
+              transitionBuilder: (child, animation) =>
+                  _TickerCharacterTransition(
+                      child: child,
+                      scale: animation,
+                      alignment: Alignment.center),
+              child: builder(digit, first, last),
+              duration: Duration(milliseconds: 500)),
+        ],
+      );
 }
 
 ///
@@ -119,15 +128,13 @@ class _TickerCharacterTransition extends AnimatedWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    final double scaleValue = scale.value;
-    final Matrix4 transform = Matrix4.identity()..scale(1.0, scaleValue, 1.0);
-    return Transform(
-      transform: transform,
-      alignment: alignment,
-      child: child,
-    );
-  }
+  Widget build(BuildContext context) =>
+      (Matrix4.identity()..scale(1.0, scale.value, 1.0))
+          .chain((transform) => Transform(
+                transform: transform,
+                alignment: alignment,
+                child: child,
+              ));
 }
 
 ///
@@ -146,9 +153,9 @@ class StyledTicker extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(
-          decoration: BoxDecoration(            
-            border: Border.all(),
-            color: Theme.of(context).cardColor.withOpacity(0.5)),
+          decoration: BoxDecoration(
+              border: Border.all(),
+              color: Theme.of(context).cardColor.withOpacity(0.5)),
           height: height,
           child: ClipRect(
             child: BackdropFilter(
