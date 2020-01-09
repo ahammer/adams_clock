@@ -52,7 +52,7 @@ import 'package:adams_clock/clocks/stars.dart';
 
 // The size of earth as a ratio of screen width
 const kEarthSize = 0.50;
-const kEarthShadowShrink = 0.963;
+const kEarthShadowShrink = 1.0;
 const kEarthRotationSpeed = -20.0;
 
 // The size of the sun as a rat
