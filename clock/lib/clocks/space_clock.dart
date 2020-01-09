@@ -55,8 +55,10 @@ const kEarthSize = 0.50;
 const kEarthShadowShrink = 1.0;
 const kEarthRotationSpeed = -20.0;
 
-// The size of the sun as a rat
+// The size of the sun as a ratio of screen width
 const kSunSize = 2.0;
+
+// Sun disc size (smaller than the images a bit, to give a "halo")
 const kSunBaseSize = 0.96;
 const kSunOrbitMultiplierX = 1.8;
 const kSunOrbitMultiplierY = 1.8;
@@ -110,8 +112,7 @@ const List<String> images = [
   "moon",
   "sun_1",
   "sun_2",
-  "sun_3",
-  "sun_4",
+  "sun_3",  
   "stars",
   "shadow"
 ];
@@ -139,9 +140,15 @@ class SpaceClockPainter extends AnimatedPainter {
   /// These paints serve as the brushes
   ///
   /// Most are getters as they like to be tweaked
-  final Paint standardPaint = Paint()..color = Colors.black;
-  final Paint sunBasePaint = Paint()..color = Colors.white;
-  final Paint sunLayerPaint = Paint();
+  final Paint standardPaint = Paint()
+    ..color = Colors.black
+    ..filterQuality = FilterQuality.medium; 
+
+  final Paint sunBasePaint = Paint()
+    ..color = Colors.white;
+    
+  final Paint sunLayerPaint = Paint()
+    ..filterQuality = FilterQuality.medium;
 
   bool get loaded => imageMap.length == images.length;
 
@@ -304,6 +311,8 @@ class SpaceClockPainter extends AnimatedPainter {
     int phase = 0;
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
     canvas.drawCircle(sunOffset, sunDiameter / 2 * kSunBaseSize, sunBasePaint);
+    
+    //We are going to go through layers 1-3 twice, once flipped
     [true, false].forEach((shouldFlip) {
       imageMap["sun_1"].drawRotatedSquare(
           canvas: canvas,
