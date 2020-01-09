@@ -146,45 +146,31 @@ class StyledTicker extends StatelessWidget {
   final double fontSize;
 
   const StyledTicker(
-      {Key key, @required this.builder, this.height = 32, this.fontSize = 18})
+      {Key key, @required this.builder, this.height = 20, this.fontSize = 12})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(),
-              color: Theme.of(context).cardColor.withOpacity(0.5)),
-          height: height,
-          child: ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-              child: Opacity(
-                opacity: 1.0,
-                child: TickerWidget(
-                  builder: builder,
-                  digitBuilder: (glyph, first, last) => Container(
-                      decoration: BoxDecoration(
-                          //color: Theme.of(context).cardColor.withOpacity(1.0),
-                          ),
-                      key: ValueKey(glyph),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                        child: Center(
-                            child: Text(
-                          glyph,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subhead
-                              .withNovaMono()
-                              .copyWith(fontSize: fontSize),
-                        )),
-                      )),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
+  Widget build(BuildContext context) => Container(
+    decoration: BoxDecoration(        
+        boxShadow: [BoxShadow(color: Theme.of(context).canvasColor.withOpacity(0.75), blurRadius: 2, spreadRadius: 2)],
+        borderRadius: BorderRadius.circular(this.height/2),
+        color: Colors.transparent),
+    height: height,
+    child: ClipRect(
+      child: TickerWidget(
+        builder: builder,
+        digitBuilder: (glyph, first, last) => Container(
+            key: ValueKey(glyph),
+            child: Center(
+                child: Text(
+              glyph,
+              style: Theme.of(context)
+                  .textTheme
+                  .subhead
+                  .withNovaMono()
+                  .copyWith(fontSize: fontSize),
+            ))),
+      ),
+    ),
+  );
 }

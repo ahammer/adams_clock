@@ -132,5 +132,5 @@ extension ClockModelHelpers on ClockModel {
 }
 
 extension TextStyleHelpers on TextStyle {
-  TextStyle withNovaMono() => this.copyWith(fontFamily: "NovaMono");
+  TextStyle withNovaMono() => this.copyWith(fontFamily: "NovaMono", fontWeight: FontWeight.bold);
 }

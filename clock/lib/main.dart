@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/customizer.dart';
 import 'package:adams_clock/util/extensions.dart';
+import 'package:adams_clock/util/string_util.dart';
 
 void main() {
   ///
@@ -26,8 +27,8 @@ final StringBuilder buildTime12String =
     () => _timeFormat12.format(DateTime.now());
 final StringBuilder buildDateString = () => _dateFormat.format(DateTime.now());
 
-String buildWeatherTickerText(ClockModel model) {
-  final phase = (DateTime.now().second / 5).round() % 3;
+String buildTickerText(ClockModel model) {
+  final phase = (DateTime.now().second / 5).round() % 5;
 
   String currentPart;
   if (phase == 0) {
@@ -36,56 +37,38 @@ String buildWeatherTickerText(ClockModel model) {
     currentPart = "LOW ${model.lowString}";
   } else if (phase == 2) {
     currentPart = "HIGH ${model.highString}";
+  } else if (phase == 3) {
+    currentPart = model.location;
+  } else {
+    currentPart = buildDateString();
   }
 
-  String buffer = "           ";
-  String output = "$currentPart";
-
-  return model.weatherEmoji +
-      buffer.replaceRange(buffer.length - output.length, buffer.length, output);
+  return "$currentPart ${model.weatherEmoji}";
 }
 
 class AdamsSpaceClock extends StatelessWidget {
   final ClockModel model;
   const AdamsSpaceClock({Key key, @required this.model}) : super(key: key);
 
+  String buildTickerString() {
+    String timeString =
+        model.is24HourFormat ? buildTime24String() : buildTime12String();
+    return buildSpacedString(" $timeString", "${buildTickerText(model)}", 36);
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     return Stack(
       children: <Widget>[
         //The space clock
         SpaceClockScene(model),
 
-/*
-        
-        // The Time widget
-        Align(
-            alignment: Alignment.topRight,
-            child: StyledTicker(
-                fontSize: 14,
-                height: 24,
-                builder: () => buildWeatherTickerText(model))),
-
-        // The Location
         Align(
             alignment: Alignment.topLeft,
-            child: StyledTicker(
-                fontSize: 14, height: 24, builder: () => model.location)),
-*/
-        // The Time widget
-        Align(
-            alignment: Alignment.bottomCenter,
-            child: StyledTicker(
-                builder: model.is24HourFormat
-                    ? buildTime24String
-                    : buildTime12String)),
-/*
-        // The Date Widget
-        Align(
-            alignment: Alignment.bottomLeft,
-            child: StyledTicker(builder: buildDateString))*/
-            
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: StyledTicker(builder: buildTickerString),
+            )),
       ],
     );
   }
