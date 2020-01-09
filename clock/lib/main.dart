@@ -56,6 +56,7 @@ class AdamsSpaceClock extends StatelessWidget {
         //The space clock
         SpaceClockScene(),
 
+        /*
         // The Time widget
         Align(
             alignment: Alignment.topRight,
@@ -82,6 +83,7 @@ class AdamsSpaceClock extends StatelessWidget {
         Align(
             alignment: Alignment.bottomLeft,
             child: StyledTicker(builder: buildDateString))
+            */
       ],
     );
   }

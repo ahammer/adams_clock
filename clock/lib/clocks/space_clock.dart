@@ -58,8 +58,8 @@ const kEarthRotationSpeed = -20.0;
 // The size of the sun as a rat
 const kSunSize = 2.0;
 const kSunBaseSize = 0.96;
-const kSunOrbitMultiplierX = 1.25;
-const kSunOrbitMultiplierY = 1.7;
+const kSunOrbitMultiplierX = 1.8;
+const kSunOrbitMultiplierY = 1.8;
 const kSunSpeed = 12;
 
 const kMoonSize = 0.24;
@@ -81,9 +81,7 @@ const List<BlendMode> blendModes = [
   BlendMode.multiply,
   BlendMode.plus,
   BlendMode.multiply,
-  BlendMode.multiply,
   BlendMode.plus,
-  BlendMode.multiply,
   BlendMode.multiply,
   BlendMode.multiply,
 ];
@@ -315,13 +313,6 @@ class SpaceClockPainter extends AnimatedPainter {
           paint: sunLayerPaint..blendMode = blendModes[phase++],
           flip: shouldFlip);
       imageMap["sun_2"].drawRotatedSquare(
-          canvas: canvas,
-          size: sunDiameter,
-          offset: sunOffset,
-          rotation: sunRotation * SunLayerSpeed[phase] * kSunSpeed,
-          flip: shouldFlip,
-          paint: sunLayerPaint..blendMode = blendModes[phase++]);
-      imageMap["sun_3"].drawRotatedSquare(
           canvas: canvas,
           size: sunDiameter,
           offset: sunOffset,
