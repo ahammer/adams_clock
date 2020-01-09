@@ -29,13 +29,13 @@ import 'package:adams_clock/util/extensions.dart';
 final _random = Random();
 
 // The default number of stars we will generate
-const kNumberStars = 1000;
+const kNumberStars = 500;
 
 /// 🔬 The "resolution" of the starfield render batching
 /// N = number of draw calls to draw stars
 /// N = the number of transitions of opacity we do from
 ///     near to far
-const kSteps = 16;
+const kSteps = 16; //16 is fast enough, yet doesn't really show much stepping
 const kStepSize = 1.0 / kSteps;
 
 /// ⏱️ Star Travel Time

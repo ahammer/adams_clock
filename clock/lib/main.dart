@@ -56,6 +56,7 @@ class AdamsSpaceClock extends StatelessWidget {
         //The space clock
         SpaceClockScene(),
 
+/*
         
         // The Time widget
         Align(
@@ -70,19 +71,19 @@ class AdamsSpaceClock extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: StyledTicker(
                 fontSize: 14, height: 24, builder: () => model.location)),
-
+*/
         // The Time widget
         Align(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment.bottomCenter,
             child: StyledTicker(
                 builder: model.is24HourFormat
                     ? buildTime24String
                     : buildTime12String)),
-
+/*
         // The Date Widget
         Align(
             alignment: Alignment.bottomLeft,
-            child: StyledTicker(builder: buildDateString))
+            child: StyledTicker(builder: buildDateString))*/
             
       ],
     );
