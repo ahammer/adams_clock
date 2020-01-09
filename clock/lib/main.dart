@@ -51,10 +51,11 @@ class AdamsSpaceClock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Stack(
       children: <Widget>[
         //The space clock
-        SpaceClockScene(),
+        SpaceClockScene(model),
 
 /*
         

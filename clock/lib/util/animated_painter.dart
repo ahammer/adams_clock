@@ -30,11 +30,17 @@ class _AnimatedPainterState extends State<AnimatedPaint>
     with SingleTickerProviderStateMixin {
   AnimatedPainter painter;
   AnimationController controller;
+
+  @override
+  void didChangeDependencies() {
+    painter = widget.painter();
+    painter.init();
+    super.didChangeDependencies();
+  }
+  
   @override
   void initState() {
     super.initState();
-    painter = widget.painter();
-    painter.init();
     controller =
         AnimationController(duration: const Duration(seconds: 1), vsync: this)
           ..repeat();
