@@ -57,8 +57,8 @@ import 'package:flutter_clock_helper/model.dart';
 abstract class SpaceConfig {
 // The size of earth as a ratio of screen width
   double get sunSize => 2.0;
-  double get earthSize => 0.50;
-  double get moonSize => 0.24;
+  double get earthSize => 0.40;
+  double get moonSize => 0.15;
 
   double get sunBaseSize => 0.96;
   double get sunOrbitMultiplierX => 0.8;
@@ -85,12 +85,12 @@ abstract class SpaceConfig {
       stops: [0.985, 1.0]);
   double get earthShadowShrink => 1.0;
   double get earthRotationSpeed => -10.0;
-  double get earthOrbitDivisor => 3; //ScreenWidth / X
+  double get earthOrbitDivisor => 4; //ScreenWidth / X
 
-  double get moonOrbitDivisorX => 2.5; //ScreenWidth / X
-  double get moonOrbitDivisorY => 3.5; //ScreenWidth / X
+  double get moonOrbitDivisorX => 3.5; //ScreenWidth / X
+  double get moonOrbitDivisorY => 4; //ScreenWidth / X
   double get moonRotationSpeed => -10;
-  double get moonSizeVariation => 0.05;
+  double get moonSizeVariation => 0.03;
   double get backgroundRotationSpeedMultiplier => 15;
   double get angleOffset => pi / 2;
 }
@@ -119,17 +119,16 @@ class DarkSpaceConfig extends SpaceConfig {
 
   DarkSpaceConfig._internal();
 
-  double get sunSize => 0.4;
+  double get sunSize => 0.3;
   double get earthSize => 0.25;
-
-  double get sunOrbitMultiplierX => 0.2;
-  double get sunOrbitMultiplierY => 0.2;
-
-  double get earthOrbitDivisor => 6; //ScreenWidth / X
-
   double get moonSize => 0.10;
+  double get sunOrbitMultiplierX => 0.3;
+  double get sunOrbitMultiplierY => 0.3;
   double get moonOrbitDivisorX => 5.5; //ScreenWidth / X
-  double get moonOrbitDivisorY => 6; //ScreenWidth / X
+  double get moonOrbitDivisorY => 5; //ScreenWidth / X
+  double get moonRotationSpeed => -10;
+  double get moonSizeVariation => 0.03;
+
 }
 
 /// Background Rotation Speed
@@ -389,10 +388,10 @@ class SpaceClockPainter extends AnimatedPainter {
       double sunRotation, SpaceConfig config) {
     int phase = 0;
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
-    sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(center:sunOffset, radius:sunDiameter / 2 * config.sunBaseSize));
+    sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(
+        center: sunOffset, radius: sunDiameter / 2 * config.sunBaseSize));
     canvas.drawCircle(
         sunOffset, sunDiameter / 2 * config.sunBaseSize, sunBasePaint);
-
 
     //We are going to go through layers 1-3 twice, once flipped
     [true, false].forEach((shouldFlip) {
