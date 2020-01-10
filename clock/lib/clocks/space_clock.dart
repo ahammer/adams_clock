@@ -76,13 +76,20 @@ abstract class SpaceConfig {
         BlendMode.multiply,
       ];
 
+  //We use a gradient for the sun
+  //Mainly to give it soft edges
+  RadialGradient get sunGradient => RadialGradient(
+      center: Alignment.center,
+      radius: 0.5,
+      colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
+      stops: [0.985, 1.0]);
   double get earthShadowShrink => 1.0;
-  double get earthRotationSpeed => -20.0;
+  double get earthRotationSpeed => -10.0;
   double get earthOrbitDivisor => 3; //ScreenWidth / X
 
   double get moonOrbitDivisorX => 2.5; //ScreenWidth / X
-  double get moonOrbitDivisorY => 6; //ScreenWidth / X
-  double get moonRotationSpeed => 40;
+  double get moonOrbitDivisorY => 3.5; //ScreenWidth / X
+  double get moonRotationSpeed => -10;
   double get moonSizeVariation => 0.05;
   double get backgroundRotationSpeedMultiplier => 15;
   double get angleOffset => pi / 2;
@@ -120,8 +127,8 @@ class DarkSpaceConfig extends SpaceConfig {
 
   double get earthOrbitDivisor => 6; //ScreenWidth / X
 
-  double get moonSize => 0.15;  
-  double get moonOrbitDivisorX => 4.5; //ScreenWidth / X
+  double get moonSize => 0.10;
+  double get moonOrbitDivisorX => 5.5; //ScreenWidth / X
   double get moonOrbitDivisorY => 6; //ScreenWidth / X
 }
 
@@ -326,11 +333,9 @@ class SpaceClockPainter extends AnimatedPainter {
     final double omoonx = cos(moonOrbit - config.angleOffset) *
         size.width /
         config.moonOrbitDivisorX;
-      
+
     final moonSin = sin(moonOrbit - config.angleOffset);
-    final double omoony = moonSin *
-        size.height /
-        config.moonOrbitDivisorY;
+    final double omoony = moonSin * size.height / config.moonOrbitDivisorY;
 
     // Draw the various layers, back to front
     drawBackground(
@@ -340,17 +345,18 @@ class SpaceClockPainter extends AnimatedPainter {
         size,
         earthOrbit * config.backgroundRotationSpeedMultiplier,
         time.millisecondsSinceEpoch / 1000.0);
+
     drawSun(canvas, size, osunx, osuny, sunDiameter, sunOrbit, config);
 
     //We draw the moon behind for the "top" pass of the circle
     if (time.second < 15 || time.second > 45) {
-      drawMoon(canvas, size, moonSin * config.moonSizeVariation, oearthx, oearthy, omoonx, omoony, osunx, osuny,
-          earthOrbit, config);
+      drawMoon(canvas, size, moonSin * config.moonSizeVariation, oearthx,
+          oearthy, omoonx, omoony, osunx, osuny, earthOrbit, config);
       drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit, config);
     } else {
       drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit, config);
-      drawMoon(canvas, size, moonSin * config.moonSizeVariation, oearthx, oearthy, omoonx, omoony, osunx, osuny,
-          earthOrbit, config);
+      drawMoon(canvas, size, moonSin * config.moonSizeVariation, oearthx,
+          oearthy, omoonx, omoony, osunx, osuny, earthOrbit, config);
     }
   }
 
@@ -383,8 +389,10 @@ class SpaceClockPainter extends AnimatedPainter {
       double sunRotation, SpaceConfig config) {
     int phase = 0;
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
+    sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(center:sunOffset, radius:sunDiameter / 2 * config.sunBaseSize));
     canvas.drawCircle(
         sunOffset, sunDiameter / 2 * config.sunBaseSize, sunBasePaint);
+
 
     //We are going to go through layers 1-3 twice, once flipped
     [true, false].forEach((shouldFlip) {
