@@ -83,7 +83,7 @@ abstract class SpaceConfig {
   double get moonOrbitDivisorX => 2.5; //ScreenWidth / X
   double get moonOrbitDivisorY => 6; //ScreenWidth / X
   double get moonRotationSpeed => 40;
-
+  double get moonSizeVariation => 0.05;
   double get backgroundRotationSpeedMultiplier => 15;
   double get angleOffset => pi / 2;
 }
@@ -120,8 +120,7 @@ class DarkSpaceConfig extends SpaceConfig {
 
   double get earthOrbitDivisor => 6; //ScreenWidth / X
 
-  double get moonSize => 0.15;
-
+  double get moonSize => 0.15;  
   double get moonOrbitDivisorX => 4.5; //ScreenWidth / X
   double get moonOrbitDivisorY => 6; //ScreenWidth / X
 }
@@ -327,7 +326,9 @@ class SpaceClockPainter extends AnimatedPainter {
     final double omoonx = cos(moonOrbit - config.angleOffset) *
         size.width /
         config.moonOrbitDivisorX;
-    final double omoony = sin(moonOrbit - config.angleOffset) *
+      
+    final moonSin = sin(moonOrbit - config.angleOffset);
+    final double omoony = moonSin *
         size.height /
         config.moonOrbitDivisorY;
 
@@ -343,12 +344,12 @@ class SpaceClockPainter extends AnimatedPainter {
 
     //We draw the moon behind for the "top" pass of the circle
     if (time.second < 15 || time.second > 45) {
-      drawMoon(canvas, size, oearthx, oearthy, omoonx, omoony, osunx, osuny,
+      drawMoon(canvas, size, moonSin * config.moonSizeVariation, oearthx, oearthy, omoonx, omoony, osunx, osuny,
           earthOrbit, config);
       drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit, config);
     } else {
       drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit, config);
-      drawMoon(canvas, size, oearthx, oearthy, omoonx, omoony, osunx, osuny,
+      drawMoon(canvas, size, moonSin * config.moonSizeVariation, oearthx, oearthy, omoonx, omoony, osunx, osuny,
           earthOrbit, config);
     }
   }
@@ -423,6 +424,7 @@ class SpaceClockPainter extends AnimatedPainter {
   void drawMoon(
       Canvas canvas,
       Size size,
+      double scaleOffset,
       double oEarthX,
       double oEarthY,
       double oMoonX,
@@ -438,14 +440,14 @@ class SpaceClockPainter extends AnimatedPainter {
         atan2(oEarthY + oMoonY - oSunY, oEarthX + oMoonX - oSunX) - pi / 2;
     imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * config.moonSize,
+        size: size.width * (config.moonSize + scaleOffset),
         offset: offset,
         rotation: earthOrbit * config.moonRotationSpeed,
         paint: standardPaint);
 
     imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * config.moonSize,
+        size: size.width * (config.moonSize + scaleOffset),
         offset: offset,
         rotation: shadowRotation,
         paint: standardPaint);
