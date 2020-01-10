@@ -48,10 +48,9 @@ import 'package:flutter_clock_helper/model.dart';
 ///
 /// Configuration
 
-
 ///
 /// This class represents a config
-/// 
+///
 /// The default values are the "Light" theme
 /// Sun is more prominent in Light
 /// Less prominent in dark
@@ -81,7 +80,8 @@ abstract class SpaceConfig {
   double get earthRotationSpeed => -20.0;
   double get earthOrbitDivisor => 3; //ScreenWidth / X
 
-  double get moonOrbitDivisor => 4; //ScreenWidth / X
+  double get moonOrbitDivisorX => 2.5; //ScreenWidth / X
+  double get moonOrbitDivisorY => 6; //ScreenWidth / X
   double get moonRotationSpeed => 40;
 
   double get backgroundRotationSpeedMultiplier => 15;
@@ -89,7 +89,7 @@ abstract class SpaceConfig {
 }
 
 /// Light Space Config
-/// 
+///
 /// All values are default
 class LightSpaceConfig extends SpaceConfig {
   static final LightSpaceConfig _singleton = LightSpaceConfig._internal();
@@ -113,14 +113,17 @@ class DarkSpaceConfig extends SpaceConfig {
   DarkSpaceConfig._internal();
 
   double get sunSize => 0.4;
-  double get earthSize => 0.35;
-  double get moonSize => 0.20;
+  double get earthSize => 0.25;
 
   double get sunOrbitMultiplierX => 0.2;
   double get sunOrbitMultiplierY => 0.2;
-    
+
   double get earthOrbitDivisor => 6; //ScreenWidth / X
-  double get moonOrbitDivisor => 5; //ScreenWidth / X
+
+  double get moonSize => 0.15;
+
+  double get moonOrbitDivisorX => 4.5; //ScreenWidth / X
+  double get moonOrbitDivisorY => 6; //ScreenWidth / X
 }
 
 /// Background Rotation Speed
@@ -135,20 +138,18 @@ class DarkSpaceConfig extends SpaceConfig {
 ///
 
 final SpaceClockPainter painter = SpaceClockPainter();
+
 class SpaceClockScene extends StatelessWidget {
   final ClockModel model;
 
-
-  SpaceClockScene(this.model,  {Key key}) : super(key: key);
+  SpaceClockScene(this.model, {Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {    
-    /// We pass the current theme to the Painter so that 
+  Widget build(BuildContext context) {
+    /// We pass the current theme to the Painter so that
     /// It knows what SpaceConfig to use
     painter.isDark = Theme.of(context).brightness == Brightness.dark;
-    return AnimatedPaint(
-      painter: () => painter
-    );
+    return AnimatedPaint(painter: () => painter);
   }
 }
 
@@ -184,7 +185,6 @@ const List<String> images = [
 ///     Draw Moon
 ///
 
-
 class SpaceClockPainter extends AnimatedPainter {
   bool isDark = false;
 
@@ -199,7 +199,7 @@ class SpaceClockPainter extends AnimatedPainter {
     ..filterQuality = FilterQuality.low;
 
   final Paint sunBasePaint = Paint()..color = Colors.white;
-  final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;  
+  final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
 
   bool get loaded => imageMap.length == images.length;
 
@@ -265,11 +265,10 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Earth
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
-    final time = DateTime.now();    
+    final time = DateTime.now();
     final SpaceConfig config =
         (isDark) ? DarkSpaceConfig() : LightSpaceConfig();
 
-    
     // Use this if you want to test a particular time
     //final time = DateTime.utc(2000,1,1,9,0,0);
     // Or just want to see it really fast
@@ -327,10 +326,10 @@ class SpaceClockPainter extends AnimatedPainter {
     //Moon orbits 1/4 a screen distance away from the earth as well
     final double omoonx = cos(moonOrbit - config.angleOffset) *
         size.width /
-        config.moonOrbitDivisor;
+        config.moonOrbitDivisorX;
     final double omoony = sin(moonOrbit - config.angleOffset) *
         size.height /
-        config.moonOrbitDivisor;
+        config.moonOrbitDivisorY;
 
     // Draw the various layers, back to front
     drawBackground(
@@ -341,9 +340,17 @@ class SpaceClockPainter extends AnimatedPainter {
         earthOrbit * config.backgroundRotationSpeedMultiplier,
         time.millisecondsSinceEpoch / 1000.0);
     drawSun(canvas, size, osunx, osuny, sunDiameter, sunOrbit, config);
-    drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit, config);
-    drawMoon(canvas, size, oearthx, oearthy, omoonx, omoony, osunx, osuny,
-        earthOrbit, config);
+
+    //We draw the moon behind for the "top" pass of the circle
+    if (time.second < 15 || time.second > 45) {
+      drawMoon(canvas, size, oearthx, oearthy, omoonx, omoony, osunx, osuny,
+          earthOrbit, config);
+      drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit, config);
+    } else {
+      drawEarth(canvas, size, oearthx, oearthy, earthOrbit, sunOrbit, config);
+      drawMoon(canvas, size, oearthx, oearthy, omoonx, omoony, osunx, osuny,
+          earthOrbit, config);
+    }
   }
 
   ///
