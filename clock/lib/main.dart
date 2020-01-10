@@ -53,7 +53,7 @@ class AdamsSpaceClock extends StatelessWidget {
   String buildTickerString() {
     String timeString =
         model.is24HourFormat ? buildTime24String() : buildTime12String();
-    return buildSpacedString(" $timeString", "${buildTickerText(model)}", 36);
+    return buildSpacedString(" $timeString ", "${buildTickerText(model)}", 36);
   }
 
   @override

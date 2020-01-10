@@ -126,6 +126,7 @@ const weatherMap = {
   WeatherCondition.windy: '🌬️'
 };
 
+
 extension ClockModelHelpers on ClockModel {
   // Want to show the weather as a Emoji
   String get weatherEmoji => weatherMap[this.weatherCondition];
