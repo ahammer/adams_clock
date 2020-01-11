@@ -5,16 +5,17 @@ A clock for the flutter clock challenge featuring the following
 
 - A not physically accurate space simulation
 - Sun, Earth and Moon
-- A digital clock in the top-left
+- A digital clock in the top-left so you can actually tell the time.
 - "Dark" and "Light" themes. The sun is much bigger in the Light Theme.
 
 How it works
 
-Sun = Hour hand
-Earth = Minute Hand
-Moon = Seconds hand
+- Sun = Hour hand
+- Earth = Minute Hand
+- Moon = Seconds hand
 
-Sun and Earth rotate the screen. Moon rotates the earth.
+- Sun and Earth rotate the screen. 
+- Moon rotates the earth.
 
 Check the screenshot for reference times/examples, or the youtube link below. 
 
