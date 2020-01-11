@@ -369,7 +369,7 @@ class SpaceClockPainter extends AnimatedPainter {
   void drawBackground(Canvas canvas, Size size, double earthOrbit) =>
       imageMap["stars"].drawRotatedSquare(
           canvas: canvas,
-          size: size.width + size.height,
+          size: sqrt(size.width*size.width + size.height*size.height),
           offset: Offset(size.width / 2, size.height / 2),
           rotation: earthOrbit,
           paint: standardPaint);
