@@ -1,19 +1,20 @@
 # Adam's Space Clock
 Flutter Clock
 
-Check it out on youtube (gif @ 16x speed)
-[![Clock in action](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/gif_preview.gif)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
-
-Check the screenshot for reference times/examples, or the youtube link below. 
-![alt text](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/contact_sheet.jpg)
-
-
 A clock for the flutter clock challenge featuring the following
 
 - A not physically accurate space simulation
 - Sun, Earth and Moon, Starfield and Background
 - A digital clock in the top-left so you can actually tell the time.
 - "Dark" and "Light" themes. The sun is much bigger in the Light Theme.
+
+
+Check it out on youtube (gif @ 16x speed)
+[![Clock in action](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/gif_preview.gif)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
+
+Check the screenshot for reference times/examples, or the youtube link below. 
+![alt text](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/contact_sheet.jpg)
+
 
 How it works
 
