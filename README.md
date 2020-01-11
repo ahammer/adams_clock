@@ -1,10 +1,12 @@
 # adams_clock
 Flutter Clock
 
+Check it out on youtube (gif @ 16x speed)
+[![Clock in action](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/gif_preview.gif)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
+
 Check the screenshot for reference times/examples, or the youtube link below. 
 ![alt text](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/contact_sheet.jpg)
 
-[![Clock in action](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/gif_preview.gif)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
 
 A clock for the flutter clock challenge featuring the following
 
@@ -21,11 +23,19 @@ How it works
 - Sun and Earth rotate the screen. 
 - Moon rotates the earth.
 
-Under the hood
+
+Drawn in the following order
 
 - Background image created digitally
   - drawn rotating slowly on the screen over time
 
+- StarField
+  - Fixed pool of random stars [x,y,z] between [0 to 1]
+  - z changes linearly through time
+  - decimal is chopped off (e.g. 4.35 = 0.35). This keep's 0-1 range and represents "looping"
+  - Transformed and projected with vector math
+  - Batched and Drawn to reduce draw calls
+  
 - Sun created from layers
   - Layer 0: Radial Gradient, White with soft border that fade towards deep orange.
   - Layer 1-6: Images blended with plus and multiply (defined in config)
@@ -36,12 +46,6 @@ Under the hood
   - "Shadow" layer drawn on top.
   - Draw order between moon/earth is switched to simulate an orbit
 
-- StarField
-  - Fixed pool of random stars [x,y,z] between [0 to 1]
-  - z changes linearly through time
-  - decimal is chopped off (e.g. 4.35 = 0.35). This keep's 0-1 range and represents "looping"
-  - Transformed and projected with vector math
-  - Batched and Drawn to reduce draw calls
   
 - Digital Clock
   - Built on Flutters widget system
