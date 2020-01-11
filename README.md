@@ -1,4 +1,4 @@
-# adams_clock
+# Adam's Space Clock
 Flutter Clock
 
 Check it out on youtube (gif @ 16x speed)
