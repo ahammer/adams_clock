@@ -8,6 +8,18 @@ import 'package:flutter_clock_helper/customizer.dart';
 import 'package:adams_clock/util/extensions.dart';
 import 'package:adams_clock/util/string_util.dart';
 
+
+// Use this time instead of DateTime.now() to globally inject a specific time
+//DateTime get spaceClockTime => DateTime.now();
+// Use this if you want to test a particular time
+//DateTime get spaceClockTime => DateTime.utc(2000,1,1,0,0,0);
+//DateTime get spaceClockTime => DateTime.utc(2000,1,1,3,15,15);
+//DateTime get spaceClockTime => DateTime.utc(2000,1,1,6,30,30);
+DateTime get spaceClockTime => DateTime.utc(2000,1,1,9,45,45);
+// Or just want to see it really fast
+//DateTime get spaceClockTime => DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch * 60*60);
+
+
 void main() {
   ///
   ///  For windows dev
@@ -22,13 +34,13 @@ final DateFormat _timeFormat12 = DateFormat("hh:mm:ss");
 final DateFormat _dateFormat = DateFormat.yMd();
 
 final StringBuilder buildTime24String =
-    () => _timeFormat24.format(DateTime.now());
+    () => _timeFormat24.format(spaceClockTime);
 final StringBuilder buildTime12String =
-    () => _timeFormat12.format(DateTime.now());
-final StringBuilder buildDateString = () => _dateFormat.format(DateTime.now());
+    () => _timeFormat12.format(spaceClockTime);
+final StringBuilder buildDateString = () => _dateFormat.format(spaceClockTime);
 
 String buildTickerText(ClockModel model) {
-  final phase = (DateTime.now().second / 5).round() % 5;
+  final phase = (spaceClockTime.second / 5).round() % 5;
 
   String currentPart;
   if (phase == 0) {

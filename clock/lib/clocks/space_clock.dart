@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:adams_clock/main.dart';
 import 'package:adams_clock/util/animated_painter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'dart:ui' as ui;
 import 'package:adams_clock/util/image_loader.dart';
 import 'package:adams_clock/clocks/stars.dart';
 import 'package:flutter_clock_helper/model.dart';
-
+import 'package:adams_clock/util/extensions.dart';
 ///
 /// Sun Clock
 ///
@@ -57,7 +58,7 @@ import 'package:flutter_clock_helper/model.dart';
 abstract class SpaceConfig {
 // The size of earth as a ratio of screen width
   double get sunSize => 2.0;
-  double get earthSize => 0.40;
+  double get earthSize => 0.35;
   double get moonSize => 0.15;
 
   double get sunBaseSize => 0.96;
@@ -85,9 +86,9 @@ abstract class SpaceConfig {
       stops: [0.985, 1.0]);
   double get earthShadowShrink => 1.0;
   double get earthRotationSpeed => -10.0;
-  double get earthOrbitDivisor => 4; //ScreenWidth / X
+  double get earthOrbitDivisor => 6; //ScreenWidth / X
 
-  double get moonOrbitDivisorX => 3.5; //ScreenWidth / X
+  double get moonOrbitDivisorX => 4; //ScreenWidth / X
   double get moonOrbitDivisorY => 4; //ScreenWidth / X
   double get moonRotationSpeed => -10;
   double get moonSizeVariation => 0.03;
@@ -121,13 +122,13 @@ class DarkSpaceConfig extends SpaceConfig {
 
   double get sunSize => 0.3;
   double get earthSize => 0.25;
-  double get moonSize => 0.10;
+  double get moonSize => 0.08;
   double get sunOrbitMultiplierX => 0.3;
-  double get sunOrbitMultiplierY => 0.3;
+  double get sunOrbitMultiplierY => 0.25;
   double get moonOrbitDivisorX => 5.5; //ScreenWidth / X
-  double get moonOrbitDivisorY => 5; //ScreenWidth / X
+  double get moonOrbitDivisorY => 5.5; //ScreenWidth / X
   double get moonRotationSpeed => -10;
-  double get moonSizeVariation => 0.03;
+  double get moonSizeVariation => 0.01;
 
 }
 
@@ -270,14 +271,9 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Earth
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
-    final time = DateTime.now();
+    final time = spaceClockTime;
     final SpaceConfig config =
         (isDark) ? DarkSpaceConfig() : LightSpaceConfig();
-
-    // Use this if you want to test a particular time
-    //final time = DateTime.utc(2000,1,1,9,0,0);
-    // Or just want to see it really fast
-    //final time = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch * 60*60);
 
     ///
     /// We prepare all the math of the clock layout/orientation here
