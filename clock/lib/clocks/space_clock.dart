@@ -65,6 +65,7 @@ abstract class SpaceConfig {
   double get sunOrbitMultiplierX => 0.8;
   double get sunOrbitMultiplierY => 1.4;
   double get sunSpeed => 20;
+
   List<double> get sunLayerSpeed => [2, -3, 7, -6, 5, -4];
 
   // Blend Mode for sun layers
@@ -272,8 +273,8 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final SpaceConfig config =
-        (isDark) ? DarkSpaceConfig() : LightSpaceConfig();
+    final SpaceConfig config = LightSpaceConfig();
+        
 
     ///
     /// We prepare all the math of the clock layout/orientation here

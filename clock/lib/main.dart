@@ -10,12 +10,12 @@ import 'package:adams_clock/util/string_util.dart';
 
 
 // Use this time instead of DateTime.now() to globally inject a specific time
-//DateTime get spaceClockTime => DateTime.now();
+DateTime get spaceClockTime => DateTime.now();
 // Use this if you want to test a particular time
 //DateTime get spaceClockTime => DateTime.utc(2000,1,1,0,0,0);
 //DateTime get spaceClockTime => DateTime.utc(2000,1,1,3,15,15);
 //DateTime get spaceClockTime => DateTime.utc(2000,1,1,6,30,30);
-DateTime get spaceClockTime => DateTime.utc(2000,1,1,9,45,45);
+//DateTime get spaceClockTime => DateTime.utc(2000,1,1,9,45,45);
 // Or just want to see it really fast
 //DateTime get spaceClockTime => DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch * 60*60);
 
