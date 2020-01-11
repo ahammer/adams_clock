@@ -6,6 +6,7 @@ A clock for the flutter clock challenge featuring the following
 - A not physically accurate space simulation
 - Sun, Earth and Moon
 - A digital clock in the top-left
+- "Dark" and "Light" themes. The sun is much bigger in the Light Theme.
 
 How it works
 
