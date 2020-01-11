@@ -4,8 +4,7 @@ Flutter Clock
 Check the screenshot for reference times/examples, or the youtube link below. 
 ![alt text](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/contact_sheet.jpg)
 
-See it on youtube
-[![Clock in action](http://img.youtube.com/vi/pEJCsp5tsR4/0.jpg)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
+[![Clock in action](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/gif_preview.gif)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
 
 A clock for the flutter clock challenge featuring the following
 
