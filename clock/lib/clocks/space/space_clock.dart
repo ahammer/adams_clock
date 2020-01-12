@@ -1,15 +1,15 @@
 import 'dart:math';
 import 'dart:ui';
-import 'package:adams_clock/main.dart';
+import 'package:adams_clock/time_proxy.dart';
 import 'package:adams_clock/util/animated_painter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:adams_clock/util/extensions.dart';
 import 'dart:ui' as ui;
 import 'package:adams_clock/util/image_loader.dart';
-import 'package:adams_clock/clocks/stars.dart';
+import 'package:adams_clock/clocks/space/stars.dart';
 import 'package:flutter_clock_helper/model.dart';
-import 'package:adams_clock/util/extensions.dart';
+
 ///
 /// Sun Clock
 ///
