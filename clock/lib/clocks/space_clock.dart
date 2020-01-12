@@ -273,7 +273,7 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final SpaceConfig config = LightSpaceConfig();
+    final SpaceConfig config = isDark?DarkSpaceConfig():LightSpaceConfig();
         
 
     ///

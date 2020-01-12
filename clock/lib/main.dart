@@ -55,7 +55,7 @@ String buildTickerText(ClockModel model) {
     currentPart = buildDateString();
   }
 
-  return "$currentPart ${model.weatherEmoji}";
+  return "$currentPart";
 }
 
 class AdamsSpaceClock extends StatelessWidget {
@@ -65,7 +65,7 @@ class AdamsSpaceClock extends StatelessWidget {
   String buildTickerString() {
     String timeString =
         model.is24HourFormat ? buildTime24String() : buildTime12String();
-    return buildSpacedString(" $timeString ", "${buildTickerText(model)}", 36);
+    return buildSpacedString(" $timeString ", "${buildTickerText(model)}  ", 36);
   }
 
   @override
@@ -79,7 +79,7 @@ class AdamsSpaceClock extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: StyledTicker(builder: buildTickerString),
+              child: StyledTicker(builder: buildTickerString, clockModel: model),
             )),
       ],
     );

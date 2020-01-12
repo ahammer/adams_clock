@@ -28,6 +28,13 @@ flutter:
    - assets/sun_3.png
    - assets/earth.png
    - assets/shadow.png
+   - weather_icons/cloud.png
+   - weather_icons/fog.png
+   - weather_icons/rain.png
+   - weather_icons/snow.png
+   - weather_icons/sun.png
+   - weather_icons/thunder.png
+   - weather_icons/wind.png
 
   fonts:
     - family: NovaMono
