@@ -8,6 +8,12 @@ A clock for the flutter clock challenge featuring the following
 - A digital clock in the top-left so you can actually tell the time.
 - "Dark" and "Light" themes. The sun is much bigger in the Light Theme.
 
+Attributions
+- Most assets created bespoke
+- Sun & Moon courtesy of Nasa, Public Domain Imagery
+- Weather Icons from Google Emoji's (Apache2)
+
+No 3rd party libraries used in it's creation (aside from clock_model).
 
 Check it out on youtube (gif @ 16x speed)
 [![Clock in action](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/gif_preview.gif)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
