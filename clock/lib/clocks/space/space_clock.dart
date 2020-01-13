@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:adams_clock/clocks/space/config.dart';
 import 'package:adams_clock/time_proxy.dart';
 import 'package:adams_clock/util/animated_painter.dart';
 import 'package:flutter/foundation.dart';
@@ -44,104 +45,6 @@ import 'package:flutter_clock_helper/model.dart';
 ///   - "Seconds Hand"
 ///   - Rotates around earth once a minute
 ///   - Shadow layer is drawn over the moon, opposite the sun
-///
-
-///
-/// Configuration
-
-///
-/// This class represents a config
-///
-/// The default values are the "Light" theme
-/// Sun is more prominent in Light
-/// Less prominent in dark
-abstract class SpaceConfig {
-// The size of earth as a ratio of screen width
-  double get sunSize => 2.0;
-  double get earthSize => 0.35;
-  double get moonSize => 0.15;
-
-  double get sunBaseSize => 0.96;
-  double get sunOrbitMultiplierX => 0.8;
-  double get sunOrbitMultiplierY => 1.4;
-  double get sunSpeed => 20;
-
-  List<double> get sunLayerSpeed => [2, -3, 7, -6, 5, -4];
-
-  // Blend Mode for sun layers
-  List<BlendMode> get sunBlendModes => [
-        BlendMode.multiply,
-        BlendMode.plus,
-        BlendMode.multiply,
-        BlendMode.plus,
-        BlendMode.multiply,
-        BlendMode.multiply,
-      ];
-
-  //We use a gradient for the sun
-  //Mainly to give it soft edges
-  RadialGradient get sunGradient => RadialGradient(
-      center: Alignment.center,
-      radius: 0.5,
-      colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
-      stops: [0.985, 1.0]);
-  double get earthShadowShrink => 1.0;
-  double get earthRotationSpeed => -10.0;
-  double get earthOrbitDivisor => 6; //ScreenWidth / X
-
-  double get moonOrbitDivisorX => 4; //ScreenWidth / X
-  double get moonOrbitDivisorY => 4; //ScreenWidth / X
-  double get moonRotationSpeed => -10;
-  double get moonSizeVariation => 0.03;
-  double get backgroundRotationSpeedMultiplier => 15;
-  double get angleOffset => pi / 2;
-}
-
-/// Light Space Config
-///
-/// All values are default
-class LightSpaceConfig extends SpaceConfig {
-  static final LightSpaceConfig _singleton = LightSpaceConfig._internal();
-  factory LightSpaceConfig() {
-    return _singleton;
-  }
-
-  LightSpaceConfig._internal();
-}
-
-/// DarkSpaceConfig
-///
-/// Values are modified to make sun less prominent
-/// and space/darkness more prominent
-class DarkSpaceConfig extends SpaceConfig {
-  static final DarkSpaceConfig _singleton = DarkSpaceConfig._internal();
-  factory DarkSpaceConfig() {
-    return _singleton;
-  }
-
-  DarkSpaceConfig._internal();
-
-  double get sunSize => 0.3;
-  double get earthSize => 0.25;
-  double get moonSize => 0.08;
-  double get sunOrbitMultiplierX => 0.3;
-  double get sunOrbitMultiplierY => 0.25;
-  double get moonOrbitDivisorX => 5.5; //ScreenWidth / X
-  double get moonOrbitDivisorY => 5.5; //ScreenWidth / X
-  double get moonRotationSpeed => -10;
-  double get moonSizeVariation => 0.01;
-
-}
-
-/// Background Rotation Speed
-///
-/// The background rotates
-///
-
-/// SpaceClockScene
-/// The actual widget that draws this scene
-///
-/// Delegates out the actual Work to an AnimatedPaint with our SpaceClockPainter
 ///
 
 final SpaceClockPainter painter = SpaceClockPainter();
@@ -273,8 +176,7 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final SpaceConfig config = isDark?DarkSpaceConfig():LightSpaceConfig();
-        
+    final SpaceConfig config = isDark ? DarkSpaceConfig() : LightSpaceConfig();
 
     ///
     /// We prepare all the math of the clock layout/orientation here
@@ -366,7 +268,7 @@ class SpaceClockPainter extends AnimatedPainter {
   void drawBackground(Canvas canvas, Size size, double earthOrbit) =>
       imageMap["stars"].drawRotatedSquare(
           canvas: canvas,
-          size: sqrt(size.width*size.width + size.height*size.height),
+          size: sqrt(size.width * size.width + size.height * size.height),
           offset: Offset(size.width / 2, size.height / 2),
           rotation: earthOrbit,
           paint: standardPaint);
@@ -387,33 +289,23 @@ class SpaceClockPainter extends AnimatedPainter {
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
     sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(
         center: sunOffset, radius: sunDiameter / 2 * config.sunBaseSize));
+
     canvas.drawCircle(
         sunOffset, sunDiameter / 2 * config.sunBaseSize, sunBasePaint);
 
+
     //We are going to go through layers 1-3 twice, once flipped
-    [true, false].forEach((shouldFlip) {
-      imageMap["sun_1"].drawRotatedSquare(
+    config.sunLayers.forEach((layer){
+      sunLayerPaint.blendMode = layer.mode;
+      imageMap[layer.image].drawRotatedSquare(
           canvas: canvas,
           size: sunDiameter,
           offset: sunOffset,
-          rotation: sunRotation * config.sunLayerSpeed[phase] * config.sunSpeed,
-          paint: sunLayerPaint..blendMode = config.sunBlendModes[phase++],
-          flip: shouldFlip);
-      imageMap["sun_2"].drawRotatedSquare(
-          canvas: canvas,
-          size: sunDiameter,
-          offset: sunOffset,
-          rotation: sunRotation * config.sunLayerSpeed[phase] * config.sunSpeed,
-          flip: shouldFlip,
-          paint: sunLayerPaint..blendMode = config.sunBlendModes[phase++]);
-      imageMap["sun_3"].drawRotatedSquare(
-          canvas: canvas,
-          size: sunDiameter,
-          offset: sunOffset,
-          rotation: sunRotation * config.sunLayerSpeed[phase] * config.sunSpeed,
-          flip: shouldFlip,
-          paint: sunLayerPaint..blendMode = config.sunBlendModes[phase++]);
+          rotation: sunRotation * layer.speed * config.sunSpeed,
+          paint: sunLayerPaint,
+          flip: layer.flip);
     });
+    
   }
 
   ///
