@@ -25,11 +25,11 @@ abstract class SpaceConfig {
   double get sunSpeed => 30;
 
   List<SunLayer> get sunLayers => [
-    SunLayer("sun_1",  BlendMode.multiply, false, 0),    
+    SunLayer("sun_1",  BlendMode.multiply, false, -1),    
     SunLayer("sun_2",  BlendMode.plus, false, 5),
-    SunLayer("sun_3",  BlendMode.plus, false, -4),        
+    SunLayer("sun_3",  BlendMode.plus, false, -4),            
     SunLayer("sun_3",  BlendMode.multiply, true, -3),    
-    SunLayer("sun_4",  BlendMode.multiply, true, 0),    
+    SunLayer("sun_4",  BlendMode.multiply, true, 1),    
   ];
 
   //We use a gradient for the sun
