@@ -74,6 +74,7 @@ const List<String> images = [
   "sun_1",
   "sun_2",
   "sun_3",
+  "sun_4",
   "stars",
   "shadow"
 ];
@@ -109,7 +110,7 @@ class SpaceClockPainter extends AnimatedPainter {
     ..filterQuality = FilterQuality.low;
 
   final Paint sunBasePaint = Paint()..color = Colors.white;
-  final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
+  final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.high;
 
   bool get loaded => imageMap.length == images.length;
 

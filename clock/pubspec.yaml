@@ -26,6 +26,7 @@ flutter:
    - assets/sun_1.png
    - assets/sun_2.png
    - assets/sun_3.png
+   - assets/sun_4.png
    - assets/earth.png
    - assets/shadow.png
    - weather_icons/cloud.png
