@@ -1,57 +1,37 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 ///
 /// Configuration of the Space Clock
 ///
 
-// We make these getters so we can runtime chang the themes
+/// Light Theme Space Config
 SpaceConfig get lightSpaceConfig => _LightSpaceConfig();
+
+/// Dark Theme Space Config
 SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 
-/// Overall Config object
-///
-/// Sun Options
-/// - sunSize = Size of the Sun as a multiplier of the screen size
-/// - sunBaseSize = The "disc" that serves as the "surface" for the sun.
-///   Small values give more "corona"
-/// - sunOrbitMultiplierX - 0 = Center of Screen, 1 = Left/Right align with center of sun
-/// - sunOrbitMultiplierY - 0 = Center of Screen, 1 = Top/Bottom algin with center of sun
-/// - sunSpeed = Animation multiplier for the sun. 
-///   Higher values make the sun more active
-/// - sunLayers = Images that are drawn at the sun's location at various rotations/blend modes
-/// - sunGradient = The sunBase is painted with this gradient. 
-///   It's set to give a soft warm glow around the edges
-///
-/// Earth Options
-/// - earthSize = Size of the earth as a multiplier of screen size
-/// - earthOrbitMultiplierX = Same as Sun
-/// - earthOrbitMultiplierY = Same as Sun
-/// - earthRotationSpeed = Speed the earth rotates on the screen cosmetic only
-///
-/// Moon Options
-/// - moonSize = Size of the moon as a multiplier of screen size
-/// - moonOrbitMultiplierX = Same as Sun/Earth
-/// - moonOrbitMultiplierY = Same as Sun/Earth but moon pivots around earth
-/// - moonRotationSpeed = Speed the earth rotates on the screen cosmetic only
-/// - moonSizeVariation = moonSize +- moonSizeVariation 
-///   as moon travels "front" to "back"
-///
-/// Generic
-/// - backgroundRotationSpeedMultiplier = How fast the background and stars spin
-/// - angleOffset = 0 degrees != 12:00, this constant offsets the 
-///   clock to correct
-
+/// Default Values for the Space Config
+/// Also used for "Light"
 abstract class SpaceConfig {
-// The size of earth as a ratio of screen width
 
+  /// sunSize = Size of the Sun as a multiplier of the screen size
   double get sunSize => 2.0;
+
+  /// sunBaseSize = The "disc" that serves as the "surface" for the sun.
+  /// Small values give more "corona"
   double get sunBaseSize => 0.95;
+
+  /// sunOrbitMultiplierX - 0 = Center of Screen, 1 = Left/Right align with center of sun
   double get sunOrbitMultiplierX => 0.8;
+
+  /// sunOrbitMultiplierY - 0 = Center of Screen, 1 = Top/Bottom algin with center of sun
   double get sunOrbitMultiplierY => 1.4;
+
+  /// sunSpeed = Animation multiplier for the sun. Higher values speed the sun
   double get sunSpeed => 40;
 
+  /// sunLayers = Images that are drawn at the sun's location at various rotations/blend modes
   List<SunLayer> get sunLayers => [
         SunLayer(
             image: "sun_1",
@@ -68,24 +48,48 @@ abstract class SpaceConfig {
             image: "sun_4", mode: BlendMode.multiply, flipped: true, speed: 1),
       ];
 
+  /// sunGradient = The sunBase is painted with this gradient. 
+  /// It's set to give a soft warm glow around the edges
   RadialGradient get sunGradient => RadialGradient(
       center: Alignment.center,
       radius: 0.5,
       colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
       stops: [0.985, 1.0]);
 
+
+  /// earthSize = Size of the earth as a multiplier of screen size
   double get earthSize => 0.35;
+
+  /// earthRotationSpeed = Speed the earth rotates on the screen cosmetic only
   double get earthRotationSpeed => -10.0;
+
+  /// earthOrbitMultiplierX = Same as Sun
   double get earthOrbitMultiplierX => 0.3; //ScreenWidth / X
+
+  /// earthOrbitMultiplierY = Same as Sun
   double get earthOrbitMultiplierY => 0.3; //ScreenWidth / X
 
+  /// moonSize = Size of the moon as a multiplier of screen size
   double get moonSize => 0.15;
+
+  /// moonOrbitMultiplierX = Same as Sun/Earth
   double get moonOrbitMultiplierX => 0.25; //ScreenWidth / X
+
+  /// moonOrbitMultiplierY = Same as Sun/Earth but moon pivots around earth
   double get moonOrbitMultiplierY => 0.25; //ScreenWidth / X
+
+  /// moonRotationSpeed = Speed the earth rotates on the screen cosmetic only
   double get moonRotationSpeed => -10;
+
+  /// moonSizeVariation = moonSize +- moonSizeVariation 
+  /// as moon travels "front" to "back"
   double get moonSizeVariation => 0.03;
 
+  /// backgroundRotationSpeedMultiplier = How fast the background and stars spin
   double get backgroundRotationSpeedMultiplier => 15;
+
+  /// angleOffset = 0 degrees != 12:00, this constant offsets the 
+  /// clock to correct
   double get angleOffset => pi / 2;
 }
 
