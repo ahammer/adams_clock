@@ -24,13 +24,25 @@ SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 /// 
 /// Earth Options
 /// - earthSize = Size of the earth as a multiplier of screen size
+/// - earthOrbitMultiplierX = Same as Sun
+/// - earthOrbitMultiplierY = Same as Sun
+/// - earthRotationSpeed = Speed the earth rotates on the screen cosmetic only
+/// 
+/// Moon Options
+/// - moonSize = Size of the moon as a multiplier of screen size
+/// - moonOrbitMultiplierX = Same as Sun/Earth
+/// - moonOrbitMultiplierY = Same as Sun/Earth but moon pivots around earth
+/// - moonRotationSpeed = Speed the earth rotates on the screen cosmetic only
+/// - moonSizeVariation = moonSize +- moonSizeVariation as moon travels "front" to "back"
+/// 
+/// Generic 
+/// - backgroundRotationSpeedMultiplier = How fast the background and stars spin
+/// - angleOffset = 0 degrees != 12:00, this constant offsets the clock to correct
 
 abstract class SpaceConfig {
 // The size of earth as a ratio of screen width
-  double get sunSize => 2.0;
-  double get earthSize => 0.35;
-  double get moonSize => 0.15;
 
+  double get sunSize => 2.0;
   double get sunBaseSize => 0.95;
   double get sunOrbitMultiplierX => 0.8;
   double get sunOrbitMultiplierY => 1.4;
@@ -44,21 +56,23 @@ abstract class SpaceConfig {
         SunLayer("sun_4", BlendMode.multiply, true, 1),
       ];
 
-  //We use a gradient for the sun
-  //Mainly to give it soft edges
   RadialGradient get sunGradient => RadialGradient(
       center: Alignment.center,
       radius: 0.5,
       colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
       stops: [0.985, 1.0]);
-  
-  double get earthRotationSpeed => -10.0;
-  double get earthOrbitDivisor => 6; //ScreenWidth / X
 
-  double get moonOrbitDivisorX => 4; //ScreenWidth / X
-  double get moonOrbitDivisorY => 4; //ScreenWidth / X
+  double get earthSize => 0.35;
+  double get earthRotationSpeed => -10.0;
+  double get earthOrbitMultiplierX => 0.3; //ScreenWidth / X
+  double get earthOrbitMultiplierY => 0.3; //ScreenWidth / X
+
+  double get moonSize => 0.15;
+  double get moonOrbitMultiplierX => 0.25; //ScreenWidth / X
+  double get moonOrbitMultiplierY => 0.25; //ScreenWidth / X
   double get moonRotationSpeed => -10;
   double get moonSizeVariation => 0.03;
+
   double get backgroundRotationSpeedMultiplier => 15;
   double get angleOffset => pi / 2;
 }
@@ -73,8 +87,8 @@ class _DarkSpaceConfig extends SpaceConfig {
   double get moonSize => 0.08;
   double get sunOrbitMultiplierX => 0.3;
   double get sunOrbitMultiplierY => 0.25;
-  double get moonOrbitDivisorX => 5.5; //ScreenWidth / X
-  double get moonOrbitDivisorY => 5.5; //ScreenWidth / X
+  double get moonOrbitMultiplierX => 0.18; //ScreenWidth / X
+  double get moonOrbitMultiplierY => 0.1; //ScreenWidth / X
   double get moonRotationSpeed => -10;
   double get moonSizeVariation => 0.01;
 }

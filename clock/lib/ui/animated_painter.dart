@@ -7,7 +7,9 @@ typedef AnimatedPainter PainterBuilder();
 ///
 /// Implement this interface to get an animated Canvas.
 /// Use with AnimatedPaint() widget
-///
+/// 
+/// Used by SpaceClock to paint the scene
+/// paint() will be called as fast as possible
 abstract class AnimatedPainter {
   void init();
   void paint(Canvas canvas, Size size);
@@ -16,7 +18,7 @@ abstract class AnimatedPainter {
 ///
 /// AnimatedPaint
 ///
-///
+/// Provide a Painter() and this class will paint it
 class AnimatedPaint extends StatefulWidget {
   final PainterBuilder painter;
 
@@ -28,9 +30,11 @@ class AnimatedPaint extends StatefulWidget {
 
 class _AnimatedPainterState extends State<AnimatedPaint>
     with SingleTickerProviderStateMixin {
+      
   AnimatedPainter painter;
   AnimationController controller;
 
+  // Every time the painter changes, track that change and init the new painter  
   @override
   void didChangeDependencies() {
     painter = widget.painter();
@@ -38,6 +42,7 @@ class _AnimatedPainterState extends State<AnimatedPaint>
     super.didChangeDependencies();
   }
   
+  // Start a looping vsync animation to sync the drawing too
   @override
   void initState() {
     super.initState();
@@ -46,6 +51,7 @@ class _AnimatedPainterState extends State<AnimatedPaint>
           ..repeat();
   }
 
+  // Clean up the animation
   @override
   void dispose() {
     controller.stop();
@@ -53,16 +59,15 @@ class _AnimatedPainterState extends State<AnimatedPaint>
     super.dispose();
   }
 
+  
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
         width: double.infinity,
         height: double.infinity,
         child: AnimatedBuilder(
             animation: Tween<double>(begin: 0, end: 1).animate(controller),
             builder: (BuildContext context, Widget child) =>
                 CustomPaint(painter: _CustomPaintProxy(painter))));
-  }
 }
 
 /// 

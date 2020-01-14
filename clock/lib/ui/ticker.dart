@@ -86,13 +86,15 @@ class _TickerCharacterView extends StatelessWidget {
   final String digit;
   final bool first, last;
   final BuildDigitWidget builder;
+  final Duration duration;
 
   const _TickerCharacterView(
       {Key key,
       @required this.digit,
       @required this.builder,
       @required this.first,
-      @required this.last})
+      @required this.last,
+      this.duration = const Duration(milliseconds: 500)})
       : super(key: key);
 
   @override
@@ -105,7 +107,7 @@ class _TickerCharacterView extends StatelessWidget {
                       scale: animation,
                       alignment: Alignment.center),
               child: builder(digit, first, last),
-              duration: Duration(milliseconds: 500)),
+              duration: duration),
         ],
       );
 }

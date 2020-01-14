@@ -222,19 +222,19 @@ class SpaceClockPainter extends AnimatedPainter {
 
     //Earth orbits 1/4 the screen dimension around the center
     final double oearthx = cos(earthOrbit - config.angleOffset) *
-        size.width /
-        config.earthOrbitDivisor;
+        size.width *
+        config.earthOrbitMultiplierX;
     final double oearthy = sin(earthOrbit - config.angleOffset) *
-        size.height /
-        config.earthOrbitDivisor;
+        size.height *
+        config.earthOrbitMultiplierY;
 
     //Moon orbits 1/4 a screen distance away from the earth as well
     final double omoonx = cos(moonOrbit - config.angleOffset) *
-        size.width /
-        config.moonOrbitDivisorX;
+        size.width *
+        config.moonOrbitMultiplierX;
 
     final moonSin = sin(moonOrbit - config.angleOffset);
-    final double omoony = moonSin * size.height / config.moonOrbitDivisorY;
+    final double omoony = moonSin * size.height * config.moonOrbitMultiplierY;
 
     // Draw the various layers, back to front
     drawBackground(
