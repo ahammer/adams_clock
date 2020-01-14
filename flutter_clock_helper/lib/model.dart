@@ -23,7 +23,7 @@ class ClockModel extends ChangeNotifier {
   }
 
   /// Current location String, for example 'Mountain View, CA'.
-  get location => _location;
+  String get location => _location;
   String _location = 'Mountain View, CA';
   set location(String location) {
     if (location != _location) {

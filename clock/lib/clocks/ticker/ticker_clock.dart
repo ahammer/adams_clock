@@ -62,10 +62,13 @@ String buildRightTickerText(ClockModel model) {
 // C = Right/Phased String, Temp/Location/Date
 // D = 2 Character padding on the right for Icon Space
 // Icons were originally emoji, but imported assets for compat
-String buildTickerString(ClockModel clockModel) =>
-    (clockModel.is24HourFormat ? time24 : time12).chain((timeString) =>
+String buildTickerString(ClockModel clockModel) {
+  bool is24Hours = clockModel.is24HourFormat as bool;
+  
+  return (is24Hours ? time24 : time12).chain((timeString) =>
         buildSpacedString(
             " $timeString ", "${buildRightTickerText(clockModel)}  ", 36));
+}
 
 /// DateTimeAndWeatherTicker
 ///

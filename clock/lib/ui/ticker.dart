@@ -136,13 +136,14 @@ class _TickerCharacterView extends StatelessWidget {
 class _TickerCharacterTransition extends AnimatedWidget {
   const _TickerCharacterTransition({
     Key key,
-    @required Animation<double> scale,
+    @required this.scale,
     this.alignment = Alignment.center,
     this.child,
   })  : assert(scale != null),
         super(key: key, listenable: scale);
 
-  Animation<double> get scale => listenable;
+
+  final Animation<double> scale;
 
   final Alignment alignment;
   final Widget child;
