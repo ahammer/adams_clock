@@ -82,14 +82,23 @@ class _LightSpaceConfig extends SpaceConfig {}
 
 /// DarkSpaceConfig, Orbits/Scales changed slightly
 class _DarkSpaceConfig extends SpaceConfig {
+  @override
   double get sunSize => 0.3;
+  @override
   double get earthSize => 0.25;
+  @override
   double get moonSize => 0.08;
+  @override
   double get sunOrbitMultiplierX => 0.3;
+  @override
   double get sunOrbitMultiplierY => 0.25;
+  @override
   double get moonOrbitMultiplierX => 0.18; //ScreenWidth / X
+  @override
   double get moonOrbitMultiplierY => 0.1; //ScreenWidth / X
+  @override
   double get moonRotationSpeed => -10;
+  @override
   double get moonSizeVariation => 0.01;
 }
 
