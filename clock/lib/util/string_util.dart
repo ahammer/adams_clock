@@ -1,5 +1,3 @@
-import 'package:flutter/animation.dart';
-
 // Builds a string of Length length
 // $left_______$right
 // Used in the ticker
@@ -10,7 +8,4 @@ String buildSpacedString(String left, String right, int length) {
   }
   output+=right;
   return output;
-
-
-  
 }

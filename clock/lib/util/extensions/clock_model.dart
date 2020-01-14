@@ -17,6 +17,6 @@ const weatherMap = {
 
 
 extension ClockModelHelpers on ClockModel {
-  // Want to show the weather as a Emoji
+  // Want to show the weather as a Icon
   String get weatherAsset => weatherMap[this.weatherCondition];
 }
