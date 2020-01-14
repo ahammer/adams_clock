@@ -318,7 +318,7 @@ class SpaceClockPainter extends AnimatedPainter {
           offset: sunOffset,
           rotation: sunRotation * layer.speed * config.sunSpeed,
           paint: sunLayerPaint,
-          flip: layer.flip);
+          flip: layer.flipped);
     }
   }
 
@@ -348,7 +348,7 @@ class SpaceClockPainter extends AnimatedPainter {
     final offset = Offset(x, y);
     final shadowRotation =
         atan2(oEarthY + oMoonY - oSunY, oEarthX + oMoonX - oSunX) - pi / 2;
-        
+
     imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * (config.moonSize + scaleOffset),

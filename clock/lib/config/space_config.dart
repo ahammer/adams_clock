@@ -14,13 +14,15 @@ SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 ///
 /// Sun Options
 /// - sunSize = Size of the Sun as a multiplier of the screen size
-/// - sunBaseSize = The "disc" that serves as the "surface" for the sun. Small values give more "corona"
+/// - sunBaseSize = The "disc" that serves as the "surface" for the sun.
+///   Small values give more "corona"
 /// - sunOrbitMultiplierX - 0 = Center of Screen, 1 = Left/Right align with center of sun
 /// - sunOrbitMultiplierY - 0 = Center of Screen, 1 = Top/Bottom algin with center of sun
-/// - sunSpeed = Animation multiplier for the sun. Higher values make the sun more active
+/// - sunSpeed = Animation multiplier for the sun. 
+///   Higher values make the sun more active
 /// - sunLayers = Images that are drawn at the sun's location at various rotations/blend modes
-/// - sunGradient = The sunBase is painted with this gradient. It's set to give a soft warm glow around the edges
-///
+/// - sunGradient = The sunBase is painted with this gradient. 
+///   It's set to give a soft warm glow around the edges
 ///
 /// Earth Options
 /// - earthSize = Size of the earth as a multiplier of screen size
@@ -33,11 +35,13 @@ SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 /// - moonOrbitMultiplierX = Same as Sun/Earth
 /// - moonOrbitMultiplierY = Same as Sun/Earth but moon pivots around earth
 /// - moonRotationSpeed = Speed the earth rotates on the screen cosmetic only
-/// - moonSizeVariation = moonSize +- moonSizeVariation as moon travels "front" to "back"
+/// - moonSizeVariation = moonSize +- moonSizeVariation 
+///   as moon travels "front" to "back"
 ///
 /// Generic
 /// - backgroundRotationSpeedMultiplier = How fast the background and stars spin
-/// - angleOffset = 0 degrees != 12:00, this constant offsets the clock to correct
+/// - angleOffset = 0 degrees != 12:00, this constant offsets the 
+///   clock to correct
 
 abstract class SpaceConfig {
 // The size of earth as a ratio of screen width
@@ -49,11 +53,19 @@ abstract class SpaceConfig {
   double get sunSpeed => 40;
 
   List<SunLayer> get sunLayers => [
-        SunLayer("sun_1", BlendMode.multiply, false, -1),
-        SunLayer("sun_2", BlendMode.plus, false, 5),
-        SunLayer("sun_3", BlendMode.plus, false, -4),
-        SunLayer("sun_3", BlendMode.multiply, true, -3),
-        SunLayer("sun_4", BlendMode.multiply, true, 1),
+        SunLayer(
+            image: "sun_1",
+            mode: BlendMode.multiply,
+            flipped: false,
+            speed: -1),
+        SunLayer(
+            image: "sun_2", mode: BlendMode.plus, flipped: false, speed: 5),
+        SunLayer(
+            image: "sun_3", mode: BlendMode.plus, flipped: false, speed: -4),
+        SunLayer(
+            image: "sun_3", mode: BlendMode.multiply, flipped: true, speed: -3),
+        SunLayer(
+            image: "sun_4", mode: BlendMode.multiply, flipped: true, speed: 1),
       ];
 
   RadialGradient get sunGradient => RadialGradient(
@@ -105,12 +117,25 @@ class _DarkSpaceConfig extends SpaceConfig {
 /// Represents a "layer" of the sun
 ///
 /// This is baked into the config so we can say
-/// what layers are drawn, with what blend mode, and if they are visually flipped
+/// what layers are drawn, with what blend mode,
+/// and if they are visually flipped
 class SunLayer {
+  /// The image name, e.g. sun_1 or sun_2, that would be in the map
   final String image;
+
+  /// The blend mode we will draw this layer
   final BlendMode mode;
-  final bool flip;
+
+  /// We can flip layers to give fake randomness
+  final bool flipped;
+
+  /// And we should set a speed the layers transition
   final double speed;
 
-  SunLayer(this.image, this.mode, this.flip, this.speed);
+  /// Construct a sun layer
+  SunLayer(
+      {@required this.image,
+      @required this.mode,
+      @required this.flipped,
+      @required this.speed});
 }
