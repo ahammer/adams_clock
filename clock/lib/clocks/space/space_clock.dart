@@ -46,6 +46,9 @@ import 'package:flutter_clock_helper/model.dart';
 ///   - Rotates around earth once a minute
 ///   - Shadow layer is drawn over the moon, opposite the sun
 ///
+/// Notes: This is graphics/math heavy, custom code to create the scene
+///
+///
 final SpaceClockPainter painter = SpaceClockPainter();
 
 class SpaceClockScene extends StatelessWidget {
@@ -57,7 +60,7 @@ class SpaceClockScene extends StatelessWidget {
   Widget build(BuildContext context) {
     /// We pass the current theme to the Painter so that
     /// It knows what SpaceConfig to use
-    painter.isDark = Theme.of(context).brightness == Brightness.dark;    
+    painter.isDark = Theme.of(context).brightness == Brightness.dark;
     return AnimatedPaint(painter: () => painter);
   }
 }
@@ -96,24 +99,28 @@ const List<String> images = [
 /// Note:
 ///  - This object acts as a singleton
 ///  - Theme Light/Dark is passed to the painter through the SpaceClockScene.build() method
-class SpaceClockPainter extends AnimatedPainter {  
+class SpaceClockPainter extends AnimatedPainter {
+  // Whether to draw dark config or not
+  // Note: This is mutating state
   bool isDark = false;
 
+  // The images load into this map
   final Map<String, ui.Image> imageMap = Map();
 
   ///
   /// These paints serve as the brushes
   ///
-  /// Most are getters as they like to be tweaked
-  final Paint standardPaint = Paint()
-    ..color = Colors.black
-    ..filterQuality = FilterQuality.low;
-
-  final Paint sunBasePaint = Paint()..color = Colors.white;
+  /// StandardPaint is just for the planets and background
+  /// SunBasePaint will draw the gradient base/surface of the sun
+  /// SunLayerPaint will adjust blendmode based on the layer as it draws the perlin noise
+  final Paint standardPaint = Paint()..filterQuality = FilterQuality.low;
+  final Paint sunBasePaint = Paint()..filterQuality = FilterQuality.low;
   final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
 
+  // Have all the images loaded?
   bool get loaded => imageMap.length == images.length;
 
+  // Init on AnimatedPainter, we use this async method to load the images
   @override
   void init() async {
     for (int i = 0; i < images.length; i++) {
@@ -122,14 +129,14 @@ class SpaceClockPainter extends AnimatedPainter {
     }
   }
 
+  // Paint the Loading Screen/Scene
   @override
   void paint(Canvas canvas, Size size) {
+    //Keep it in the view    
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
-    if (!loaded) {
-      drawLoadingScreen(canvas, size);
-    } else {
-      drawSpace(canvas, size);
-    }
+
+    // Draw space or the loading screen
+    loaded ? drawSpace(canvas, size) : drawLoadingScreen(canvas, size);
   }
 
   /// drawLoadingScreen
@@ -144,13 +151,13 @@ class SpaceClockPainter extends AnimatedPainter {
         Rect.fromLTWH(0, 0, size.width, size.height), standardPaint);
 
     // Set up the TextSpan (Specifies Text, Font, Etc)
-    TextSpan span = new TextSpan(
-        style: new TextStyle(color: Colors.white, fontSize: 24).withNovaMono(),
+    TextSpan span = TextSpan(
+        style: TextStyle(color: Colors.white, fontSize: 24).withNovaMono(),
         text:
             "Loading (${(imageMap.length / images.length.toDouble() * 100).toInt()}%)....");
 
     // Set up the TextPainter, which decides how to draw the span
-    TextPainter tp = new TextPainter(
+    TextPainter tp = TextPainter(
         text: span,
         textAlign: TextAlign.left,
         textDirection: TextDirection.ltr);
@@ -159,10 +166,8 @@ class SpaceClockPainter extends AnimatedPainter {
     tp.layout();
 
     // Paint the Loading Text in the middle of the screen
-    tp.paint(
-        canvas,
-        new Offset(
-            size.width / 2 - tp.width / 2, size.height / 2 - tp.height / 2));
+    tp.paint(canvas,
+        Offset(size.width / 2 - tp.width / 2, size.height / 2 - tp.height / 2));
   }
 
   /// drawSpace
@@ -286,7 +291,6 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   void drawSun(Canvas canvas, Size size, double x, double y, double sunDiameter,
       double sunRotation, SpaceConfig config) {
-    int phase = 0;
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
     sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(
         center: sunOffset, radius: sunDiameter / 2 * config.sunBaseSize));
@@ -294,9 +298,8 @@ class SpaceClockPainter extends AnimatedPainter {
     canvas.drawCircle(
         sunOffset, sunDiameter / 2 * config.sunBaseSize, sunBasePaint);
 
-
     //We are going to go through layers 1-3 twice, once flipped
-    config.sunLayers.forEach((layer){
+    config.sunLayers.forEach((layer) {
       sunLayerPaint.blendMode = layer.mode;
       imageMap[layer.image].drawRotatedSquare(
           canvas: canvas,
@@ -306,7 +309,6 @@ class SpaceClockPainter extends AnimatedPainter {
           paint: sunLayerPaint,
           flip: layer.flip);
     });
-    
   }
 
   ///

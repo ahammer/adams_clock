@@ -23,11 +23,9 @@ extension ImageHelpers on ui.Image {
       canvas.scale(-1, 1);
     }
 
-    canvas.save();
     canvas.rotate(flip ? -rotation : rotation);
     canvas.scale(size);
-    canvas.drawImageRect(this, bounds(), kTargetRect, paint);
-    canvas.restore();
+    canvas.drawImageRect(this, bounds(), kTargetRect, paint);    
     canvas.restore();
   }
 
