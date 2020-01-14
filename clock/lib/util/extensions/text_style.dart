@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Extension to TextStyle
 extension TextStyleHelpers on TextStyle {
+  /// User the Nova Mono font with this TextStyle
   TextStyle withNovaMono() =>
-      this.copyWith(fontFamily: "NovaMono", fontWeight: FontWeight.bold);
+      copyWith(fontFamily: "NovaMono", fontWeight: FontWeight.bold);
 }

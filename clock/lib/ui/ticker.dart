@@ -3,13 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:adams_clock/util/extensions.dart';
+import '../util/extensions.dart';
 
 // For building the current string to display
-typedef String StringBuilder();
+typedef StringBuilder = String Function();
 
 // For building a widget for a individual character in the string
-typedef Widget BuildDigitWidget(String value, bool first, bool last);
+typedef BuildDigitWidget = Widget Function(String value, bool first, bool last);
 
 ///
 /// Ticker Widget
@@ -27,11 +27,19 @@ typedef Widget BuildDigitWidget(String value, bool first, bool last);
 /// Because it looks cool
 ///
 class TickerWidget extends StatefulWidget {
+  /// Widget Builder that builds a particular digit/glyph/character
   final BuildDigitWidget digitBuilder;
+
+  /// Function that generates the desired string 
   final StringBuilder builder;
+  
+  /// Ticker animation randomness in MS
   final int tickerRandomnessMs;
+  
+  /// Ticker base animation time
   final int tickerBaseTimeMs;
 
+  /// Construct a Ticker Widget
   TickerWidget(
       {this.builder,
       this.digitBuilder,

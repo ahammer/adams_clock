@@ -1,13 +1,16 @@
-import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+
 
 ///🖼️🖼️🖼️🖼️🖼️🖼️🖼️🖼️🖼️🖼️
 /// Image Helpers
 /// Extending ui.Image to make it easier to draw to the screen
-final kTargetRect = Rect.fromCenter(center: Offset.zero, width: 1, height: 1);
+final Rect kTargetRect =
+    Rect.fromCenter(center: Offset.zero, width: 1, height: 1);
 
+/// Helpers to draw an image
 extension ImageHelpers on ui.Image {
-  // Draws a Square Image rotated at offset around it's axis
+  /// Draws a Square Image rotated at offset around it's axis
   void drawRotatedSquare(
       {Canvas canvas,
       double size,
@@ -28,6 +31,6 @@ extension ImageHelpers on ui.Image {
     canvas.restore();
   }
 
-  Rect bounds() =>
-      Rect.fromLTRB(0, 0, this.width.toDouble(), this.height.toDouble());
+  /// Creates a Rect bounds for this Image
+  Rect bounds() => Rect.fromLTRB(0, 0, width.toDouble(), height.toDouble());
 }

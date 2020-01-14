@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-typedef AnimatedPainter PainterBuilder();
+/// Builds an AnimatedPainter object
+typedef PainterBuilder = AnimatedPainter Function();
 
 ///
 /// AnimatedPainter
@@ -11,7 +12,11 @@ typedef AnimatedPainter PainterBuilder();
 /// Used by SpaceClock to paint the scene
 /// paint() will be called as fast as possible
 abstract class AnimatedPainter {
+
+  /// Initialize the Painter (e.g. Load Images)
   void init();
+
+  /// Paint to the canvas
   void paint(Canvas canvas, Size size);
 }
 
@@ -20,8 +25,11 @@ abstract class AnimatedPainter {
 ///
 /// Provide a Painter() and this class will paint it
 class AnimatedPaint extends StatefulWidget {
+
+  /// The Painter interface we are using
   final PainterBuilder painter;
 
+  /// Construct an AnimatedPaint to draw a AnimatedPainter
   const AnimatedPaint({Key key, @required this.painter}) : super(key: key);
 
   @override

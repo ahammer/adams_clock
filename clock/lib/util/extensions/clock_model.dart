@@ -15,7 +15,9 @@ const weatherMap = {
   WeatherCondition.windy: 'weather_icons/wind.png'
 };
 
+
+/// Add ability to get the weather asset name from the clock model
 extension ClockModelHelpers on ClockModel {
-  // Want to show the weather as a Icon
-  String get weatherAsset => weatherMap[this.weatherCondition];
+  /// When we want to show the weather as a Icon
+  String get weatherAsset => weatherMap[weatherCondition];
 }

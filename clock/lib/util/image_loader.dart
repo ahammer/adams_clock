@@ -13,12 +13,10 @@ Future<ui.Image> loadImageFromAsset(String asset) async {
   final img = (await rootBundle.load('assets/$asset.png'))
       .chain((bytes) => Uint8List.view(bytes.buffer));
 
-  final Completer<ui.Image> completer = Completer();
+  final  completer = Completer<ui.Image>();
 
   // Decode the Image in a Future Envelope
-  ui.decodeImageFromList(img, (ui.Image img) {
-    return completer.complete(img);
-  });
+  ui.decodeImageFromList(img, completer.complete);
 
   // Return the future
   return completer.future;
