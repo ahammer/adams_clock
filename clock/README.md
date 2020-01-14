@@ -25,3 +25,4 @@ Notes
 - Supported Platforms (Android, iOS, Desktop) 
 - Web will barely run, but expect most of it to be broken, I suspect canvas in web support is not fully there yet. Maybe it'll improve with future releases of flutter.
 - http://www.adamhammer.ca/minesweep/ => If you really want a flutter web demo to play with.
+- Optimized on a HTC One (2013) device.
