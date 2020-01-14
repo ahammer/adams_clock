@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
@@ -25,11 +24,10 @@ extension ImageHelpers on ui.Image {
 
     canvas.rotate(flip ? -rotation : rotation);
     canvas.scale(size);
-    canvas.drawImageRect(this, bounds(), kTargetRect, paint);    
+    canvas.drawImageRect(this, bounds(), kTargetRect, paint);
     canvas.restore();
   }
 
   Rect bounds() =>
       Rect.fromLTRB(0, 0, this.width.toDouble(), this.height.toDouble());
 }
-

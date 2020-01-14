@@ -3,9 +3,9 @@
 // Used in the ticker
 String buildSpacedString(String left, String right, int length) {
   String output = left;
-  for (int i=0;i<length-(left.length+right.length);i++) {
-    output+=" ";
+  for (int i = 0; i < length - (left.length + right.length); i++) {
+    output += " ";
   }
-  output+=right;
+  output += right;
   return output;
 }

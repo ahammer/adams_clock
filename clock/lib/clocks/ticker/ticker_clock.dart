@@ -85,13 +85,13 @@ class DateTimeAndWeatherTicker extends StatelessWidget {
   /// We wrap this ticket in a decoration (getTickerDecoration)
   /// The ticker expects a method to generate it's current string (buildTickerString(clockModel))
   /// It also expects a builder function to generate the characters
-  /// 
+  ///
   /// Normally we add TickerCharacterWidget which draws 1 character
-  /// On the last item, we draw the WeatherIcon 
+  /// On the last item, we draw the WeatherIcon
   /// (there should be blank spaces on the end of the string to make room for it)
-  /// 
+  ///
   /// We also need to place ValueKey's on the nodes to help the AnimatedSwitcher work with them internally
-  /// 
+  ///
   @override
   Widget build(BuildContext context) => Container(
         decoration: getTickerDecoration(context),
@@ -100,26 +100,25 @@ class DateTimeAndWeatherTicker extends StatelessWidget {
           builder: () => buildTickerString(clockModel),
           digitBuilder: (glyph, first, last) => last
               ? TickerWeatherIcon(
-                key: ValueKey(clockModel.weatherCondition),
-                clockModel: clockModel, height: height)
+                  key: ValueKey(clockModel.weatherCondition),
+                  clockModel: clockModel,
+                  height: height)
               : TickerCharacterWidget(
-                  key: ValueKey(glyph),
-                  fontSize: fontSize,
-                  glyph: glyph),
+                  key: ValueKey(glyph), fontSize: fontSize, glyph: glyph),
         ),
       );
 
   // Builds the decoration for the top-left Ticker
   // I use the Shadow as a background, to give a soft bordered round background
   BoxDecoration getTickerDecoration(BuildContext context) => BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-              color: Theme.of(context).canvasColor.withOpacity(0.75),
-              blurRadius: 2,
-              spreadRadius: 2)
-        ],
-        borderRadius: BorderRadius.circular(this.height / 2),
-        color: Colors.transparent);
+          boxShadow: [
+            BoxShadow(
+                color: Theme.of(context).canvasColor.withOpacity(0.75),
+                blurRadius: 2,
+                spreadRadius: 2)
+          ],
+          borderRadius: BorderRadius.circular(this.height / 2),
+          color: Colors.transparent);
 }
 
 /// TickerWeatherIcon
@@ -127,7 +126,7 @@ class DateTimeAndWeatherTicker extends StatelessWidget {
 /// Handles the drawing of the weather icon
 /// Uses ClockModel to get the weather
 /// Size is HxH
-/// 
+///
 class TickerWeatherIcon extends StatelessWidget {
   const TickerWeatherIcon({
     Key key,
@@ -142,8 +141,8 @@ class TickerWeatherIcon extends StatelessWidget {
   final double height;
 
   @override
-  Widget build(BuildContext context) => Container(        
-        decoration: BoxDecoration(          
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
             image: DecorationImage(
                 image: ExactAssetImage(clockModel.weatherAsset),
                 fit: BoxFit.contain)),
@@ -165,14 +164,14 @@ class TickerCharacterWidget extends StatelessWidget {
   final double fontSize;
 
   @override
-  Widget build(BuildContext context) => Container(        
-        child: Center(
-            child: Text(
-          glyph,
-          style: Theme.of(context)
-              .textTheme
-              .subhead
-              .withNovaMono()
-              .copyWith(fontSize: fontSize),
-        )));
+  Widget build(BuildContext context) => Container(
+          child: Center(
+              child: Text(
+        glyph,
+        style: Theme.of(context)
+            .textTheme
+            .subhead
+            .withNovaMono()
+            .copyWith(fontSize: fontSize),
+      )));
 }

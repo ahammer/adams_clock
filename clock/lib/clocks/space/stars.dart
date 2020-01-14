@@ -22,7 +22,6 @@ import 'package:adams_clock/util/extensions.dart';
 ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
 */
 
-
 // ============== 📖📒 Constants 📒📖 ==============
 
 // Random Numbers
@@ -39,43 +38,42 @@ const kSteps = 16; //16 is fast enough, yet doesn't really show much stepping
 const kStepSize = 1.0 / kSteps;
 
 /// ⏱️ Star Travel Time
-/// 
-/// At 1, stars travel 0-1 range every 1 second. 
+///
+/// At 1, stars travel 0-1 range every 1 second.
 /// At 20, it'll take 20s for 0-1 to iterate
-/// 
+///
 /// This number represents the # of seconds
 /// a star will take to travel from back to front.
-/// 
+///
 const kStarTravelTime = 25;
 
 // 🎨 The paint for our stars
 final Paint _starsPaint = Paint();
 
-// 🌠 The actual stars 
+// 🌠 The actual stars
 final List<Star> _stars = List.generate(kNumberStars, (idx) => Star());
-
 
 /// 🌠 Star
 /// Represents a Star
 ///
 /// We only track X/Y/Z
 /// The star itself is immutable
-/// 
+///
 /// We are the ones that travel in this calculation.
-/// 
+///
 class Star {
   final x = _random.nextDouble() - 0.5,
       y = _random.nextDouble() - 0.5,
       z = _random.nextDouble();
 
   /// 🌐 zForTime(time)
-  /// 
+  ///
   /// Gives a Z position adjusted for our time
   /// Z is always between (0 .. 1)
   /// We subtract time from this, and take the fraction.
-  /// So a star at 0.5, after 10 seconds would be at -9.5. 
+  /// So a star at 0.5, after 10 seconds would be at -9.5.
   /// We then take the fraction and it's back at -0.5;
-  ///   
+  ///
   double zForTime(double time) => (z - (time / kStarTravelTime)).fraction();
 
   /// 🌐 Project(time, perspective)
@@ -93,54 +91,54 @@ class Star {
           .toOffset();
 }
 
-
 /// 📲 Draw Stars
 ///
-/// We draw this starfield 
+/// We draw this starfield
 ///   canvas - on the Canvas
 ///   size - with a size
 ///   rotation - and a rotation around center
 ///   time - at a specific time
-/// 
+///
 /// It fills the canvas
 void drawStars(Canvas canvas, Size size, double rotation, double time) {
-
   /// 📷 Creates a 140 degree projection matrix for our size, with a near of 0 and a far of 1
   /// and rotates around the Z axis by rotation degrees
-  final projection = vector.makePerspectiveMatrix(140, size.width / size.height, 0, 1)
-  ..rotateZ(rotation);
-  
+  final projection = vector.makePerspectiveMatrix(
+      140, size.width / size.height, 0, 1)
+    ..rotateZ(rotation);
 
   /// 🧮 Generates a "page" of stars (back to front) of varying opacities
   /// We draw pages to minimize draw calls
-  /// E.g. 
+  /// E.g.
   ///   1 Draw Call = Single Paint, all stars look the same
   ///   1 Draw Call for 1,000 stars = slow, inefficient
   ///   Solution: Create kSteps/pages and draw each page with a common paint back to front (painters algorithm)
   ///   This allows me to artistically handle distance variations without tanking performance.
   List.generate(kSteps, (idx) => idx / kSteps.toDouble()).forEach((interval) {
-    
     /// 🎨 Generate star color based on the current page
     /// We fade the opacity with distance to camera
-    /// 
+    ///
     /// We also adjust the size based on distance (between 1-2 px)
     _starsPaint
       ..color = Colors.white.withOpacity(1 - interval)
-      ..strokeWidth = (1 - interval)  + 1;      
-      
+      ..strokeWidth = (1 - interval) + 1;
 
     // 🖌️ Draw the points
     canvas.drawPoints(
         PointMode.points,
         _stars
             // ✂️ where star Z is in current interval
-            .where((star) => star.zForTime(time).chain((z)=>(z > interval && z < (interval + kStepSize))))
+            .where((star) => star
+                .zForTime(time)
+                .chain((z) => (z > interval && z < (interval + kStepSize))))
             // 📺 Convert this Star into a Screen Space Offset
             .map((star) => star
-                .project(time, projection)        // Project to screen space
-                .translate(0.5, 0.5)              // Transform it from -0.5->0.5 range to 0-1 range
-                .scale(size.width, size.height))  // Scale it from 0-1 range to canvas size
-            //Creates a List<Offset> to draw, from all stars 
+                .project(time, projection) // Project to screen space
+                .translate(
+                    0.5, 0.5) // Transform it from -0.5->0.5 range to 0-1 range
+                .scale(size.width,
+                    size.height)) // Scale it from 0-1 range to canvas size
+            //Creates a List<Offset> to draw, from all stars
             .toList(),
         _starsPaint);
   });

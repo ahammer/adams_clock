@@ -20,22 +20,22 @@ SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 /// - sunSpeed = Animation multiplier for the sun. Higher values make the sun more active
 /// - sunLayers = Images that are drawn at the sun's location at various rotations/blend modes
 /// - sunGradient = The sunBase is painted with this gradient. It's set to give a soft warm glow around the edges
-/// 
-/// 
+///
+///
 /// Earth Options
 /// - earthSize = Size of the earth as a multiplier of screen size
 /// - earthOrbitMultiplierX = Same as Sun
 /// - earthOrbitMultiplierY = Same as Sun
 /// - earthRotationSpeed = Speed the earth rotates on the screen cosmetic only
-/// 
+///
 /// Moon Options
 /// - moonSize = Size of the moon as a multiplier of screen size
 /// - moonOrbitMultiplierX = Same as Sun/Earth
 /// - moonOrbitMultiplierY = Same as Sun/Earth but moon pivots around earth
 /// - moonRotationSpeed = Speed the earth rotates on the screen cosmetic only
 /// - moonSizeVariation = moonSize +- moonSizeVariation as moon travels "front" to "back"
-/// 
-/// Generic 
+///
+/// Generic
 /// - backgroundRotationSpeedMultiplier = How fast the background and stars spin
 /// - angleOffset = 0 degrees != 12:00, this constant offsets the clock to correct
 

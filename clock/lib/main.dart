@@ -18,11 +18,11 @@ void main() {
 
 ///
 /// The scaffolding of this clock
-/// 
+///
 /// It's a Stack
 /// Layer 1: The space scene
 /// Layer 2: The DateTimeAndWeatherTicker the draws in the top left
-/// 
+///
 class ClockScaffolding extends StatelessWidget {
   final ClockModel model;
   const ClockScaffolding({Key key, @required this.model}) : super(key: key);

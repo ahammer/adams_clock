@@ -1,4 +1,3 @@
-
 ///🗺️🗺️🗺️🗺️🗺️🗺️🗺️🗺️🗺️🗺️
 /// Global .chain((in)=>out)
 ///
@@ -15,7 +14,6 @@
 /// Useful for scoping a value without
 /// creating a variable.
 
-extension ChainHelper<IN, OUT> on IN {  
+extension ChainHelper<IN, OUT> on IN {
   OUT chain<OUT>(OUT mapFunc(IN input)) => mapFunc(this);
 }
-

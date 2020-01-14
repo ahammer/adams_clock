@@ -19,7 +19,7 @@ Future<ui.Image> loadImageFromAsset(String asset) async {
   ui.decodeImageFromList(img, (ui.Image img) {
     return completer.complete(img);
   });
-  
+
   // Return the future
   return completer.future;
 }

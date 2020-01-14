@@ -7,7 +7,3 @@ extension DoubleHelpers on double {
   ///
   double fraction() => this - this.floorToDouble();
 }
-
-
-
-

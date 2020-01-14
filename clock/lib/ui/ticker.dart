@@ -22,10 +22,10 @@ typedef Widget BuildDigitWidget(String value, bool first, bool last);
 /// StringBuilder => Builds the string we want to display
 ///
 /// It updates every 1 seconds
-/// 
+///
 /// There is some randomness built into transition time
 /// Because it looks cool
-/// 
+///
 class TickerWidget extends StatefulWidget {
   final BuildDigitWidget digitBuilder;
   final StringBuilder builder;

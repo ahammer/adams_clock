@@ -132,7 +132,7 @@ class SpaceClockPainter extends AnimatedPainter {
   // Paint the Loading Screen/Scene
   @override
   void paint(Canvas canvas, Size size) {
-    //Keep it in the view    
+    //Keep it in the view
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Draw space or the loading screen
