@@ -16,3 +16,7 @@ linter:
     - constant_identifier_names
     - control_flow_in_finally
     - empty_statements
+    - unnecessary_statements
+    - unrelated_type_equality_checks
+    - always_declare_return_types
+    - avoid_function_literals_in_foreach_calls

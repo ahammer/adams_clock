@@ -299,7 +299,7 @@ class SpaceClockPainter extends AnimatedPainter {
         sunOffset, sunDiameter / 2 * config.sunBaseSize, sunBasePaint);
 
     //We are going to go through layers 1-3 twice, once flipped
-    config.sunLayers.forEach((layer) {
+    for (var layer in config.sunLayers) {
       sunLayerPaint.blendMode = layer.mode;
       imageMap[layer.image].drawRotatedSquare(
           canvas: canvas,
@@ -308,7 +308,7 @@ class SpaceClockPainter extends AnimatedPainter {
           rotation: sunRotation * layer.speed * config.sunSpeed,
           paint: sunLayerPaint,
           flip: layer.flip);
-    });
+    }
   }
 
   ///

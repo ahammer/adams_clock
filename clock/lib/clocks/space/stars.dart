@@ -114,7 +114,8 @@ void drawStars(Canvas canvas, Size size, double rotation, double time) {
   ///   1 Draw Call for 1,000 stars = slow, inefficient
   ///   Solution: Create kSteps/pages and draw each page with a common paint back to front (painters algorithm)
   ///   This allows me to artistically handle distance variations without tanking performance.
-  List.generate(kSteps, (idx) => idx / kSteps.toDouble()).forEach((interval) {
+  
+  for (final interval in List.generate(kSteps, (idx) => idx / kSteps.toDouble())) {
     /// 🎨 Generate star color based on the current page
     /// We fade the opacity with distance to camera
     ///
@@ -141,5 +142,5 @@ void drawStars(Canvas canvas, Size size, double rotation, double time) {
             //Creates a List<Offset> to draw, from all stars
             .toList(),
         _starsPaint);
-  });
+  }
 }
