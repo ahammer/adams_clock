@@ -1,5 +1,5 @@
 
-library adams_clock_extensions;
+library adams_clock;
 
 export 'package:adams_clock/util/extensions/chain.dart';
 export 'package:adams_clock/util/extensions/clock_model.dart';

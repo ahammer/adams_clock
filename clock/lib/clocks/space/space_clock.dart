@@ -110,7 +110,7 @@ class SpaceClockPainter extends AnimatedPainter {
     ..filterQuality = FilterQuality.low;
 
   final Paint sunBasePaint = Paint()..color = Colors.white;
-  final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.high;
+  final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
 
   bool get loaded => imageMap.length == images.length;
 
