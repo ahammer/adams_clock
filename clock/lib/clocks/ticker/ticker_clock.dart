@@ -96,8 +96,11 @@ class DateTimeAndWeatherTicker extends StatelessWidget {
         child: TickerWidget(
           builder: () => buildTickerString(clockModel),
           digitBuilder: (glyph, first, last) => last
-              ? TickerWeatherIcon(clockModel: clockModel, height: height)
+              ? TickerWeatherIcon(
+                key: ValueKey(clockModel.weatherCondition),
+                clockModel: clockModel, height: height)
               : TickerCharacterWidget(
+                  key: ValueKey(glyph),
                   fontSize: fontSize,
                   glyph: glyph),
         ),
@@ -159,8 +162,7 @@ class TickerCharacterWidget extends StatelessWidget {
   final double fontSize;
 
   @override
-  Widget build(BuildContext context) => Container(
-        key: ValueKey(glyph),
+  Widget build(BuildContext context) => Container(        
         child: Center(
             child: Text(
           glyph,

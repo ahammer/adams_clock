@@ -91,6 +91,9 @@ class DarkSpaceConfig extends SpaceConfig {
 }
 
 /// Represents a "layer" of the sun
+/// 
+/// This is baked into the config so we can say 
+/// what layers are drawn, with what blend mode, and if they are visually flipped
 class SunLayer {
   final String image;
   final BlendMode mode;

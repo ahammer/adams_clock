@@ -37,7 +37,7 @@ class ClockScaffolding extends StatelessWidget {
         Align(
             alignment: Alignment.topLeft,
             child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(8.0),
               child: DateTimeAndWeatherTicker(clockModel: model),
             )),
       ],
