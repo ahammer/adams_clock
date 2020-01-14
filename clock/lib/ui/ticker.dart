@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:adams_clock/util/extensions.dart';
-import 'package:flutter_clock_helper/model.dart';
 
 // For building the current string to display
 typedef String StringBuilder();
@@ -23,12 +22,21 @@ typedef Widget BuildDigitWidget(String value, bool first, bool last);
 /// StringBuilder => Builds the string we want to display
 ///
 /// It updates every 1 seconds
-///
+/// 
+/// There is some randomness built into transition time
+/// Because it looks cool
+/// 
 class TickerWidget extends StatefulWidget {
   final BuildDigitWidget digitBuilder;
   final StringBuilder builder;
+  final int tickerRandomnessMs;
+  final int tickerBaseTimeMs;
 
-  TickerWidget({this.builder, this.digitBuilder});
+  TickerWidget(
+      {this.builder,
+      this.digitBuilder,
+      this.tickerRandomnessMs = 500,
+      this.tickerBaseTimeMs = 200});
 
   @override
   _TickerWidgetState createState() => _TickerWidgetState();
@@ -41,6 +49,10 @@ class TickerWidget extends StatefulWidget {
 ///
 class _TickerWidgetState extends State<TickerWidget> {
   Timer _timer;
+
+  //100 randoms we can use to offset the Ticker timings
+  final List<double> _random =
+      List.generate(100, (idx) => Random.secure().nextDouble());
 
   @override
   void initState() {
@@ -71,6 +83,11 @@ class _TickerWidgetState extends State<TickerWidget> {
               ...List.generate(
                   currentString.length,
                   (idx) => _TickerCharacterView(
+                      duration: Duration(
+                          milliseconds: widget.tickerBaseTimeMs +
+                              (_random[idx % _random.length] *
+                                      widget.tickerRandomnessMs)
+                                  .toInt()),
                       first: idx == 0,
                       last: idx == (currentString.length - 1),
                       builder: widget.digitBuilder,
