@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
-import 'package:adams_clock/util/extensions.dart';
+import '../../util/extensions.dart';
 
 /*
 ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
@@ -27,7 +27,7 @@ import 'package:adams_clock/util/extensions.dart';
 // Random Numbers
 final _random = Random();
 
-// The default number of stars we will generate
+/// The default number of stars we will generate
 const kNumberStars = 500;
 
 /// 🔬 The "resolution" of the starfield render batching
@@ -35,6 +35,8 @@ const kNumberStars = 500;
 /// N = the number of transitions of opacity we do from
 ///     near to far
 const kSteps = 16; //16 is fast enough, yet doesn't really show much stepping
+
+/// Precalculated step size
 const kStepSize = 1.0 / kSteps;
 
 /// ⏱️ Star Travel Time
@@ -62,9 +64,14 @@ final List<Star> _stars = List.generate(kNumberStars, (idx) => Star());
 /// We are the ones that travel in this calculation.
 ///
 class Star {
-  final x = _random.nextDouble() - 0.5,
-      y = _random.nextDouble() - 0.5,
-      z = _random.nextDouble();
+  /// x Coord of a random star (-0.5->0.5 means less transforms later)
+  final double x = _random.nextDouble() - 0.5;
+
+  /// y coord of a random star (-0.5->0.5 means less transforms later)
+  final double y = _random.nextDouble() - 0.5;
+
+  /// z coord of a random star
+  final double z = _random.nextDouble();
 
   /// 🌐 zForTime(time)
   ///
@@ -101,7 +108,8 @@ class Star {
 ///
 /// It fills the canvas
 void drawStars(Canvas canvas, Size size, double rotation, double time) {
-  /// 📷 Creates a 140 degree projection matrix for our size, with a near of 0 and a far of 1
+  /// 📷 Creates a 140 degree projection matrix for our size,
+  /// with a near of 0 and a far of 1
   /// and rotates around the Z axis by rotation degrees
   final projection = vector.makePerspectiveMatrix(
       140, size.width / size.height, 0, 1)
@@ -112,10 +120,13 @@ void drawStars(Canvas canvas, Size size, double rotation, double time) {
   /// E.g.
   ///   1 Draw Call = Single Paint, all stars look the same
   ///   1 Draw Call for 1,000 stars = slow, inefficient
-  ///   Solution: Create kSteps/pages and draw each page with a common paint back to front (painters algorithm)
-  ///   This allows me to artistically handle distance variations without tanking performance.
-  
-  for (final interval in List.generate(kSteps, (idx) => idx / kSteps.toDouble())) {
+  ///   Solution: Create kSteps/pages and draw each page with a common
+  ///   paint back to front (painters algorithm)
+  ///   This allows me to artistically handle distance variations
+  ///   without tanking performance.
+
+  final intervals = List.generate(kSteps, (idx) => idx / kSteps.toDouble());
+  for (final interval in intervals) {
     /// 🎨 Generate star color based on the current page
     /// We fade the opacity with distance to camera
     ///

@@ -9,13 +9,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  pedantic: ^1.8.0+1  
   flutter_clock_helper: 
     path: ../flutter_clock_helper
   
 dev_dependencies:
   flutter_test:
     sdk: flutter  
+  effective_dart: ^1.2.0
+  pedantic: ^1.8.0+1  
 
 flutter:
   uses-material-design: true

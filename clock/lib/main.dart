@@ -1,10 +1,10 @@
-import 'package:adams_clock/clocks/space/space_clock.dart';
-import 'package:adams_clock/clocks/ticker/ticker_clock.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/customizer.dart';
+import 'clocks/space/space_clock.dart';
+import 'clocks/ticker/ticker_clock.dart';
 
 void main() {
   //We have no inputs, so Fuschia should be fine all around
@@ -24,7 +24,11 @@ void main() {
 /// Layer 2: The DateTimeAndWeatherTicker the draws in the top left
 ///
 class ClockScaffolding extends StatelessWidget {
+
+  /// The ClockModel, needed by things to make decisions about what to draw
   final ClockModel model;
+
+  /// Construct a clock scaffolding given a model
   const ClockScaffolding({Key key, @required this.model}) : super(key: key);
 
   @override

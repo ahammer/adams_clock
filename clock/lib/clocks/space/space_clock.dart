@@ -1,15 +1,17 @@
 import 'dart:math';
 import 'dart:ui';
-import 'package:adams_clock/config/space_config.dart';
-import 'package:adams_clock/config/time_proxy.dart';
-import 'package:adams_clock/ui/animated_painter.dart';
+import 'dart:ui' as ui;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:adams_clock/util/extensions.dart';
-import 'dart:ui' as ui;
-import 'package:adams_clock/util/image_loader.dart';
-import 'package:adams_clock/clocks/space/stars.dart';
 import 'package:flutter_clock_helper/model.dart';
+
+import '../../config/space_config.dart';
+import '../../config/time_proxy.dart';
+import '../../ui/animated_painter.dart';
+import '../../util/extensions.dart';
+import '../../util/image_loader.dart';
+import 'stars.dart';
 
 ///
 /// Sun Clock
@@ -22,8 +24,10 @@ import 'package:flutter_clock_helper/model.dart';
 /// - Fixed star background (rotating over time, for motion effect)
 ///
 /// - Star Simulation
-///   - Matrix math for projecting and transforming to "time space" and screen space
-///   - Batched by Z distance to set size/color and draw with drawPoints() to reduce draw calls
+///   - Matrix math for projecting and transforming to "time space"
+///     and screen space
+///   - Batched by Z distance to set size/color and draw with drawPoints()
+///     to reduce draw calls
 ///
 /// - Sun
 ///   - "Hour Hand".
@@ -33,8 +37,10 @@ import 'package:flutter_clock_helper/model.dart';
 ///     - Multiply to emulate sunspots
 ///     - Plus/Softlight to emulate light/glowing
 ///   - Layers rotate slowly in varying directions
-///   - Each layer is drawn twice, once flipped and rotated in opposite direction
-///   - The effective 8 layers do a Perlin compose a perlin noise that looks a lot like the sun.
+///   - Each layer is drawn twice, once flipped and rotated in
+///     opposite direction
+///   - The effective 8 layers do a Perlin compose a perlin noise that
+///     looks a lot like the sun.
 ///
 /// - Earth
 ///   - "Minute Hand"
@@ -51,9 +57,16 @@ import 'package:flutter_clock_helper/model.dart';
 ///
 final SpaceClockPainter painter = SpaceClockPainter();
 
+/// Space Clock Scene
+///
+/// Handles the drawing of the space clock
 class SpaceClockScene extends StatelessWidget {
+  /// ClockModel from the challenge
   final ClockModel model;
 
+  /// SpaceClockScene
+  ///
+  /// Constructs the space_clock, give it a ClockModel
   SpaceClockScene(this.model, {Key key}) : super(key: key);
 
   @override
@@ -100,30 +113,29 @@ const List<String> images = [
 ///  - This object acts as a singleton
 ///  - Theme Light/Dark is passed to the painter through the SpaceClockScene.build() method
 class SpaceClockPainter extends AnimatedPainter {
-  // Whether to draw dark config or not
-  // Note: This is mutating state
+  /// Whether to draw dark config or not
+  /// Note: This is mutating state
   bool isDark = false;
 
-  // The images load into this map
-  final Map<String, ui.Image> imageMap = Map();
+  /// The images load into this map
+  final Map<String, ui.Image> imageMap = {};
 
-  ///
-  /// These paints serve as the brushes
-  ///
   /// StandardPaint is just for the planets and background
-  /// SunBasePaint will draw the gradient base/surface of the sun
-  /// SunLayerPaint will adjust blendmode based on the layer as it draws the perlin noise
   final Paint standardPaint = Paint()..filterQuality = FilterQuality.low;
+
+  /// SunBasePaint will draw the gradient base/surface of the sun
   final Paint sunBasePaint = Paint()..filterQuality = FilterQuality.low;
+
+  /// SunLayerPaint will adjust blendmode based on the layer as it
   final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
 
-  // Have all the images loaded?
+  /// Have all the images loaded?
   bool get loaded => imageMap.length == images.length;
 
   // Init on AnimatedPainter, we use this async method to load the images
   @override
   void init() async {
-    for (int i = 0; i < images.length; i++) {
+    for (var i = 0; i < images.length; i++) {
       final image = images[i];
       imageMap[image] = await loadImageFromAsset(image);
     }
@@ -151,13 +163,15 @@ class SpaceClockPainter extends AnimatedPainter {
         Rect.fromLTWH(0, 0, size.width, size.height), standardPaint);
 
     // Set up the TextSpan (Specifies Text, Font, Etc)
-    TextSpan span = TextSpan(
+    final percentLoaded =
+        (imageMap.length / images.length.toDouble() * 100).toInt();
+
+    final span = TextSpan(
         style: TextStyle(color: Colors.white, fontSize: 24).withNovaMono(),
-        text:
-            "Loading (${(imageMap.length / images.length.toDouble() * 100).toInt()}%)....");
+        text: "Loading ($percentLoaded%)....");
 
     // Set up the TextPainter, which decides how to draw the span
-    TextPainter tp = TextPainter(
+    final tp = TextPainter(
         text: span,
         textAlign: TextAlign.left,
         textDirection: TextDirection.ltr);
@@ -182,64 +196,62 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final SpaceConfig config = isDark ? darkSpaceConfig : lightSpaceConfig;
+    final config = isDark ? darkSpaceConfig : lightSpaceConfig;
 
     ///
     /// We prepare all the math of the clock layout/orientation here
     ///
-    /// Since some bodies are relative to others it's useful to calculate this all at once
+    /// Since some bodies are relative to others it's useful
+    /// to calculate this all at once
+    ///
     /// e.g.
     ///  - Moon rotates the earth
     ///  - Shadows rotate with sun
     ///
     /// So we pass various rotation to various draw functions
 
-    // This offset aligns the rotation so 12:00:00am everything will be at the top.
+    /// The moon Orbit Angle, it rotates the earth once per minute
+    final moonOrbit = (time.second * 1000 + time.millisecond) / 60000 * 2 * pi;
 
-    // The moon Orbit Angle, it rotates the earth once per minute
-    final double moonOrbit =
-        (time.second * 1000 + time.millisecond) / 60000 * 2 * pi;
-
-    // The earth orbit, once per hour (millis precision for animations to not be choppy)
-    //Combined with second and millis for greater animation accuracy
-    final double earthOrbit =
+    ///  The earth orbit, once per hour
+    /// (millis precision for animations to not be choppy)
+    /// Combined with second and millis for greater animation accuracy
+    final earthOrbit =
         (time.minute * 60 * 1000 + time.second * 1000 + time.millisecond) /
             3600000 *
             2 *
             pi;
 
-    // The suns orbit of the screen once per day
-    // Combined with the earth orbit to give it smooth precision
-    final double sunOrbit =
-        (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
+    /// The suns orbit of the screen once per day
+    /// Combined with the earth orbit to give it smooth precision
+    final sunOrbit = (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
 
-    // These are the offsets from center for the earth/sun/moon
-    // They travel in an Oval, in proportion to screen size
-
+    /// These are the offsets from center for the earth/sun/moon
+    /// They travel in an Oval, in proportion to screen size
     //Sun orbits slightly outside the screen, because it's huge
     final sunDiameter = size.width * config.sunSize;
-    final double osunx = cos(sunOrbit - config.angleOffset) *
+    final osunx = cos(sunOrbit - config.angleOffset) *
         size.width *
         config.sunOrbitMultiplierX;
-    final double osuny = sin(sunOrbit - config.angleOffset) *
+    final osuny = sin(sunOrbit - config.angleOffset) *
         size.height *
         config.sunOrbitMultiplierY;
 
-    //Earth orbits 1/4 the screen dimension around the center
-    final double oearthx = cos(earthOrbit - config.angleOffset) *
+    ///Earth orbits around the center
+    final oearthx = cos(earthOrbit - config.angleOffset) *
         size.width *
         config.earthOrbitMultiplierX;
-    final double oearthy = sin(earthOrbit - config.angleOffset) *
+    final oearthy = sin(earthOrbit - config.angleOffset) *
         size.height *
         config.earthOrbitMultiplierY;
 
     //Moon orbits 1/4 a screen distance away from the earth as well
-    final double omoonx = cos(moonOrbit - config.angleOffset) *
+    final omoonx = cos(moonOrbit - config.angleOffset) *
         size.width *
         config.moonOrbitMultiplierX;
 
     final moonSin = sin(moonOrbit - config.angleOffset);
-    final double omoony = moonSin * size.height * config.moonOrbitMultiplierY;
+    final omoony = moonSin * size.height * config.moonOrbitMultiplierY;
 
     // Draw the various layers, back to front
     drawBackground(
@@ -264,7 +276,6 @@ class SpaceClockPainter extends AnimatedPainter {
     }
   }
 
-  ///
   /// Draws the Background
   ///
   /// It's size is "big enough" to cover the screen
@@ -279,16 +290,16 @@ class SpaceClockPainter extends AnimatedPainter {
           rotation: earthOrbit,
           paint: standardPaint);
 
-  ///
   /// Draw the Sun
   ///
-  /// We have 4 Layers, we can draw them 8 times (flipped once) to increase randomness
+  /// We have 4 Layers, we can draw them 8 times (flipped once)
+  /// to increase randomness
   ///
   /// The layers are Blended/Transformed based on the kernels/arrays in the config
   /// This was just experimented with until I liked the way it looks
   ///
-  /// The idea was to have it look bright and gaseous, with the occasional sunspot
-  ///
+  /// The idea was to have it look bright and gaseous, with the occasional
+  /// sunspot
   void drawSun(Canvas canvas, Size size, double x, double y, double sunDiameter,
       double sunRotation, SpaceConfig config) {
     final sunOffset = Offset(size.width / 2 + x, size.height / 2 + y);
@@ -332,11 +343,12 @@ class SpaceClockPainter extends AnimatedPainter {
       double oSunY,
       double earthOrbit,
       SpaceConfig config) {
-    double x = size.width / 2 + oEarthX + oMoonX;
-    double y = size.height / 2 + oEarthY + oMoonY;
+    final x = size.width / 2 + oEarthX + oMoonX;
+    final y = size.height / 2 + oEarthY + oMoonY;
     final offset = Offset(x, y);
-    double shadowRotation =
+    final shadowRotation =
         atan2(oEarthY + oMoonY - oSunY, oEarthX + oMoonX - oSunX) - pi / 2;
+        
     imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * (config.moonSize + scaleOffset),
