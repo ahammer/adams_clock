@@ -129,7 +129,7 @@ const weatherMap = {
 
 extension ClockModelHelpers on ClockModel {
   // Want to show the weather as a Emoji
-  String get weatherEmoji => weatherMap[this.weatherCondition];
+  String get weatherAsset => weatherMap[this.weatherCondition];
 }
 
 extension TextStyleHelpers on TextStyle {

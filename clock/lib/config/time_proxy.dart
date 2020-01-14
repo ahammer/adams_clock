@@ -1,6 +1,5 @@
 /// This method serves as a proxy for DateTime.now();
-/// It is used to inject a specific time into the clock
-
+/// It is used to inject a specific time into the clock to allow us to instrument it for testing
 DateTime get spaceClockTime => DateTime.now();
 
 //Fixed times
