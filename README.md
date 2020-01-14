@@ -7,6 +7,7 @@ A clock for the flutter clock challenge featuring the following
 - Sun, Earth and Moon, Starfield and Background
 - A digital clock in the top-left so you can actually tell the time.
 - "Dark" and "Light" themes. The sun is much bigger in the Light Theme.
+- Passes Effective Dart & Pedantic rulesets
 
 Attributions
 - Most assets created bespoke
