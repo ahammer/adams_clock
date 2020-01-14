@@ -1,10 +1,12 @@
-import 'package:adams_clock/clocks/ticker.dart';
+
+import 'package:adams_clock/config/time_proxy.dart';
+import 'package:adams_clock/ui/ticker.dart';
 import 'package:adams_clock/util/string_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:adams_clock/util/extensions.dart';
 import 'package:intl/intl.dart';
-import 'package:adams_clock/time_proxy.dart';
+
 
 final DateFormat _timeFormat24 = DateFormat("HH:mm:ss");
 final DateFormat _timeFormat12 = DateFormat("hh:mm:ss");

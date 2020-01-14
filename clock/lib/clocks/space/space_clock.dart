@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
-import 'package:adams_clock/clocks/space/config.dart';
-import 'package:adams_clock/time_proxy.dart';
-import 'package:adams_clock/util/animated_painter.dart';
+import 'package:adams_clock/config/space_config.dart';
+import 'package:adams_clock/config/time_proxy.dart';
+import 'package:adams_clock/ui/animated_painter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:adams_clock/util/extensions.dart';
@@ -46,7 +46,6 @@ import 'package:flutter_clock_helper/model.dart';
 ///   - Rotates around earth once a minute
 ///   - Shadow layer is drawn over the moon, opposite the sun
 ///
-
 final SpaceClockPainter painter = SpaceClockPainter();
 
 class SpaceClockScene extends StatelessWidget {
@@ -58,7 +57,7 @@ class SpaceClockScene extends StatelessWidget {
   Widget build(BuildContext context) {
     /// We pass the current theme to the Painter so that
     /// It knows what SpaceConfig to use
-    painter.isDark = Theme.of(context).brightness == Brightness.dark;
+    painter.isDark = Theme.of(context).brightness == Brightness.dark;    
     return AnimatedPaint(painter: () => painter);
   }
 }
@@ -94,9 +93,10 @@ const List<String> images = [
 ///     Draw Sun
 ///     Draw Earth
 ///     Draw Moon
-///
-
-class SpaceClockPainter extends AnimatedPainter {
+/// Note:
+///  - This object acts as a singleton
+///  - Theme Light/Dark is passed to the painter through the SpaceClockScene.build() method
+class SpaceClockPainter extends AnimatedPainter {  
   bool isDark = false;
 
   final Map<String, ui.Image> imageMap = Map();

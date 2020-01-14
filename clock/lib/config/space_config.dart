@@ -3,16 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 
+///
+/// Configuration of the Space Clock
+///
 
-///
-/// Configuration
 
-///
-/// This class represents a config
-///
-/// The default values are the "Light" theme
-/// Sun is more prominent in Light
-/// Less prominent in dark
+/// LightSpaceConfig and DarkSpaceConfig are consumed
+/// 
+/// Values in SpaceConfig (Abstract Class == Light Values)
+/// DarkSpaceConfig over-rides and changes the values
+/// 
 abstract class SpaceConfig {
 // The size of earth as a ratio of screen width
   double get sunSize => 2.0;
@@ -22,7 +22,7 @@ abstract class SpaceConfig {
   double get sunBaseSize => 0.96;
   double get sunOrbitMultiplierX => 0.8;
   double get sunOrbitMultiplierY => 1.4;
-  double get sunSpeed => 30;
+  double get sunSpeed => 25;
 
   List<SunLayer> get sunLayers => [
     SunLayer("sun_1",  BlendMode.multiply, false, -1),    
@@ -39,6 +39,7 @@ abstract class SpaceConfig {
       radius: 0.5,
       colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
       stops: [0.985, 1.0]);
+
   double get earthShadowShrink => 1.0;
   double get earthRotationSpeed => -10.0;
   double get earthOrbitDivisor => 6; //ScreenWidth / X
@@ -52,8 +53,9 @@ abstract class SpaceConfig {
 }
 
 /// Light Space Config
-///
-/// All values are default
+/// 
+/// Basic implementation of config
+/// No params set
 class LightSpaceConfig extends SpaceConfig {
   static final LightSpaceConfig _singleton = LightSpaceConfig._internal();
   factory LightSpaceConfig() {
@@ -65,8 +67,9 @@ class LightSpaceConfig extends SpaceConfig {
 
 /// DarkSpaceConfig
 ///
-/// Values are modified to make sun less prominent
-/// and space/darkness more prominent
+/// What we show in dark-mode
+/// Some values are over-ridden
+/// to make screen darker
 class DarkSpaceConfig extends SpaceConfig {
   static final DarkSpaceConfig _singleton = DarkSpaceConfig._internal();
   factory DarkSpaceConfig() {
