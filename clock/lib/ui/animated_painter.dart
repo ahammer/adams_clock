@@ -7,7 +7,7 @@ typedef AnimatedPainter PainterBuilder();
 ///
 /// Implement this interface to get an animated Canvas.
 /// Use with AnimatedPaint() widget
-/// 
+///
 /// Used by SpaceClock to paint the scene
 /// paint() will be called as fast as possible
 abstract class AnimatedPainter {
@@ -30,19 +30,18 @@ class AnimatedPaint extends StatefulWidget {
 
 class _AnimatedPainterState extends State<AnimatedPaint>
     with SingleTickerProviderStateMixin {
-      
   AnimatedPainter painter;
   AnimationController controller;
 
-  // Every time the painter changes, track that change and init the new painter  
+  // Every time the painter changes, track that change and init the new painter
   @override
   void didChangeDependencies() {
     painter = widget.painter();
     painter.init();
     super.didChangeDependencies();
   }
-  
-  // Start a 
+
+  // Start a
   @override
   void initState() {
     super.initState();
@@ -60,19 +59,20 @@ class _AnimatedPainterState extends State<AnimatedPaint>
 
   @override
   Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        height: double.infinity,
-        child:  CustomPaint(painter: _CustomPaintProxy(painter, repaint: controller)));
+      width: double.infinity,
+      height: double.infinity,
+      child: CustomPaint(
+          painter: _CustomPaintProxy(painter, repaint: controller)));
 }
 
-/// 
+///
 /// _CustomPaintProxy
-/// 
+///
 /// Adapts a CustomPaint to the AnimatedPaint interface
 class _CustomPaintProxy extends CustomPainter {
   final AnimatedPainter painter;
-    _CustomPaintProxy(this.painter, {Listenable repaint}) : super(repaint: repaint);
-
+  _CustomPaintProxy(this.painter, {Listenable repaint})
+      : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) => painter.paint(canvas, size);
