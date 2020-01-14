@@ -2,35 +2,47 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-
 ///
 /// Configuration of the Space Clock
 ///
 
+// We make these getters so we can runtime chang the themes
+SpaceConfig get lightSpaceConfig => _LightSpaceConfig();
+SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 
-/// LightSpaceConfig and DarkSpaceConfig are consumed
+/// Overall Config object
+///
+/// Sun Options
+/// - sunSize = Size of the Sun as a multiplier of the screen size
+/// - sunBaseSize = The "disc" that serves as the "surface" for the sun. Small values give more "corona"
+/// - sunOrbitMultiplierX - 0 = Center of Screen, 1 = Left/Right align with center of sun
+/// - sunOrbitMultiplierY - 0 = Center of Screen, 1 = Top/Bottom algin with center of sun
+/// - sunSpeed = Animation multiplier for the sun. Higher values make the sun more active
+/// - sunLayers = Images that are drawn at the sun's location at various rotations/blend modes
+/// - sunGradient = The sunBase is painted with this gradient. It's set to give a soft warm glow around the edges
 /// 
-/// Values in SpaceConfig (Abstract Class == Light Values)
-/// DarkSpaceConfig over-rides and changes the values
 /// 
+/// Earth Options
+/// - earthSize = Size of the earth as a multiplier of screen size
+
 abstract class SpaceConfig {
 // The size of earth as a ratio of screen width
   double get sunSize => 2.0;
   double get earthSize => 0.35;
   double get moonSize => 0.15;
 
-  double get sunBaseSize => 0.96;
+  double get sunBaseSize => 0.95;
   double get sunOrbitMultiplierX => 0.8;
   double get sunOrbitMultiplierY => 1.4;
-  double get sunSpeed => 25;
+  double get sunSpeed => 40;
 
   List<SunLayer> get sunLayers => [
-    SunLayer("sun_1",  BlendMode.multiply, false, -1),    
-    SunLayer("sun_2",  BlendMode.plus, false, 5),
-    SunLayer("sun_3",  BlendMode.plus, false, -4),            
-    SunLayer("sun_3",  BlendMode.multiply, true, -3),    
-    SunLayer("sun_4",  BlendMode.multiply, true, 1),    
-  ];
+        SunLayer("sun_1", BlendMode.multiply, false, -1),
+        SunLayer("sun_2", BlendMode.plus, false, 5),
+        SunLayer("sun_3", BlendMode.plus, false, -4),
+        SunLayer("sun_3", BlendMode.multiply, true, -3),
+        SunLayer("sun_4", BlendMode.multiply, true, 1),
+      ];
 
   //We use a gradient for the sun
   //Mainly to give it soft edges
@@ -39,8 +51,7 @@ abstract class SpaceConfig {
       radius: 0.5,
       colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
       stops: [0.985, 1.0]);
-
-  double get earthShadowShrink => 1.0;
+  
   double get earthRotationSpeed => -10.0;
   double get earthOrbitDivisor => 6; //ScreenWidth / X
 
@@ -52,32 +63,11 @@ abstract class SpaceConfig {
   double get angleOffset => pi / 2;
 }
 
-/// Light Space Config
-/// 
-/// Basic implementation of config
-/// No params set
-class LightSpaceConfig extends SpaceConfig {
-  static final LightSpaceConfig _singleton = LightSpaceConfig._internal();
-  factory LightSpaceConfig() {
-    return _singleton;
-  }
+/// Light Space Config, Defaults Only
+class _LightSpaceConfig extends SpaceConfig {}
 
-  LightSpaceConfig._internal();
-}
-
-/// DarkSpaceConfig
-///
-/// What we show in dark-mode
-/// Some values are over-ridden
-/// to make screen darker
-class DarkSpaceConfig extends SpaceConfig {
-  static final DarkSpaceConfig _singleton = DarkSpaceConfig._internal();
-  factory DarkSpaceConfig() {
-    return _singleton;
-  }
-
-  DarkSpaceConfig._internal();
-
+/// DarkSpaceConfig, Orbits/Scales changed slightly
+class _DarkSpaceConfig extends SpaceConfig {
   double get sunSize => 0.3;
   double get earthSize => 0.25;
   double get moonSize => 0.08;
@@ -87,12 +77,11 @@ class DarkSpaceConfig extends SpaceConfig {
   double get moonOrbitDivisorY => 5.5; //ScreenWidth / X
   double get moonRotationSpeed => -10;
   double get moonSizeVariation => 0.01;
-
 }
 
 /// Represents a "layer" of the sun
-/// 
-/// This is baked into the config so we can say 
+///
+/// This is baked into the config so we can say
 /// what layers are drawn, with what blend mode, and if they are visually flipped
 class SunLayer {
   final String image;

@@ -177,7 +177,7 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final SpaceConfig config = isDark ? DarkSpaceConfig() : LightSpaceConfig();
+    final SpaceConfig config = isDark ? darkSpaceConfig : lightSpaceConfig;
 
     ///
     /// We prepare all the math of the clock layout/orientation here
@@ -369,7 +369,7 @@ class SpaceClockPainter extends AnimatedPainter {
 
     imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * config.earthSize * config.earthShadowShrink,
+        size: size.width * config.earthSize,
         offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
         rotation: sunOrbit,
         paint: standardPaint);

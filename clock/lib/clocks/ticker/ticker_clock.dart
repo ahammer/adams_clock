@@ -89,6 +89,9 @@ class DateTimeAndWeatherTicker extends StatelessWidget {
   /// Normally we add TickerCharacterWidget which draws 1 character
   /// On the last item, we draw the WeatherIcon 
   /// (there should be blank spaces on the end of the string to make room for it)
+  /// 
+  /// We also need to place ValueKey's on the nodes to help the AnimatedSwitcher work with them internally
+  /// 
   @override
   Widget build(BuildContext context) => Container(
         decoration: getTickerDecoration(context),
