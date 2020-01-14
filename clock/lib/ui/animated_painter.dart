@@ -42,7 +42,7 @@ class _AnimatedPainterState extends State<AnimatedPaint>
     super.didChangeDependencies();
   }
   
-  // Start a looping vsync animation to sync the drawing too
+  // Start a 
   @override
   void initState() {
     super.initState();
@@ -51,7 +51,6 @@ class _AnimatedPainterState extends State<AnimatedPaint>
           ..repeat();
   }
 
-  // Clean up the animation
   @override
   void dispose() {
     controller.stop();
@@ -59,15 +58,11 @@ class _AnimatedPainterState extends State<AnimatedPaint>
     super.dispose();
   }
 
-  
   @override
   Widget build(BuildContext context) => Container(
         width: double.infinity,
         height: double.infinity,
-        child: AnimatedBuilder(
-            animation: Tween<double>(begin: 0, end: 1).animate(controller),
-            builder: (BuildContext context, Widget child) =>
-                CustomPaint(painter: _CustomPaintProxy(painter))));
+        child:  CustomPaint(painter: _CustomPaintProxy(painter, repaint: controller)));
 }
 
 /// 
@@ -76,7 +71,8 @@ class _AnimatedPainterState extends State<AnimatedPaint>
 /// Adapts a CustomPaint to the AnimatedPaint interface
 class _CustomPaintProxy extends CustomPainter {
   final AnimatedPainter painter;
-  _CustomPaintProxy(this.painter);
+    _CustomPaintProxy(this.painter, {Listenable repaint}) : super(repaint: repaint);
+
 
   @override
   void paint(Canvas canvas, Size size) => painter.paint(canvas, size);
