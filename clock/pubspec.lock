@@ -79,9 +79,11 @@ packages:
   flutter_clock_helper:
     dependency: "direct main"
     description:
-      path: "..\\flutter_clock_helper"
-      relative: true
-    source: path
+      path: flutter_clock_helper
+      ref: HEAD
+      resolved-ref: eb7afa5aa652b936e80cd41336260ee80c3c1c52
+      url: "https://github.com/flutter/flutter_clock.git"
+    source: git
     version: "1.0.0+1"
   flutter_test:
     dependency: "direct dev"

@@ -51,8 +51,8 @@ String buildRightTickerText(ClockModel model) {
     currentPart = "LOW ${model.lowString}";
   } else if (phase == 2) {
     currentPart = "HIGH ${model.highString}";
-  } else if (phase == 3) {
-    currentPart = model.location;
+  } else if (phase == 3 && model.location is String) {
+    currentPart = model.location as String;
   } else {
     currentPart = date;
   }

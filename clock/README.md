@@ -1,13 +1,21 @@
 # adams_clock
 
-This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm.
+This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There is eclipses 8 times a day (12:00:00am/pm), and close to 3:16, 6:32, 9:47, when things line up.
+
+
 
 Best on Desktop or Mobile
 
 Only very partial web support due to canvas support needing some work, run main_web to get the simplified "web" version of
 the digital clock only.
 
-- Tech Overview
+Tech notes
+- Some Canvas, Some Widget System
+- No 3rd party libraries (pure flutter 1.12)
+- All ClockModel data utilized
+- Easily configurable
+- Pedantic & Effective Dart linted
+- Extension Function APIs for various things
 
 Space Clock
 - Draws as fast as possible
