@@ -7,7 +7,7 @@ import 'clocks/ticker/ticker_clock.dart';
 
 ///
 /// This is the Canvas free version of the clock
-/// 
+///
 /// I wanted to give the web something, even if not a full experience.
 void main() {
   //We have no inputs, so Fuschia should be fine all around
@@ -34,33 +34,32 @@ class ClockScaffolding extends StatelessWidget {
   const ClockScaffolding({Key key, @required this.model}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      Container(
-        color: Theme.of(context).colorScheme.primary,
-        child: Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: DateTimeAndWeatherTicker(
-                clockModel: model,
-                fontSize: 30,
-                height: 40,
-              ),
-            )),
-      ),
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-              "🚧 This is not the full clock\n"         
+  Widget build(BuildContext context) => Stack(children: [
+        Container(
+          color: Theme.of(context).colorScheme.primary,
+          child: Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DateTimeAndWeatherTicker(
+                  clockModel: model,
+                  fontSize: 30,
+                  height: 40,
+                ),
+              )),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "🚧 This is not the full clock\n"
               "👉Only the Widget Based Ticker works.\n"
               "👉Canvas drawing not well supported on web.\n"
               "To see Space/Stars/Sun, run on 📱 or 🖥️",
-              textAlign: TextAlign.left,),
-        ),
-      )
-    ]);
-  }
+              textAlign: TextAlign.left,
+            ),
+          ),
+        )
+      ]);
 }
