@@ -109,7 +109,6 @@ class _DarkSpaceConfig extends SpaceConfig {
   double get sunOrbitMultiplierX => 0.25;
   @override
   double get sunOrbitMultiplierY => 0.2;
-
   @override
   double get earthOrbitMultiplierX => 0.25;
   @override

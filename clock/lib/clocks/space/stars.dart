@@ -28,7 +28,7 @@ import '../../util/extensions.dart';
 final _random = Random();
 
 /// The default number of stars we will generate
-const kNumberStars = 1500;
+const kNumberStars = 500;
 
 /// 🔬 The "resolution" of the starfield render batching
 /// N = number of draw calls to draw stars
@@ -133,7 +133,7 @@ void drawStars(Canvas canvas, Size size, double rotation, double time) {
     /// We also adjust the size based on distance (between 1-2 px)
     _starsPaint
       ..color = Colors.white.withOpacity(1 - interval)
-      ..strokeWidth = (1 - interval) + 1;
+      ..strokeWidth = (1 - interval) + 1.5;
 
     // 🖌️ Draw the points
     canvas.drawPoints(
