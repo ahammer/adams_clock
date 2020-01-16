@@ -4,7 +4,8 @@ This is my clock. The Planets indicate the rough positions of the "hands" of a c
 
 Best on Desktop or Mobile
 
-Not supported on Web (It doesn't work with everything I use, e.g. drawPoints() for the stars, blending bitmaps, transparent pngs). It'll just render the background and the digital clock portion.
+Only very partial web support due to canvas support needing some work, run main_web to get the simplified "web" version of
+the digital clock only.
 
 - Tech Overview
 
@@ -19,10 +20,9 @@ Digital Clock
 - Card drawn in the bottom right
 - Includes Date/Time/Weather
 - Weather Type gets Emojified
-
+- Tickers are pseudo random for a cool effect
 
 Notes
 - Supported Platforms (Android, iOS, Desktop) 
-- Web will barely run, but expect most of it to be broken, I suspect canvas in web support is not fully there yet. Maybe it'll improve with future releases of flutter.
-- http://www.adamhammer.ca/minesweep/ => If you really want a flutter web demo to play with.
+- The subset that works on the web can be run from web_main.dart (it's missing a lot)
 - Optimized on a HTC One (2013) device.
