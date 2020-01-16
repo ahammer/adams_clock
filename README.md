@@ -1,59 +1,36 @@
-# Adam's Space Clock
-Flutter Clock
+# adams_clock
 
-A clock for the flutter clock challenge featuring the following
-
-- A not physically accurate space simulation
-- Sun, Earth and Moon, Starfield and Background
-- A digital clock in the top-left so you can actually tell the time.
-- "Dark" and "Light" themes. The sun is much bigger in the Light Theme.
-- Passes Effective Dart & Pedantic rulesets
-
-Attributions
-- Most assets created bespoke
-- Sun & Moon courtesy of Nasa, Public Domain Imagery
-- Weather Icons from Google Emoji's (Apache2)
-
-No 3rd party libraries used in it's creation (aside from clock_model).
-
-Check it out on youtube (gif @ 16x speed)
-[![Clock in action](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/gif_preview.gif)](http://www.youtube.com/watch?v=pEJCsp5tsR4 "Clock in action")
-
-Check the screenshot for reference times/examples, or the youtube link below. 
-![alt text](https://raw.githubusercontent.com/ahammer/adams_clock/master/clock/screenshots/contact_sheet.jpg)
+This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There is eclipses 8 times a day (12:00:00am/pm), and close to 3:16, 6:32, 9:47, when things line up.
 
 
-How it works
 
-- Sun = Hour hand
-- Earth = Minute Hand
-- Moon = Seconds hand
-- Sun and Earth rotate the screen. 
-- Moon rotates the earth.
+Best on Desktop or Mobile
 
+Only very partial web support due to canvas support needing some work, run main_web to get the simplified "web" version of
+the digital clock only.
 
-Drawn in the following order
+Tech notes
+- Some Canvas, Some Widget System
+- No 3rd party libraries (pure flutter 1.12)
+- All ClockModel data utilized
+- Easily configurable
+- Pedantic & Effective Dart linted
+- Extension Function APIs for various things
 
-- In a CustomPaint layer
-  - Background image created digitally
-    - drawn rotating slowly on the screen over time
-  - StarField
-    - Fixed pool of random stars [x,y,z] between [0 to 1]
-    - z changes linearly through time
-    - decimal is chopped off (e.g. 4.35 = 0.35). This keep's 0-1 range and represents "looping"
-    - Transformed and projected with vector math
-    - Batched and Drawn to reduce draw calls
- 
-  - Sun created from layers
-    - Layer 0: Radial Gradient, White with soft border that fade towards deep orange.
-    - Layer 1-6: Images blended with plus and multiply (defined in config)
-    - Perlin Noise effect by blending layers give sun a dynamic feel
-  - Earth and Moon
-    - Bitmaps for the Moon/Earth
-    - "Shadow" layer drawn on top.
-    - Draw order between moon/earth is switched to simulate an orbit
-- With the Widget System
-  - Digital Clock    
-    - Breaks down string every 1s
-    - Updates individual characters with animated switcher as they change
-  
+Space Clock
+- Draws as fast as possible
+- Background is a Bitmap that rotates slowly (static stars at infinity)
+- Stars are a simple particle system. An array of Stars are created in a [0..1] ranged 3d cube. Z tranforms with time, and repeats >1 => 0. They are projected and transformed to screen stace in steps based on their distance. Each step has increasing opacity and size. This is so we can have "fade in" on the stars, without an individual draw call for each star, allowing far more stars.
+- Planets are drawn with Extensions to UI.Image that help place and rotate them, based on their calculated position.
+- The sun is drawn in layers, with a solid base layer, and 3 layers of varying texture/blending to give it a Perlin Noise style effect.
+
+Digital Clock
+- Card drawn in the bottom right
+- Includes Date/Time/Weather
+- Weather Type gets Emojified
+- Tickers are pseudo random for a cool effect
+
+Notes
+- Supported Platforms (Android, iOS, Desktop) 
+- The subset that works on the web can be run from web_main.dart (it's missing a lot)
+- Optimized on a HTC One (2013) device.
