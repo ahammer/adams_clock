@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:intl/intl.dart';
-import '../../config/time_proxy.dart';
+import '../../config/time.dart';
 import '../../ui/ticker.dart';
 import '../../util/extensions.dart';
 import '../../util/string_util.dart';

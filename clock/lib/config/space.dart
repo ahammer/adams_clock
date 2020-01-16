@@ -11,10 +11,12 @@ SpaceConfig get lightSpaceConfig => _LightSpaceConfig();
 /// Dark Theme Space Config
 SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 
+/// For Development: Locks to a theme
+SpaceConfig get defaultTheme => darkSpaceConfig;
+
 /// Default Values for the Space Config
 /// Also used for "Light"
 abstract class SpaceConfig {
-
   /// sunSize = Size of the Sun as a multiplier of the screen size
   double get sunSize => 2.0;
 
@@ -48,14 +50,13 @@ abstract class SpaceConfig {
             image: "sun_4", mode: BlendMode.multiply, flipped: true, speed: 1),
       ];
 
-  /// sunGradient = The sunBase is painted with this gradient. 
+  /// sunGradient = The sunBase is painted with this gradient.
   /// It's set to give a soft warm glow around the edges
   RadialGradient get sunGradient => RadialGradient(
       center: Alignment.center,
       radius: 0.5,
       colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
       stops: [0.985, 1.0]);
-
 
   /// earthSize = Size of the earth as a multiplier of screen size
   double get earthSize => 0.35;
@@ -81,14 +82,14 @@ abstract class SpaceConfig {
   /// moonRotationSpeed = Speed the earth rotates on the screen cosmetic only
   double get moonRotationSpeed => -10;
 
-  /// moonSizeVariation = moonSize +- moonSizeVariation 
+  /// moonSizeVariation = moonSize +- moonSizeVariation
   /// as moon travels "front" to "back"
   double get moonSizeVariation => 0.03;
 
   /// backgroundRotationSpeedMultiplier = How fast the background and stars spin
   double get backgroundRotationSpeedMultiplier => 15;
 
-  /// angleOffset = 0 degrees != 12:00, this constant offsets the 
+  /// angleOffset = 0 degrees != 12:00, this constant offsets the
   /// clock to correct
   double get angleOffset => pi / 2;
 }

@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
 
-import '../../config/space_config.dart';
-import '../../config/time_proxy.dart';
+import '../../config/space.dart';
+import '../../config/time.dart';
 import '../../ui/animated_painter.dart';
 import '../../util/extensions.dart';
 import '../../util/image_loader.dart';
@@ -70,12 +70,9 @@ class SpaceClockScene extends StatelessWidget {
   SpaceClockScene(this.model, {Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    /// We pass the current theme to the Painter so that
-    /// It knows what SpaceConfig to use
-    painter.isDark = Theme.of(context).brightness == Brightness.dark;
-    return AnimatedPaint(painter: () => painter);
-  }
+  Widget build(BuildContext context) => AnimatedPaint(
+      painter:  SpaceClockPainter(
+          isDark: Theme.of(context).brightness == Brightness.dark));
 }
 
 ///
@@ -93,6 +90,12 @@ const List<String> images = [
   "stars",
   "shadow"
 ];
+
+/// The images load into this map
+final Map<String, ui.Image> _imageMap = {};
+
+/// Have all the images loaded?
+bool get _imagesLoaded => _imageMap.length == images.length;
 
 /// SpaceClockPainter
 ///
@@ -115,10 +118,7 @@ const List<String> images = [
 class SpaceClockPainter extends AnimatedPainter {
   /// Whether to draw dark config or not
   /// Note: This is mutating state
-  bool isDark = false;
-
-  /// The images load into this map
-  final Map<String, ui.Image> imageMap = {};
+  final bool isDark;
 
   /// StandardPaint is just for the planets and background
   final Paint standardPaint = Paint()..filterQuality = FilterQuality.low;
@@ -129,15 +129,18 @@ class SpaceClockPainter extends AnimatedPainter {
   /// SunLayerPaint will adjust blendmode based on the layer as it
   final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
 
-  /// Have all the images loaded?
-  bool get loaded => imageMap.length == images.length;
+  // Generic painter builder
+  SpaceClockPainter({@required this.isDark});
+
 
   // Init on AnimatedPainter, we use this async method to load the images
   @override
   void init() async {
-    for (var i = 0; i < images.length; i++) {
-      final image = images[i];
-      imageMap[image] = await loadImageFromAsset(image);
+    if (!_imagesLoaded) {
+      for (var i = 0; i < images.length; i++) {
+        final image = images[i];
+        _imageMap[image] = await loadImageFromAsset(image);
+      }
     }
   }
 
@@ -148,7 +151,7 @@ class SpaceClockPainter extends AnimatedPainter {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
 
     // Draw space or the loading screen
-    loaded ? drawSpace(canvas, size) : drawLoadingScreen(canvas, size);
+    _imagesLoaded ? drawSpace(canvas, size) : drawLoadingScreen(canvas, size);
   }
 
   /// drawLoadingScreen
@@ -164,7 +167,7 @@ class SpaceClockPainter extends AnimatedPainter {
 
     // Set up the TextSpan (Specifies Text, Font, Etc)
     final percentLoaded =
-        (imageMap.length / images.length.toDouble() * 100).toInt();
+        (_imageMap.length / images.length.toDouble() * 100).toInt();
 
     final span = TextSpan(
         style: TextStyle(color: Colors.white, fontSize: 24).withNovaMono(),
@@ -283,7 +286,7 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   ///
   void drawBackground(Canvas canvas, Size size, double earthOrbit) =>
-      imageMap["stars"].drawRotatedSquare(
+      _imageMap["stars"].drawRotatedSquare(
           canvas: canvas,
           size: sqrt(size.width * size.width + size.height * size.height),
           offset: Offset(size.width / 2, size.height / 2),
@@ -312,7 +315,7 @@ class SpaceClockPainter extends AnimatedPainter {
     //We are going to go through layers 1-3 twice, once flipped
     for (var layer in config.sunLayers) {
       sunLayerPaint.blendMode = layer.mode;
-      imageMap[layer.image].drawRotatedSquare(
+      _imageMap[layer.image].drawRotatedSquare(
           canvas: canvas,
           size: sunDiameter,
           offset: sunOffset,
@@ -349,14 +352,14 @@ class SpaceClockPainter extends AnimatedPainter {
     final shadowRotation =
         atan2(oEarthY + oMoonY - oSunY, oEarthX + oMoonX - oSunX) - pi / 2;
 
-    imageMap["moon"].drawRotatedSquare(
+    _imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * (config.moonSize + scaleOffset),
         offset: offset,
         rotation: earthOrbit * config.moonRotationSpeed,
         paint: standardPaint);
 
-    imageMap["shadow"].drawRotatedSquare(
+    _imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * (config.moonSize + scaleOffset),
         offset: offset,
@@ -374,14 +377,14 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   void drawEarth(Canvas canvas, Size size, double ox, double oy,
       double earthOrbit, double sunOrbit, SpaceConfig config) {
-    imageMap["earth"].drawRotatedSquare(
+    _imageMap["earth"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * config.earthSize,
         offset: Offset(size.width / 2 + ox, size.height / 2 + oy),
         rotation: earthOrbit * config.earthRotationSpeed,
         paint: standardPaint);
 
-    imageMap["shadow"].drawRotatedSquare(
+    _imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
         size: size.width * config.earthSize,
         offset: Offset(size.width / 2 + ox, size.height / 2 + oy),

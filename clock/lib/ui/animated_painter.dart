@@ -27,7 +27,7 @@ abstract class AnimatedPainter {
 class AnimatedPaint extends StatefulWidget {
 
   /// The Painter interface we are using
-  final PainterBuilder painter;
+  final AnimatedPainter painter;
 
   /// Construct an AnimatedPaint to draw a AnimatedPainter
   const AnimatedPaint({Key key, @required this.painter}) : super(key: key);
@@ -38,14 +38,13 @@ class AnimatedPaint extends StatefulWidget {
 
 class _AnimatedPainterState extends State<AnimatedPaint>
     with SingleTickerProviderStateMixin {
-  AnimatedPainter painter;
+  
   AnimationController controller;
 
   // Every time the painter changes, track that change and init the new painter
   @override
-  void didChangeDependencies() {
-    painter = widget.painter();
-    painter.init();
+  void didChangeDependencies() {    
+    widget.painter.init();
     super.didChangeDependencies();
   }
 
@@ -70,7 +69,7 @@ class _AnimatedPainterState extends State<AnimatedPaint>
       width: double.infinity,
       height: double.infinity,
       child: CustomPaint(
-          painter: _CustomPaintProxy(painter, repaint: controller)));
+          painter: _CustomPaintProxy(widget.painter, repaint: controller)));
 }
 
 ///
