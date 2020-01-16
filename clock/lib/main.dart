@@ -13,7 +13,24 @@ void main() {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
   ]);
-  runApp(ClockCustomizer((model) => ClockScaffolding(model: model)));
+  runApp(MainWidget());
+}
+
+///
+/// We broke out the "Main" widget into it's own
+///
+/// So we can "Navigate" to it
+class MainWidget extends StatelessWidget {
+  /// Main Screen
+  const MainWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClockCustomizer((model) =>
+        Builder(builder: (context) => ClockScaffolding(model: model)));
+  }
 }
 
 ///

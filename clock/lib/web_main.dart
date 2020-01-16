@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/customizer.dart';
 import 'clocks/ticker/ticker_clock.dart';
+import 'main.dart' as full_main;
 
 ///
 /// This is the Canvas free version of the clock
@@ -16,7 +17,11 @@ void main() {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
   ]);
-  runApp(ClockCustomizer((model) => ClockScaffolding(model: model)));
+
+  // Run the app
+  // We use a Builder to pass the scaffolding, so Theme.of() works
+  runApp(ClockCustomizer((model) =>
+      Builder(builder: (context) => ClockScaffolding(model: model))));
 }
 
 ///
@@ -36,28 +41,50 @@ class ClockScaffolding extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(children: [
         Container(
-          color: Theme.of(context).colorScheme.primary,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/stars.png"), fit: BoxFit.cover)),
           child: Align(
               alignment: Alignment.center,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DateTimeAndWeatherTicker(
                   clockModel: model,
-                  fontSize: 30,
-                  height: 40,
+                  fontSize: 32,
+                  height: 64,
                 ),
               )),
         ),
         Align(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "🚧 This is not the full clock\n"
-              "👉Only the Widget Based Ticker works.\n"
-              "👉Canvas drawing not well supported on web.\n"
-              "To see Space/Stars/Sun, run on 📱 or 🖥️",
-              textAlign: TextAlign.left,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "🚧 This is NOT the full clock\n"
+                      "👉Only the Widget Based Ticker is demo'd for web.\n"
+                      "👉Canvas drawing not well supported on web.\n"
+                      "To see Space/Stars/Sun, run on 📱 or 🖥️",
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => full_main.MainWidget())),
+                      child: Text(
+                          "Try the full clock\n(NOT SUPPORTED ON WEB/FLUTTER 1.12)"),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         )

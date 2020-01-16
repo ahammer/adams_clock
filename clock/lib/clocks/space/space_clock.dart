@@ -55,7 +55,6 @@ import 'stars.dart';
 /// Notes: This is graphics/math heavy, custom code to create the scene
 ///
 ///
-final SpaceClockPainter painter = SpaceClockPainter();
 
 /// Space Clock Scene
 ///
