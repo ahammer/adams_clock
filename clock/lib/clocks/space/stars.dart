@@ -28,7 +28,7 @@ import '../../util/extensions.dart';
 final _random = Random();
 
 /// The default number of stars we will generate
-const kNumberStars = 500;
+const kNumberStars = 1500;
 
 /// 🔬 The "resolution" of the starfield render batching
 /// N = number of draw calls to draw stars

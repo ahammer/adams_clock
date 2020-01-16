@@ -71,8 +71,9 @@ class SpaceClockScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AnimatedPaint(
-      painter:  SpaceClockPainter(
-          isDark: Theme.of(context).brightness == Brightness.dark));
+        painter: SpaceClockPainter(
+            isDark: Theme.of(context).brightness == Brightness.dark),
+      );
 }
 
 ///
@@ -96,6 +97,7 @@ final Map<String, ui.Image> _imageMap = {};
 
 /// Have all the images loaded?
 bool get _imagesLoaded => _imageMap.length == images.length;
+bool _startedLoadingImages = false;
 
 /// SpaceClockPainter
 ///
@@ -129,14 +131,15 @@ class SpaceClockPainter extends AnimatedPainter {
   /// SunLayerPaint will adjust blendmode based on the layer as it
   final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
 
-  // Generic painter builder
+  /// Constructor for the painter
   SpaceClockPainter({@required this.isDark});
 
-
   // Init on AnimatedPainter, we use this async method to load the images
+  // we'll need
   @override
   void init() async {
-    if (!_imagesLoaded) {
+    if (!_imagesLoaded && !_startedLoadingImages) {
+      _startedLoadingImages = true;
       for (var i = 0; i < images.length; i++) {
         final image = images[i];
         _imageMap[image] = await loadImageFromAsset(image);
@@ -199,7 +202,9 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final config = isDark ? darkSpaceConfig : lightSpaceConfig;
+    final config = overrideTheme != null
+        ? overrideTheme
+        : isDark ? darkSpaceConfig : lightSpaceConfig;
 
     ///
     /// We prepare all the math of the clock layout/orientation here

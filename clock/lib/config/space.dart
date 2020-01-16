@@ -12,7 +12,7 @@ SpaceConfig get lightSpaceConfig => _LightSpaceConfig();
 SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 
 /// For Development: Locks to a theme
-SpaceConfig get defaultTheme => darkSpaceConfig;
+SpaceConfig get overrideTheme => null;
 
 /// Default Values for the Space Config
 /// Also used for "Light"
@@ -25,7 +25,7 @@ abstract class SpaceConfig {
   double get sunBaseSize => 0.95;
 
   /// sunOrbitMultiplierX - 0 = Center of Screen, 1 = Left/Right align with center of sun
-  double get sunOrbitMultiplierX => 0.8;
+  double get sunOrbitMultiplierX => 0.9;
 
   /// sunOrbitMultiplierY - 0 = Center of Screen, 1 = Top/Bottom algin with center of sun
   double get sunOrbitMultiplierY => 1.4;
@@ -59,25 +59,25 @@ abstract class SpaceConfig {
       stops: [0.985, 1.0]);
 
   /// earthSize = Size of the earth as a multiplier of screen size
-  double get earthSize => 0.35;
+  double get earthSize => 0.30;
 
   /// earthRotationSpeed = Speed the earth rotates on the screen cosmetic only
   double get earthRotationSpeed => -10.0;
 
   /// earthOrbitMultiplierX = Same as Sun
-  double get earthOrbitMultiplierX => 0.3; //ScreenWidth / X
+  double get earthOrbitMultiplierX => 0.15; //ScreenWidth / X
 
   /// earthOrbitMultiplierY = Same as Sun
-  double get earthOrbitMultiplierY => 0.3; //ScreenWidth / X
+  double get earthOrbitMultiplierY => 0.15; //ScreenWidth / X
 
   /// moonSize = Size of the moon as a multiplier of screen size
-  double get moonSize => 0.15;
+  double get moonSize => 0.14;
 
   /// moonOrbitMultiplierX = Same as Sun/Earth
   double get moonOrbitMultiplierX => 0.25; //ScreenWidth / X
 
   /// moonOrbitMultiplierY = Same as Sun/Earth but moon pivots around earth
-  double get moonOrbitMultiplierY => 0.25; //ScreenWidth / X
+  double get moonOrbitMultiplierY => 0.22; //ScreenWidth / X
 
   /// moonRotationSpeed = Speed the earth rotates on the screen cosmetic only
   double get moonRotationSpeed => -10;
@@ -102,17 +102,22 @@ class _DarkSpaceConfig extends SpaceConfig {
   @override
   double get sunSize => 0.3;
   @override
-  double get earthSize => 0.25;
+  double get earthSize => 0.280;
   @override
   double get moonSize => 0.08;
   @override
-  double get sunOrbitMultiplierX => 0.3;
+  double get sunOrbitMultiplierX => 0.25;
   @override
-  double get sunOrbitMultiplierY => 0.25;
+  double get sunOrbitMultiplierY => 0.2;
+
   @override
-  double get moonOrbitMultiplierX => 0.18; //ScreenWidth / X
+  double get earthOrbitMultiplierX => 0.25;
   @override
-  double get moonOrbitMultiplierY => 0.1; //ScreenWidth / X
+  double get earthOrbitMultiplierY => 0.2;
+  @override
+  double get moonOrbitMultiplierX => 0.20; //ScreenWidth / X
+  @override
+  double get moonOrbitMultiplierY => 0.22; //ScreenWidth / X
   @override
   double get moonRotationSpeed => -10;
   @override
