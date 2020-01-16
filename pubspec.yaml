@@ -24,7 +24,7 @@ flutter:
   uses-material-design: true
 
   assets:
-   - assets/stars.png
+   - assets/stars.jpg
    - assets/moon.png
    - assets/sun_1.png
    - assets/sun_2.png

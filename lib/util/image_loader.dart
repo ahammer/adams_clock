@@ -8,9 +8,10 @@ import 'extensions.dart';
 ///
 /// Loads an image from an asset
 ///
-Future<ui.Image> loadImageFromAsset(String asset) async {
+Future<ui.Image> loadImageFromAsset(String asset, {String ext = "png"}) async {
   /// Read the bytes of the Data into a list
-  final img = (await rootBundle.load('assets/$asset.png'))
+  
+  final img = (await rootBundle.load('assets/$asset.$ext'))
       .chain((bytes) => Uint8List.view(bytes.buffer));
 
   final  completer = Completer<ui.Image>();

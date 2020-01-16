@@ -91,6 +91,14 @@ const List<String> images = [
   "shadow"
 ];
 
+/// Only the Stars are a jpeg,
+/// but I'll add this list as a hint
+/// on whether to load a jpeg or a png
+/// Generally on all images I want alpha
+/// channel, but on background, size is
+/// more important.
+const List<String> jpegImages = ["stars"];
+
 /// The images load into this map
 final Map<String, ui.Image> _imageMap = {};
 
@@ -141,7 +149,9 @@ class SpaceClockPainter extends AnimatedPainter {
       _startedLoadingImages = true;
       for (var i = 0; i < images.length; i++) {
         final image = images[i];
-        _imageMap[image] = await loadImageFromAsset(image);
+
+        _imageMap[image] = await loadImageFromAsset(image,
+            ext: jpegImages.contains(image) ? "jpg" : "png");
       }
     }
   }
