@@ -2,6 +2,9 @@
 
 ![Adams Clock](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/preview.webp)
 
+![12:00:00AM Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark000000)
+![12:00:00AM Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light000000)
+
 This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode.
 
 
