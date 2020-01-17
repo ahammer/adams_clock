@@ -1,6 +1,6 @@
 # adams_clock
 
-This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There is eclipses 8 times a day (12:00:00am/pm), and close to 3:16, 6:32, 9:47, when things line up.
+This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode.
 
 
 

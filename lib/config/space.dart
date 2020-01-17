@@ -12,7 +12,7 @@ SpaceConfig get lightSpaceConfig => _LightSpaceConfig();
 SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 
 /// For Development: Locks to a theme
-SpaceConfig get overrideTheme => null;
+SpaceConfig get overrideTheme => darkSpaceConfig;
 
 /// Default Values for the Space Config
 /// Also used for "Light"

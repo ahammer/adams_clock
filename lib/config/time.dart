@@ -19,4 +19,4 @@ DateTime get spaceClockTime => DateTime.now();
 
 // Or just want to see it really fast
 // DateTime get spaceClockTime => DateTime.fromMillisecondsSinceEpoch(
-//   DateTime.now().millisecondsSinceEpoch * 60 * 60);
+//   DateTime.now().millisecondsSinceEpoch * 30);
