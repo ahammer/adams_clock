@@ -1,9 +1,20 @@
 # adams_clock
 
-![Adams Clock](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/preview.webp)
 
-![12:00:00AM Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark000000.png)
-![12:00:00AM Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light000000.png)
+| Light | Dark |
+| ----- | ---- |
+| 12:00:00 |
+| ![12:00:00 Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark000000.png) | ![12:00:00 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light000000.png) |
+| 3:15:15 |
+| ![03:15:15 Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark031515.png) | ![3:15:15 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light031515.png) |
+| 6:30:30 |
+| ![6:30:30 Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark063030.png) | ![6:30:30 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light063030.png) |
+| 9:45:45 |
+| ![9:45:45 Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark094545.png) | ![9:45:45 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light094545.png) |
+| ![Adams Clock](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/preview.webp) |
+
+
+
 
 This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode.
 
