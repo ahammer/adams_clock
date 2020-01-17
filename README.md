@@ -1,8 +1,10 @@
 # Adams Space Clock
 
-This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode.
+This is my Clock Submission for the #flutterclock challenge. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode.
 
 Best on Desktop or Mobile
+
+Licensed Apache 2
 
 | Light | Dark |
 | ----- | ---- |
