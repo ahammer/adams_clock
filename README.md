@@ -1,5 +1,8 @@
-# adams_clock
+# Adams Space Clock
 
+This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode.
+
+Best on Desktop or Mobile
 
 | Light | Dark |
 | ----- | ---- |
@@ -16,11 +19,6 @@
 
 
 
-This is my clock. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode.
-
-
-
-Best on Desktop or Mobile
 
 Only very partial web support due to canvas support needing some work, run main_web to get the simplified "web" version of
 the digital clock only.
