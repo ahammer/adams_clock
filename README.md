@@ -1,6 +1,8 @@
 # Adams Space Clock
 
-This is my Clock Submission for the #flutterclock challenge. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode. Best seen in action, the perlin noise on the sun will generate awesome random looking sun spots, and the starfield and general dynamic nature of the scene are not captured well in screenshots or the webp animation.
+This is my Clock Submission for the #flutterclock challenge. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode. 
+
+Best seen in action, the perlin noise on the sun will generate awesome random looking sun spots, and the starfield and general dynamic nature of the scene are not captured well in screenshots or the webp animation.
 
 Best on Desktop or Mobile
 
