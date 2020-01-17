@@ -4,6 +4,8 @@ This is my clock. The Planets indicate the rough positions of the "hands" of a c
 
 Best on Desktop or Mobile
 
+Licensed Apache 2
+
 | Light | Dark |
 | ----- | ---- |
 | 12:00:00 |
