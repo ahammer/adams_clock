@@ -5,7 +5,7 @@ import 'package:adams_clock/config/space.dart';
 import 'package:flutter/widgets.dart';
 
 class SpaceViewModel {
-  final double moonOrbit;
+  //final double moonOrbit;
   final double moonRotation;
   final double moonSize;
   final double earthOrbit;
@@ -15,14 +15,14 @@ class SpaceViewModel {
   final double osuny;
   final double oearthx;
   final double oearthy;
-  final double omoonx;
-  final double omoony;
+  //final double omoonx;
+  //final double omoony;
   final double moonScale;
   final double backgroundRotation;
   final Offset moonOffset;
 
   SpaceViewModel(
-      {@required this.moonOrbit,
+      {
       @required this.moonRotation,
       @required this.moonSize,
       @required this.earthOrbit,
@@ -32,8 +32,6 @@ class SpaceViewModel {
       @required this.osuny,
       @required this.oearthx,
       @required this.oearthy,
-      @required this.omoonx,
-      @required this.omoony,
       @required this.moonOffset,
       @required this.moonScale,
       @required this.backgroundRotation});
@@ -111,9 +109,6 @@ class SpaceViewModel {
       oearthy: oearthy,
       moonScale: moonScale,
       moonSize: moonSize,
-      moonOrbit: moonOrbit,
-      omoonx: omoonx,
-      omoony: omoony,
       sunDiameter: sunDiameter,
       sunOrbit: sunOrbit,
       osunx: osunx,
