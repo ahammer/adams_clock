@@ -70,6 +70,11 @@ Inputs: Time, Config, View Size
 3) Transformed from 3d to 2d points using Matrix/Vector
 4) Drawn to screen in batches with drawPoints (for performance)
 
+There is 500 stars, and they are split into 16 batches (to adjust opacity without visual banding/flick)
+
+There is a fair bit of headroom here, you can easily boost this number way up on modern hardware. But I felt 500 looked right.
+
+
 #### Ticker Clock
 Generic component for buiding a UI agnostic ticker out of a string and AnimatedSwitcher
 
