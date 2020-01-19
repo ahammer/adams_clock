@@ -41,7 +41,7 @@ At the top level we create the ClockScaffold which places the 2 clocks we have i
 #### Clock Scaffold
 ClockCustomizer -> Stack[SpaceClockScene, TickerClock]
 
-Here we pass the ClockModel to the Clocks, the Clocks are both State
+Here we pass the ClockModel to the Clocks and get everything on the screen.
 
 #### Space Clock Scene
 
