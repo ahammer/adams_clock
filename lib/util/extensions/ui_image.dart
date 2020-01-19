@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-
 ///🖼️🖼️🖼️🖼️🖼️🖼️🖼️🖼️🖼️🖼️
 /// Image Helpers
 /// Extending ui.Image to make it easier to draw to the screen
@@ -18,17 +17,19 @@ extension ImageHelpers on ui.Image {
       double rotation,
       Paint paint,
       bool flip = false}) {
-    canvas.save();
-    canvas.translate(offset.dx, offset.dy);
+    canvas
+      ..save()
+      ..translate(offset.dx, offset.dy);
 
     if (flip) {
       canvas.scale(-1, 1);
     }
 
-    canvas.rotate(flip ? -rotation : rotation);
-    canvas.scale(size);
-    canvas.drawImageRect(this, bounds(), kTargetRect, paint);
-    canvas.restore();
+    canvas
+      ..rotate(flip ? -rotation : rotation)
+      ..scale(size)
+      ..drawImageRect(this, bounds(), kTargetRect, paint)
+      ..restore();
   }
 
   /// Creates a Rect bounds for this Image

@@ -33,7 +33,7 @@ String get date => _dateFormat.format(spaceClockTime);
 /// 2 = High Temp
 /// 3 = Current Location
 /// 4 = Date
-/// note: kDelayS * kPhases should equal 3,5,10,15,20,30,60 
+/// note: kDelayS * kPhases should equal 3,5,10,15,20,30,60
 /// if it's to loop seemlessly once a minute
 const int kDelayS = 4;
 
@@ -71,16 +71,23 @@ String buildRightTickerText(ClockModel model) {
 /// Icons were originally emoji, but imported assets for compat
 String buildTickerString(ClockModel clockModel) {
   final is24Hours = clockModel.is24HourFormat as bool;
-  
-  return (is24Hours ? time24 : time12).chain((timeString) =>
-        buildSpacedString(
-            " $timeString ", "${buildRightTickerText(clockModel)}  ", 36));
+
+  return (is24Hours ? time24 : time12).chain((timeString) => buildSpacedString(
+      " $timeString ", "${buildRightTickerText(clockModel)}  ", 36));
 }
 
 /// DateTimeAndWeatherTicker
 ///
 /// This is the Ticker as a whole for showing the text at the top left
 class DateTimeAndWeatherTicker extends StatelessWidget {
+  /// Constructs this ticker widget
+  const DateTimeAndWeatherTicker({
+    @required this.clockModel,
+    this.height = 20,
+    this.fontSize = 12,
+    Key key,
+  }) : super(key: key);
+
   /// The ClockModel we get the Weather from
   final ClockModel clockModel;
 
@@ -90,25 +97,17 @@ class DateTimeAndWeatherTicker extends StatelessWidget {
   /// The font size we want to draw with
   final double fontSize;
 
-  /// Constructs this ticker widget
-  const DateTimeAndWeatherTicker(
-      {Key key,
-      this.height = 20,
-      this.fontSize = 12,
-      @required this.clockModel})
-      : super(key: key);
-
   /// We wrap this ticket in a decoration (getTickerDecoration)
-  /// The ticker expects a method to generate it's current string 
+  /// The ticker expects a method to generate it's current string
   /// (buildTickerString(clockModel))
   /// It also expects a builder function to generate the characters
   ///
   /// Normally we add TickerCharacterWidget which draws 1 character
   /// On the last item, we draw the WeatherIcon
-  /// (there should be blank spaces on the end of the string 
+  /// (there should be blank spaces on the end of the string
   /// to make room for it)
   ///
-  /// We also need to place ValueKey's on the nodes to help the 
+  /// We also need to place ValueKey's on the nodes to help the
   /// AnimatedSwitcher work with them internally
   ///
   @override
@@ -147,13 +146,12 @@ class DateTimeAndWeatherTicker extends StatelessWidget {
 /// Size is HxH
 ///
 class TickerWeatherIcon extends StatelessWidget {
-
   /// Constructor for the WeatherIcon in the ticker
   /// Takes height to define a fixed square size
   const TickerWeatherIcon({
-    Key key,
     @required this.clockModel,
     @required this.height,
+    Key key,
   }) : super(key: key);
 
   /// We get the weather from the ClockModel
@@ -176,14 +174,13 @@ class TickerWeatherIcon extends StatelessWidget {
 ///
 /// This builds a single character for the ticker
 class TickerCharacterWidget extends StatelessWidget {
-
   /// Constructs a character widget for the ticker
   /// Requires the "glyph" a single character
   /// And the font size
   const TickerCharacterWidget({
-    Key key,
     @required this.glyph,
     @required this.fontSize,
+    Key key,
   }) : super(key: key);
 
   /// The character to draw

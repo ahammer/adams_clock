@@ -32,22 +32,22 @@ void main() {
 /// Layer 2: The DateTimeAndWeatherTicker the draws in the top left
 ///
 class ClockScaffolding extends StatelessWidget {
+  /// Construct a clock scaffolding given a model
+  const ClockScaffolding({@required this.model, Key key}) : super(key: key);
+
   /// The ClockModel, needed by things to make decisions about what to draw
   final ClockModel model;
-
-  /// Construct a clock scaffolding given a model
-  const ClockScaffolding({Key key, @required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Stack(children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/stars.png"), fit: BoxFit.cover)),
           child: Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: DateTimeAndWeatherTicker(
                   clockModel: model,
                   fontSize: 32,
@@ -58,13 +58,13 @@ class ClockScaffolding extends StatelessWidget {
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Card(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8),
                     child: Text(
                       "🚧 This is NOT the full clock\n"
                       "👉Only the Widget Based Ticker is demo'd for web.\n"
@@ -73,18 +73,17 @@ class ClockScaffolding extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  /*
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8),
                     child: RaisedButton(
                       onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => full_main.MainWidget())),
-                      child: Text(
+                          MaterialPageRoute<Widget>(
+                              builder: (context) =>
+                                  const full_main.MainWidget())),
+                      child: const Text(
                           "Try the full clock\n(NOT SUPPORTED ON WEB/FLUTTER 1.12)"),
                     ),
                   )
-                  */
                 ],
               ),
             ),

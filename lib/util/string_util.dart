@@ -2,10 +2,10 @@
 /// $left_______$right
 /// Used in the ticker
 String buildSpacedString(String left, String right, int length) {
-  var output = left;
+  var output = StringBuffer(left);
   for (var i = 0; i < length - (left.length + right.length); i++) {
-    output += " ";
+    output.write(" ");
   }
-  output += right;
-  return output;
+  output.write(right);
+  return output.toString();
 }

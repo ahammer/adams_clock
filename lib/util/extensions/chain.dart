@@ -15,5 +15,5 @@
 /// creating a variable.
 extension ChainHelper<IN, OUT> on IN {
   /// Chain values togeter
-  OUT chain<OUT>(OUT mapFunc(IN input)) => mapFunc(this);
+  OUT chain<OUT>(OUT Function(IN input) mapFunc) => mapFunc(this);
 }

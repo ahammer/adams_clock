@@ -27,24 +27,24 @@ typedef BuildDigitWidget = Widget Function(String value, bool first, bool last);
 /// Because it looks cool
 ///
 class TickerWidget extends StatefulWidget {
-  /// Widget Builder that builds a particular digit/glyph/character
-  final BuildDigitWidget digitBuilder;
-
-  /// Function that generates the desired string 
-  final StringBuilder builder;
-  
-  /// Ticker animation randomness in MS
-  final int tickerRandomnessMs;
-  
-  /// Ticker base animation time
-  final int tickerBaseTimeMs;
-
   /// Construct a Ticker Widget
-  TickerWidget(
+  const TickerWidget(
       {this.builder,
       this.digitBuilder,
       this.tickerRandomnessMs = 500,
       this.tickerBaseTimeMs = 200});
+
+  /// Widget Builder that builds a particular digit/glyph/character
+  final BuildDigitWidget digitBuilder;
+
+  /// Function that generates the desired string
+  final StringBuilder builder;
+
+  /// Ticker animation randomness in MS
+  final int tickerRandomnessMs;
+
+  /// Ticker base animation time
+  final int tickerBaseTimeMs;
 
   @override
   _TickerWidgetState createState() => _TickerWidgetState();
@@ -65,7 +65,7 @@ class _TickerWidgetState extends State<TickerWidget> {
   @override
   void initState() {
     //Each ticker should run once a second
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       //Trigger a rebuild
       setState(() {});
     });
@@ -108,19 +108,19 @@ class _TickerWidgetState extends State<TickerWidget> {
 ///
 ///
 class _TickerCharacterView extends StatelessWidget {
+  const _TickerCharacterView(
+      {@required this.digit,
+      @required this.builder,
+      @required this.first,
+      @required this.last,
+      this.duration = const Duration(milliseconds: 500),
+      Key key})
+      : super(key: key);
+
   final String digit;
   final bool first, last;
   final BuildDigitWidget builder;
   final Duration duration;
-
-  const _TickerCharacterView(
-      {Key key,
-      @required this.digit,
-      @required this.builder,
-      @required this.first,
-      @required this.last,
-      this.duration = const Duration(milliseconds: 500)})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -128,11 +128,11 @@ class _TickerCharacterView extends StatelessWidget {
           AnimatedSwitcher(
               transitionBuilder: (child, animation) =>
                   _TickerCharacterTransition(
-                      child: child,
                       scale: animation,
-                      alignment: Alignment.center),
-              child: builder(digit, first, last),
-              duration: duration),
+                      alignment: Alignment.center,
+                      child: child),
+              duration: duration,
+              child: builder(digit, first, last)),
         ],
       );
 }
@@ -143,13 +143,12 @@ class _TickerCharacterView extends StatelessWidget {
 /// Changed the X scale to be fixed at 1.
 class _TickerCharacterTransition extends AnimatedWidget {
   const _TickerCharacterTransition({
-    Key key,
     @required this.scale,
     this.alignment = Alignment.center,
     this.child,
+    Key key,
   })  : assert(scale != null),
         super(key: key, listenable: scale);
-
 
   final Animation<double> scale;
 
@@ -158,7 +157,7 @@ class _TickerCharacterTransition extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) =>
-      (Matrix4.identity()..scale(1.0, scale.value, 1.0))
+      (Matrix4.identity()..scale(1.0, scale.value, 1))
           .chain((transform) => Transform(
                 transform: transform,
                 alignment: alignment,

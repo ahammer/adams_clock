@@ -18,7 +18,7 @@ SpaceConfig get overrideTheme => null;
 /// Also used for "Light"
 abstract class SpaceConfig {
   /// sunSize = Size of the Sun as a multiplier of the screen size
-  double get sunSize => 2.0;
+  double get sunSize => 2;
 
   /// sunBaseSize = The "disc" that serves as the "surface" for the sun.
   /// Small values give more "corona"
@@ -55,14 +55,14 @@ abstract class SpaceConfig {
   RadialGradient get sunGradient => RadialGradient(
       center: Alignment.center,
       radius: 0.5,
-      colors: [Colors.white, Colors.deepOrange.withOpacity(0.0)],
-      stops: [0.985, 1.0]);
+      colors: [Colors.white, Colors.deepOrange.withOpacity(0)],
+      stops: const [0.985, 1]);
 
   /// earthSize = Size of the earth as a multiplier of screen size
   double get earthSize => 0.30;
 
   /// earthRotationSpeed = Speed the earth rotates on the screen cosmetic only
-  double get earthRotationSpeed => -10.0;
+  double get earthRotationSpeed => -10;
 
   /// earthOrbitMultiplierX = Same as Sun
   double get earthOrbitMultiplierX => 0.15; //ScreenWidth / X
@@ -129,6 +129,13 @@ class _DarkSpaceConfig extends SpaceConfig {
 /// what layers are drawn, with what blend mode,
 /// and if they are visually flipped
 class SunLayer {
+  /// Construct a sun layer
+  SunLayer(
+      {@required this.image,
+      @required this.mode,
+      @required this.flipped,
+      @required this.speed});
+
   /// The image name, e.g. sun_1 or sun_2, that would be in the map
   final String image;
 
@@ -140,11 +147,4 @@ class SunLayer {
 
   /// And we should set a speed the layers transition
   final double speed;
-
-  /// Construct a sun layer
-  SunLayer(
-      {@required this.image,
-      @required this.mode,
-      @required this.flipped,
-      @required this.speed});
 }

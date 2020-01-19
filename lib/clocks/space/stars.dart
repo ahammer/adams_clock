@@ -142,7 +142,7 @@ void drawStars(Canvas canvas, Size size, double rotation, double time) {
             // ✂️ where star Z is in current interval
             .where((star) => star
                 .zForTime(time)
-                .chain((z) => (z > interval && z < (interval + kStepSize))))
+                .chain((z) => z > interval && z < (interval + kStepSize)))
             // 📺 Convert this Star into a Screen Space Offset
             .map((star) => star
                 .project(time, projection) // Project to screen space
