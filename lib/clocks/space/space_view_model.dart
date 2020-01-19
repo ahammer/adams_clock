@@ -10,31 +10,41 @@ class SpaceViewModel {
   final double moonSize;
   final double earthOrbit;
   final double sunOrbit;
-  final double sunDiameter;
-  final double osunx;
-  final double osuny;
-  final double oearthx;
-  final double oearthy;
+  final double sunSize;
+  final Offset sunOffset;
+  final double sunBaseRadius;
+  final double backgroundSize;
+  final Offset centerOffset;
+
+  //final double osunx;
+  //final double osuny;
+  //final double oearthx;
+  //final double oearthy;
+  final double earthSize;
+  final Offset earthOffset;
   //final double omoonx;
   //final double omoony;
   final double moonScale;
   final double backgroundRotation;
   final Offset moonOffset;
 
+
+
   SpaceViewModel(
-      {
-      @required this.moonRotation,
+      {@required this.moonRotation,
       @required this.moonSize,
       @required this.earthOrbit,
       @required this.sunOrbit,
-      @required this.sunDiameter,
-      @required this.osunx,
-      @required this.osuny,
-      @required this.oearthx,
-      @required this.oearthy,
+      @required this.sunSize,
+      @required this.sunOffset,
+      @required this.sunBaseRadius,
+      @required this.earthOffset,
+      @required this.earthSize,
       @required this.moonOffset,
       @required this.moonScale,
-      @required this.backgroundRotation});
+      @required this.backgroundRotation,
+      @required this.centerOffset,
+      @required this.backgroundSize});
 
   /// Create a VM out of a time/config/screen size
   factory SpaceViewModel.of(DateTime time, SpaceConfig config, Size size) {
@@ -50,6 +60,10 @@ class SpaceViewModel {
     ///
     /// So we pass various rotation to various draw functions
 
+    final centerOffset = Offset(size.width / 2, size.height / 2);
+    final backgroundSize =
+        sqrt(size.width * size.width + size.height * size.height);
+
     /// The moon Orbit Angle, it rotates the earth once per minute
     final moonOrbit = (time.second * 1000 + time.millisecond) / 60000 * 2 * pi;
 
@@ -64,7 +78,8 @@ class SpaceViewModel {
 
     /// The suns orbit of the screen once per day
     /// Combined with the earth orbit to give it smooth precision
-    final sunOrbit = (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
+    final sunOrbit =
+        (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit) * config.sunSpeed;
 
     /// These are the offsets from center for the earth/sun/moon
     /// They travel in an Oval, in proportion to screen size
@@ -100,21 +115,28 @@ class SpaceViewModel {
     final moonOffset = Offset(
         size.width / 2 + oearthx + omoonx, size.height / 2 + oearthy + omoony);
     final moonRotation = earthOrbit * config.moonRotationSpeed;
+    final earthSize = size.width * config.earthSize;
+    final earthOffset =
+        Offset(size.width / 2 + oearthx, size.height / 2 + oearthy);
+    final sunOffset = Offset(size.width / 2 + osunx, size.height / 2 + osuny);
+    final sunBaseRadius = sunDiameter / 2 * config.sunBaseSize;
 
     /// Create the view model we draw with
     return SpaceViewModel(
       backgroundRotation: backgroundRotation,
       earthOrbit: earthOrbit,
-      oearthx: oearthx,
-      oearthy: oearthy,
+      earthOffset: earthOffset,
+      earthSize: earthSize,
       moonScale: moonScale,
       moonSize: moonSize,
-      sunDiameter: sunDiameter,
+      sunBaseRadius: sunBaseRadius,
+      sunSize: sunDiameter,
       sunOrbit: sunOrbit,
-      osunx: osunx,
-      osuny: osuny,
+      sunOffset: sunOffset,
       moonOffset: moonOffset,
       moonRotation: moonRotation,
+      centerOffset: centerOffset,
+      backgroundSize: backgroundSize
     );
   }
 }

@@ -187,17 +187,18 @@ class SpaceClockPainter extends AnimatedPainter {
         text: "Loading ($percentLoaded%)....");
 
     // Set up the TextPainter, which decides how to draw the span
-    final tp = TextPainter(
+    final textPainter = TextPainter(
         text: span,
         textAlign: TextAlign.left,
         textDirection: TextDirection.ltr);
 
     // Layouter the Text (Measure it, etc)
-    tp.layout();
-
-    // Paint the Loading Text in the middle of the screen
-    tp.paint(canvas,
-        Offset(size.width / 2 - tp.width / 2, size.height / 2 - tp.height / 2));
+    textPainter
+      ..layout()
+      ..paint(
+          canvas,
+          Offset(size.width / 2 - textPainter.width / 2,
+              size.height / 2 - textPainter.height / 2));
   }
 
   /// drawSpace
@@ -212,9 +213,8 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final config = overrideTheme != null
-        ? overrideTheme
-        : isDark ? darkSpaceConfig : lightSpaceConfig;
+    final config = overrideTheme ?? 
+      (isDark ? darkSpaceConfig : lightSpaceConfig);
 
     final viewModel = SpaceViewModel.of(time, config, size);
 
@@ -244,8 +244,8 @@ class SpaceClockPainter extends AnimatedPainter {
   void drawBackground(Canvas canvas, Size size, SpaceViewModel viewModel) =>
       _imageMap["stars"].drawRotatedSquare(
           canvas: canvas,
-          size: sqrt(size.width * size.width + size.height * size.height),
-          offset: Offset(size.width / 2, size.height / 2),
+          size: viewModel.backgroundSize,
+          offset: viewModel.centerOffset,
           rotation: viewModel.earthOrbit,
           paint: standardPaint);
 
@@ -261,23 +261,22 @@ class SpaceClockPainter extends AnimatedPainter {
   /// sunspot
   void drawSun(
       Canvas canvas, Size size, SpaceViewModel viewModel, SpaceConfig config) {
-    final sunOffset = Offset(
-        size.width / 2 + viewModel.osunx, size.height / 2 + viewModel.osuny);
-    sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(
-        center: sunOffset,
-        radius: viewModel.sunDiameter / 2 * config.sunBaseSize));
 
-    canvas.drawCircle(sunOffset, viewModel.sunDiameter / 2 * config.sunBaseSize,
-        sunBasePaint);
+    sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(
+        center: viewModel.sunOffset,
+        radius: viewModel.sunBaseRadius));
+
+    canvas.drawCircle(
+        viewModel.sunOffset, viewModel.sunBaseRadius, sunBasePaint);
 
     //We are going to go through layers 1-3 twice, once flipped
     for (var layer in config.sunLayers) {
       sunLayerPaint.blendMode = layer.mode;
       _imageMap[layer.image].drawRotatedSquare(
           canvas: canvas,
-          size: viewModel.sunDiameter,
-          offset: sunOffset,
-          rotation: viewModel.sunOrbit * layer.speed * config.sunSpeed,
+          size: viewModel.sunSize,
+          offset: viewModel.sunOffset,
+          rotation: viewModel.sunOrbit * layer.speed,
           paint: sunLayerPaint,
           flip: layer.flipped);
     }
@@ -294,8 +293,6 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   void drawMoon(
       Canvas canvas, Size size, SpaceViewModel viewModel, SpaceConfig config) {
-    
-
     _imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
         size: viewModel.moonSize,
@@ -323,17 +320,15 @@ class SpaceClockPainter extends AnimatedPainter {
       Canvas canvas, Size size, SpaceViewModel viewModel, SpaceConfig config) {
     _imageMap["earth"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * config.earthSize,
-        offset: Offset(size.width / 2 + viewModel.oearthx,
-            size.height / 2 + viewModel.oearthy),
+        size: viewModel.earthSize,
+        offset: viewModel.earthOffset,
         rotation: viewModel.earthOrbit * config.earthRotationSpeed,
         paint: standardPaint);
 
     _imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * config.earthSize,
-        offset: Offset(size.width / 2 + viewModel.oearthx,
-            size.height / 2 + viewModel.oearthy),
+        size: viewModel.earthSize,
+        offset: viewModel.earthOffset,
         rotation: viewModel.sunOrbit,
         paint: standardPaint);
   }
