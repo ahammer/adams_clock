@@ -6,114 +6,120 @@ import '../../config/space.dart';
 
 /// View Model for the Space Clock
 class SpaceViewModel {
-    /// Construct a Space Clock View Model
-    SpaceViewModel(    
-      {@required this.moonRotation,
-      @required this.moonSize,      
-      @required this.sunRotation,
-      @required this.sunSize,
-      @required this.sunOffset,
-      @required this.sunBaseRadius,
-      @required this.earthOffset,
-      @required this.earthSize,
-      @required this.moonOffset,
-      @required this.backgroundRotation,
-      @required this.centerOffset,
-      @required this.backgroundSize,
-      @required this.earthRotation,
-      });
+  /// Construct a Space Clock View Model
+  SpaceViewModel({
+    @required this.moonRotation,
+    @required this.moonSize,
+    @required this.sunRotation,
+    @required this.sunSize,
+    @required this.sunOffset,
+    @required this.sunBaseRadius,
+    @required this.earthOffset,
+    @required this.earthSize,
+    @required this.moonOffset,
+    @required this.backgroundRotation,
+    @required this.centerOffset,
+    @required this.backgroundSize,
+    @required this.earthRotation,
+  });
 
-   /// Create a VM out of a time/config/screen size
+  /// Create a VM out of a time/config/screen size
   factory SpaceViewModel.of(DateTime time, SpaceConfig config, Size size) {
-    ///
-    /// We prepare all the math of the clock layout/orientation here
-    ///
-    /// Since some bodies are relative to others it's useful
-    /// to calculate this all at once
-    ///
-    /// e.g.
-    ///  - Moon rotates the earth
-    ///  - Shadows rotate with sun
-    ///
-    /// So we pass various rotation to various draw functions
-
+    /// Center of the Screen
     final centerOffset = Offset(size.width / 2, size.height / 2);
+
+    /// Background size (at least hyp to fill screen as rotating)
     final backgroundSize =
         sqrt(size.width * size.width + size.height * size.height);
 
-    /// The moon Orbit Angle, it rotates the earth once per minute
+    /// The moon orbit (0-360 every 60 sec)
     final moonOrbit = (time.second * 1000 + time.millisecond) / 60000 * 2 * pi;
 
-    ///  The earth orbit, once per hour
-    /// (millis precision for animations to not be choppy)
-    /// Combined with second and millis for greater animation accuracy
+    /// The earth orbit (0-360 every 60 minutes)
     final earthOrbit =
         (time.minute * 60 * 1000 + time.second * 1000 + time.millisecond) /
             3600000 *
             2 *
             pi;
 
-    /// The suns orbit of the screen once per day
-    /// Combined with the earth orbit to give it smooth precision
+    /// The suns rotation (0-360 every 12 hours)
     final sunRotation =
         (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit) * config.sunSpeed;
 
-    /// These are the offsets from center for the earth/sun/moon
-    /// They travel in an Oval, in proportion to screen size
-    //Sun orbits slightly outside the screen, because it's huge
-    final sunDiameter = size.width * config.sunSize;
-    final osunx = cos(sunRotation - config.angleOffset) *
+    /// The sun's diameter
+    final sunSize = size.width * config.sunSize;
+
+    /// The sun's base disc radius
+    final sunBaseRadius = sunSize / 2 * config.sunBaseSize;
+
+    /// The X and Y Offsets for the sun
+    final sunOffsetX = cos(sunRotation - config.angleOffset) *
         size.width *
         config.sunOrbitMultiplierX;
-    final osuny = sin(sunRotation - config.angleOffset) *
+    final sunOffsetY = sin(sunRotation - config.angleOffset) *
         size.height *
         config.sunOrbitMultiplierY;
 
-    ///Earth orbits around the center
-    final oearthx = cos(earthOrbit - config.angleOffset) *
+    /// The X and Y offsets of the earth
+    final earthOffsetX = cos(earthOrbit - config.angleOffset) *
         size.width *
         config.earthOrbitMultiplierX;
-    final oearthy = sin(earthOrbit - config.angleOffset) *
+    final earthOffsetY = sin(earthOrbit - config.angleOffset) *
         size.height *
         config.earthOrbitMultiplierY;
 
+    /// We use this in the Y offset of the Moon and the Scale     
+    final moonSin = sin(moonOrbit - config.angleOffset);
+
     //Moon orbits 1/4 a screen distance away from the earth as well
-    final omoonx = cos(moonOrbit - config.angleOffset) *
+    final moonOffsetX = cos(moonOrbit - config.angleOffset) *
         size.width *
         config.moonOrbitMultiplierX;
+    final moonOffsetY = moonSin * size.height * config.moonOrbitMultiplierY;
 
-    final moonSin = sin(moonOrbit - config.angleOffset);
-    final omoony = moonSin * size.height * config.moonOrbitMultiplierY;
+    /// The scale of the moon, adjusts with SIN of the rotation 
+    /// (bigger at bottom, smaller at top)
     final moonScale = moonSin * config.moonSizeVariation;
     final moonSize = size.width * (config.moonSize + moonScale);
+
+    /// The rotating of the background image
     final backgroundRotation =
         earthOrbit * config.backgroundRotationSpeedMultiplier;
 
-    final moonOffset = Offset(
-        size.width / 2 + oearthx + omoonx, size.height / 2 + oearthy + omoony);
+
+    /// The rotation of the moon
     final moonRotation = earthOrbit * config.moonRotationSpeed;
+
+    /// The size of the earth
     final earthSize = size.width * config.earthSize;
+
+    /// The Screen Offsets of the Sun, Earth and Moon
+    /// Screen offset of the moon
+    final moonOffset = Offset(size.width / 2 + earthOffsetX + moonOffsetX,
+        size.height / 2 + earthOffsetY + moonOffsetY);
+
     final earthOffset =
-        Offset(size.width / 2 + oearthx, size.height / 2 + oearthy);
-    final sunOffset = Offset(size.width / 2 + osunx, size.height / 2 + osuny);
-    final sunBaseRadius = sunDiameter / 2 * config.sunBaseSize;
+        Offset(size.width / 2 + earthOffsetX, size.height / 2 + earthOffsetY);
+
+    final sunOffset =
+        Offset(size.width / 2 + sunOffsetX, size.height / 2 + sunOffsetY);
+  
 
     /// Create the view model we draw with
     return SpaceViewModel(
-      backgroundRotation: backgroundRotation,      
-      earthOffset: earthOffset,
-      earthSize: earthSize,
-      earthRotation: earthOrbit * config.earthRotationSpeed,            
-      moonSize: moonSize,
-      sunBaseRadius: sunBaseRadius,
-      sunSize: sunDiameter,
-      sunRotation: sunRotation,
-      sunOffset: sunOffset,
-      moonOffset: moonOffset,
-      moonRotation: moonRotation,
-      centerOffset: centerOffset,
-      backgroundSize: backgroundSize
-    );
+        backgroundRotation: backgroundRotation,
+        earthOffset: earthOffset,
+        earthSize: earthSize,
+        earthRotation: earthOrbit * config.earthRotationSpeed,
+        moonSize: moonSize,
+        sunBaseRadius: sunBaseRadius,
+        sunSize: sunSize,
+        sunRotation: sunRotation,
+        sunOffset: sunOffset,
+        moonOffset: moonOffset,
+        moonRotation: moonRotation,
+        centerOffset: centerOffset,
+        backgroundSize: backgroundSize);
   }
 
   /// Rotation of the Moon
@@ -122,7 +128,7 @@ class SpaceViewModel {
   /// Size of the Moon
   final double moonSize;
 
-  /// Rotation of the Sun  
+  /// Rotation of the Sun
   final double sunRotation;
 
   /// Size of the sun
@@ -146,18 +152,12 @@ class SpaceViewModel {
   /// Screen offset of the earth
   final Offset earthOffset;
 
-
   /// Rotation of the background
   final double backgroundRotation;
 
   /// Moons offset in screen coords
   final Offset moonOffset;
 
-  /// Earth rotation 
+  /// Earth rotation
   final double earthRotation;
-
-
-
-
- 
 }
