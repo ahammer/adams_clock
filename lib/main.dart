@@ -13,7 +13,7 @@ void main() {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
   ]);
-  runApp(MainWidget());
+  runApp(const MainWidget());
 }
 
 ///
@@ -27,10 +27,8 @@ class MainWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ClockCustomizer((model) =>
-        Builder(builder: (context) => ClockScaffolding(model: model)));
-  }
+  Widget build(BuildContext context) => ClockCustomizer(
+      (model) => Builder(builder: (context) => ClockScaffolding(model: model)));
 }
 
 ///
@@ -41,11 +39,12 @@ class MainWidget extends StatelessWidget {
 /// Layer 2: The DateTimeAndWeatherTicker the draws in the top left
 ///
 class ClockScaffolding extends StatelessWidget {
+  /// Construct a clock scaffolding given a model
+  const ClockScaffolding({@required this.model, Key key}) : super(key: key);
+
   /// The ClockModel, needed by things to make decisions about what to draw
   final ClockModel model;
 
-  /// Construct a clock scaffolding given a model
-  const ClockScaffolding({Key key, @required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -56,7 +55,7 @@ class ClockScaffolding extends StatelessWidget {
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: DateTimeAndWeatherTicker(clockModel: model),
               )),
         ],
