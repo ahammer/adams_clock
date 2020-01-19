@@ -43,8 +43,12 @@ class SpaceViewModel {
             pi;
 
     /// The suns rotation (0-360 every 12 hours)
-    final sunRotation =
-        (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit) * config.sunSpeed;
+    final sunOrbit =
+        (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
+    
+    /// The "Rotation" of the sun
+    /// Is the base speed of the rotational perlin noise for the sun
+    final sunRotation = sunOrbit * config.sunSpeed;
 
     /// The sun's diameter
     final sunSize = size.width * config.sunSize;
@@ -53,10 +57,10 @@ class SpaceViewModel {
     final sunBaseRadius = sunSize / 2 * config.sunBaseSize;
 
     /// The X and Y Offsets for the sun
-    final sunOffsetX = cos(sunRotation - config.angleOffset) *
+    final sunOffsetX = cos(sunOrbit - config.angleOffset) *
         size.width *
         config.sunOrbitMultiplierX;
-    final sunOffsetY = sin(sunRotation - config.angleOffset) *
+    final sunOffsetY = sin(sunOrbit - config.angleOffset) *
         size.height *
         config.sunOrbitMultiplierY;
 
