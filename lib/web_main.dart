@@ -73,6 +73,7 @@ class ClockScaffolding extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
+                  /*
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: RaisedButton(
@@ -83,6 +84,7 @@ class ClockScaffolding extends StatelessWidget {
                           "Try the full clock\n(NOT SUPPORTED ON WEB/FLUTTER 1.12)"),
                     ),
                   )
+                  */
                 ],
               ),
             ),

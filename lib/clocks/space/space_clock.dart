@@ -297,23 +297,19 @@ class SpaceClockPainter extends AnimatedPainter {
     final x = size.width / 2 + viewModel.oearthx + viewModel.omoonx;
     final y = size.height / 2 + viewModel.oearthy + viewModel.omoony;
     final offset = Offset(x, y);
-    final shadowRotation = atan2(
-            viewModel.oearthy + viewModel.omoony - viewModel.osuny,
-            viewModel.oearthx - viewModel.osunx) -
-        pi / 2;
 
     _imageMap["moon"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * (config.moonSize + viewModel.moonScale),
+        size: viewModel.moonSize,
         offset: offset,
-        rotation: viewModel.earthOrbit * config.moonRotationSpeed,
+        rotation: viewModel.moonRotation,
         paint: standardPaint);
 
     _imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
-        size: size.width * (config.moonSize + viewModel.moonScale),
+        size: viewModel.moonSize,
         offset: offset,
-        rotation: shadowRotation,
+        rotation: viewModel.sunOrbit,
         paint: standardPaint);
   }
 

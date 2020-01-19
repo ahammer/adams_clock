@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 
 class SpaceViewModel {
   final double moonOrbit;
+  final double moonRotation;
+  final double moonSize;
   final double earthOrbit;
   final double sunOrbit;
   final double sunDiameter;
@@ -17,9 +19,12 @@ class SpaceViewModel {
   final double omoony;
   final double moonScale;
   final double backgroundRotation;
+  final Offset moonOffset;
 
   SpaceViewModel(
       {@required this.moonOrbit,
+      @required this.moonRotation,
+      @required this.moonSize,
       @required this.earthOrbit,
       @required this.sunOrbit,
       @required this.sunDiameter,
@@ -29,6 +34,7 @@ class SpaceViewModel {
       @required this.oearthy,
       @required this.omoonx,
       @required this.omoony,
+      @required this.moonOffset,
       @required this.moonScale,
       @required this.backgroundRotation});
 
@@ -89,8 +95,13 @@ class SpaceViewModel {
     final moonSin = sin(moonOrbit - config.angleOffset);
     final omoony = moonSin * size.height * config.moonOrbitMultiplierY;
     final moonScale = moonSin * config.moonSizeVariation;
+    final moonSize = size.width * (config.moonSize + moonScale);
     final backgroundRotation =
         earthOrbit * config.backgroundRotationSpeedMultiplier;
+
+    final moonOffset = Offset(
+        size.width / 2 + oearthx + omoonx, size.height / 2 + oearthy + omoony);
+    final moonRotation = earthOrbit * config.moonRotationSpeed;
 
     /// Create the view model we draw with
     return SpaceViewModel(
@@ -99,6 +110,7 @@ class SpaceViewModel {
       oearthx: oearthx,
       oearthy: oearthy,
       moonScale: moonScale,
+      moonSize: moonSize,
       moonOrbit: moonOrbit,
       omoonx: omoonx,
       omoony: omoony,
@@ -106,6 +118,8 @@ class SpaceViewModel {
       sunOrbit: sunOrbit,
       osunx: osunx,
       osuny: osuny,
+      moonOffset: moonOffset,
+      moonRotation: moonRotation,
     );
   }
 }
