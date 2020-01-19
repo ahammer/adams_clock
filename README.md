@@ -2,7 +2,7 @@
 
 ## Time and Space 
 
-![6:30:30 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light063030.png) 
+![Adams Clock](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/preview.webp)
 
 This clock was an experiment in iterative development. As it progressed it gained a clear goal of the Time and Space clock. The entire thing is a function of time, completely deterministic. Two devices will show the same image at the same time. The goal was to visually push Flutter's limits, while not pushing a devices limits. There is roughly 25-30 draw calls for the entire scene. 
 
@@ -107,5 +107,5 @@ the digital clock only.
 | ![6:30:30 Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark063030.png) | ![6:30:30 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light063030.png) |
 | 9:45:45 |
 | ![9:45:45 Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark094545.png) | ![9:45:45 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light094545.png) |
-| ![Adams Clock](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/preview.webp) |
+
 
