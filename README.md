@@ -93,6 +93,7 @@ the digital clock only.
 - Supported Platforms (Android, iOS, Desktop) 
 - The subset that works on the web can be run from web_main.dart (it's missing a lot)
 - Optimized on a HTC One (2013) device.
+- Code here is slightly ahead of contest submission zip code. No UI changes however documentation, more lint checks, non-functional refactoring have been added. Last commit will be before contest end time.
 
 #### Licensed Apache 2
 
