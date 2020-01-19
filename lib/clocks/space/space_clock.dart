@@ -246,7 +246,7 @@ class SpaceClockPainter extends AnimatedPainter {
           canvas: canvas,
           size: viewModel.backgroundSize,
           offset: viewModel.centerOffset,
-          rotation: viewModel.earthOrbit,
+          rotation: viewModel.backgroundRotation,
           paint: standardPaint);
 
   /// Draw the Sun
@@ -274,7 +274,7 @@ class SpaceClockPainter extends AnimatedPainter {
           canvas: canvas,
           size: viewModel.sunSize,
           offset: viewModel.sunOffset,
-          rotation: viewModel.sunOrbit * layer.speed,
+          rotation: viewModel.sunRotation * layer.speed,
           paint: sunLayerPaint,
           flip: layer.flipped);
     }
@@ -302,7 +302,7 @@ class SpaceClockPainter extends AnimatedPainter {
         canvas: canvas,
         size: viewModel.moonSize,
         offset: viewModel.moonOffset,
-        rotation: viewModel.sunOrbit,
+        rotation: viewModel.sunRotation,
         paint: standardPaint);
   }
 
@@ -320,14 +320,14 @@ class SpaceClockPainter extends AnimatedPainter {
         canvas: canvas,
         size: viewModel.earthSize,
         offset: viewModel.earthOffset,
-        rotation: viewModel.earthOrbit * config.earthRotationSpeed,
+        rotation: viewModel.earthRotation,
         paint: standardPaint);
 
     _imageMap["shadow"].drawRotatedSquare(
         canvas: canvas,
         size: viewModel.earthSize,
         offset: viewModel.earthOffset,
-        rotation: viewModel.sunOrbit,
+        rotation: viewModel.sunRotation,
         paint: standardPaint);
   }
 }

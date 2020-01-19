@@ -1,52 +1,29 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:adams_clock/config/space.dart';
 import 'package:flutter/widgets.dart';
+import '../../config/space.dart';
 
+/// View Model for the Space Clock
 class SpaceViewModel {
-  //final double moonOrbit;
-  final double moonRotation;
-  final double moonSize;
-  final double earthOrbit;
-  final double sunOrbit;
-  final double sunSize;
-  final Offset sunOffset;
-  final double sunBaseRadius;
-  final double backgroundSize;
-  final Offset centerOffset;
-
-  //final double osunx;
-  //final double osuny;
-  //final double oearthx;
-  //final double oearthy;
-  final double earthSize;
-  final Offset earthOffset;
-  //final double omoonx;
-  //final double omoony;
-  final double moonScale;
-  final double backgroundRotation;
-  final Offset moonOffset;
-
-
-
-  SpaceViewModel(
+    /// Construct a Space Clock View Model
+    SpaceViewModel(    
       {@required this.moonRotation,
-      @required this.moonSize,
-      @required this.earthOrbit,
-      @required this.sunOrbit,
+      @required this.moonSize,      
+      @required this.sunRotation,
       @required this.sunSize,
       @required this.sunOffset,
       @required this.sunBaseRadius,
       @required this.earthOffset,
       @required this.earthSize,
       @required this.moonOffset,
-      @required this.moonScale,
       @required this.backgroundRotation,
       @required this.centerOffset,
-      @required this.backgroundSize});
+      @required this.backgroundSize,
+      @required this.earthRotation,
+      });
 
-  /// Create a VM out of a time/config/screen size
+   /// Create a VM out of a time/config/screen size
   factory SpaceViewModel.of(DateTime time, SpaceConfig config, Size size) {
     ///
     /// We prepare all the math of the clock layout/orientation here
@@ -78,17 +55,17 @@ class SpaceViewModel {
 
     /// The suns orbit of the screen once per day
     /// Combined with the earth orbit to give it smooth precision
-    final sunOrbit =
+    final sunRotation =
         (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit) * config.sunSpeed;
 
     /// These are the offsets from center for the earth/sun/moon
     /// They travel in an Oval, in proportion to screen size
     //Sun orbits slightly outside the screen, because it's huge
     final sunDiameter = size.width * config.sunSize;
-    final osunx = cos(sunOrbit - config.angleOffset) *
+    final osunx = cos(sunRotation - config.angleOffset) *
         size.width *
         config.sunOrbitMultiplierX;
-    final osuny = sin(sunOrbit - config.angleOffset) *
+    final osuny = sin(sunRotation - config.angleOffset) *
         size.height *
         config.sunOrbitMultiplierY;
 
@@ -123,15 +100,14 @@ class SpaceViewModel {
 
     /// Create the view model we draw with
     return SpaceViewModel(
-      backgroundRotation: backgroundRotation,
-      earthOrbit: earthOrbit,
+      backgroundRotation: backgroundRotation,      
       earthOffset: earthOffset,
       earthSize: earthSize,
-      moonScale: moonScale,
+      earthRotation: earthOrbit * config.earthRotationSpeed,            
       moonSize: moonSize,
       sunBaseRadius: sunBaseRadius,
       sunSize: sunDiameter,
-      sunOrbit: sunOrbit,
+      sunRotation: sunRotation,
       sunOffset: sunOffset,
       moonOffset: moonOffset,
       moonRotation: moonRotation,
@@ -139,4 +115,49 @@ class SpaceViewModel {
       backgroundSize: backgroundSize
     );
   }
+
+  /// Rotation of the Moon
+  final double moonRotation;
+
+  /// Size of the Moon
+  final double moonSize;
+
+  /// Rotation of the Sun  
+  final double sunRotation;
+
+  /// Size of the sun
+  final double sunSize;
+
+  /// Sun's screen offset
+  final Offset sunOffset;
+
+  /// Radius of the suns's base disc
+  final double sunBaseRadius;
+
+  /// Size of the background
+  final double backgroundSize;
+
+  /// Center of the screen
+  final Offset centerOffset;
+
+  /// Size of the earth
+  final double earthSize;
+
+  /// Screen offset of the earth
+  final Offset earthOffset;
+
+
+  /// Rotation of the background
+  final double backgroundRotation;
+
+  /// Moons offset in screen coords
+  final Offset moonOffset;
+
+  /// Earth rotation 
+  final double earthRotation;
+
+
+
+
+ 
 }
