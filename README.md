@@ -1,12 +1,95 @@
-# Adams Space Clock
+# Time and Space clock
 
-This is my Clock Submission for the #flutterclock challenge. The Planets indicate the rough positions of the "hands" of a clock would point. The moon rotates relative to the center of the earth. All planets will be "up" at 12:00:00am and "down" at 12:30:30pm. There should be hourly eclipses in Dark mode. 
+## Time and Space 
 
-Best seen in action, the perlin noise on the sun will generate awesome random looking sun spots, and the starfield and general dynamic nature of the scene are not captured well in screenshots or the webp animation.
+![6:30:30 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light063030.png) 
 
-Best on Desktop or Mobile
+This clock was an experiment in iterative development. As it progressed it gained a clear goal of the Time and Space clock. The entire thing is a function of time, completely deterministic. Two devices will show the same image at the same time. The goal was to visually push Flutter's limits, while not pushing a devices limits. There is roughly 25-30 draw calls for the entire scene. 
 
-Licensed Apache 2
+Highlights
+- Some Canvas, Some Widget System
+- No 3rd party libraries (pure flutter 1.12)
+- All ClockModel data utilized
+- Easily configurable
+- Strict Mode Enabled (lots of lint checks)
+- Extension Function APIs for various things
+
+
+### Project Iterations 
+
+1) Original Design - Fixed hand clock with 3 discs (hands point up, discs spin)
+2) Experimented with design, ended up with planets on the dials because it looked kind of cheesy.
+3) Ran with concept or orbits and positioning of objects to tell the time more
+4) Added a starfield for some 3D effect
+5) Added a static/rotating background for atmosphere and infinity
+6) Added a perlin noise to create the sun
+7) Lots of tweaking to sun parameters/images to make the sun look the way I want.
+8) Added shadowing to the moon/earth to give the images 3D depth
+9) Added the "ticker" to show the time/date/weather at a glance.
+10) Extracted "config" from the drawing code. Built a light and dark config
+11) Optimization on older devices
+12) Fine tuning, lint checks, code cleanup
+13) Extracted "viewmodel" from render code, to help organize it better
+
+### Architectural OverView
+
+#### Top Level
+Main -> ClockScaffold
+
+At the top level we create the ClockScaffold which places the 2 clocks we have in here (Digital + Analog)
+
+#### Clock Scaffold
+ClockCustomizer -> Stack[SpaceClockScene, TickerClock]
+
+Here we pass the ClockModel to the Clocks, the Clocks are both State
+
+#### Space Clock Scene
+
+AnimatedPaint(SpaceClockPainter)
+
+Animated Painter is just an extension on CustomPainter to allow automatic animation. The actual Painting is in SpaceClockPainter.
+
+#### Space Clock Draw Call
+1) Generate View Model
+2) Draw Background
+3) Draw Stars
+4) Draw Sun
+5) Draw Earth & Moon
+
+#### Space Clock View Model Generation
+Inputs: Time, Config, View Size
+1) Calculate "orbits" between 0-360 that map to an analog clock
+2) Calculate size of background to fill the screen
+3) Calculate the size of sun/earth/moon
+4) Calculate locations of sun/earth/moon
+
+
+#### Star Field
+1) Immutable state
+2) zForTime on a Star offsets by time and loops
+3) Transformed from 3d to 2d points using Matrix/Vector
+4) Drawn to screen in batches with drawPoints (for performance)
+
+#### Ticker Clock
+Generic component for buiding a UI agnostic ticker out of a string and AnimatedSwitcher
+
+Customized Component to build the ticker text (date/time/weather) and UI I want for the ticker.
+
+Ticker updates every 1 second. A random factor is applied to each element to make the animation a bit "analog" looking.
+
+
+
+
+## Notes
+
+Only very partial web support due to canvas support needing some work, run main_web to get the simplified "web" version of
+the digital clock only.
+
+- Supported Platforms (Android, iOS, Desktop) 
+- The subset that works on the web can be run from web_main.dart (it's missing a lot)
+- Optimized on a HTC One (2013) device.
+
+#### Licensed Apache 2
 
 | Light | Dark |
 | ----- | ---- |
@@ -20,35 +103,3 @@ Licensed Apache 2
 | ![9:45:45 Dark](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/dark094545.png) | ![9:45:45 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light094545.png) |
 | ![Adams Clock](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/preview.webp) |
 
-
-
-
-
-Only very partial web support due to canvas support needing some work, run main_web to get the simplified "web" version of
-the digital clock only.
-
-Tech notes
-- Some Canvas, Some Widget System
-- No 3rd party libraries (pure flutter 1.12)
-- All ClockModel data utilized
-- Easily configurable
-- Pedantic & Effective Dart linted
-- Extension Function APIs for various things
-
-Space Clock
-- Draws as fast as possible
-- Background is a Bitmap that rotates slowly (static stars at infinity)
-- Stars are a simple particle system. An array of Stars are created in a [0..1] ranged 3d cube. Z tranforms with time, and repeats >1 => 0. They are projected and transformed to screen stace in steps based on their distance. Each step has increasing opacity and size. This is so we can have "fade in" on the stars, without an individual draw call for each star, allowing far more stars.
-- Planets are drawn with Extensions to UI.Image that help place and rotate them, based on their calculated position.
-- The sun is drawn in layers, with a solid base layer, and 3 layers of varying texture/blending to give it a Perlin Noise style effect.
-
-Digital Clock
-- Card drawn in the bottom right
-- Includes Date/Time/Weather
-- Weather Type gets Emojified
-- Tickers are pseudo random for a cool effect
-
-Notes
-- Supported Platforms (Android, iOS, Desktop) 
-- The subset that works on the web can be run from web_main.dart (it's missing a lot)
-- Optimized on a HTC One (2013) device.
