@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 import 'dart:ui' as ui;
 
@@ -61,13 +60,13 @@ import 'stars.dart';
 ///
 /// Handles the drawing of the space clock
 class SpaceClockScene extends StatelessWidget {
-  /// ClockModel from the challenge
-  final ClockModel model;
-
   /// SpaceClockScene
   ///
   /// Constructs the space_clock, give it a ClockModel
-  SpaceClockScene(this.model, {Key key}) : super(key: key);
+  const SpaceClockScene(this.model, {Key key}) : super(key: key);
+
+  /// ClockModel from the challenge
+  final ClockModel model;
 
   @override
   Widget build(BuildContext context) => AnimatedPaint(
@@ -126,6 +125,9 @@ bool _startedLoadingImages = false;
 ///  - This object acts as a singleton
 ///  - Theme Light/Dark is passed to the painter through the SpaceClockScene.build() method
 class SpaceClockPainter extends AnimatedPainter {
+  /// Constructor for the painter
+  SpaceClockPainter({@required this.isDark});
+
   /// Whether to draw dark config or not
   /// Note: This is mutating state
   final bool isDark;
@@ -139,20 +141,18 @@ class SpaceClockPainter extends AnimatedPainter {
   /// SunLayerPaint will adjust blendmode based on the layer as it
   final Paint sunLayerPaint = Paint()..filterQuality = FilterQuality.low;
 
-  /// Constructor for the painter
-  SpaceClockPainter({@required this.isDark});
-
   // Init on AnimatedPainter, we use this async method to load the images
   // we'll need
   @override
-  void init() async {
+  void init() {
     if (!_imagesLoaded && !_startedLoadingImages) {
       _startedLoadingImages = true;
       for (var i = 0; i < images.length; i++) {
         final image = images[i];
 
-        _imageMap[image] = await loadImageFromAsset(image,
-            ext: jpegImages.contains(image) ? "jpg" : "png");
+        loadImageFromAsset(image,
+                ext: jpegImages.contains(image) ? "jpg" : "png")
+            .then((result) => _imageMap[image] = result);
       }
     }
   }
@@ -213,8 +213,8 @@ class SpaceClockPainter extends AnimatedPainter {
   ///  Draw the Moon
   void drawSpace(Canvas canvas, Size size) {
     final time = spaceClockTime;
-    final config = overrideTheme ?? 
-      (isDark ? darkSpaceConfig : lightSpaceConfig);
+    final config =
+        overrideTheme ?? (isDark ? darkSpaceConfig : lightSpaceConfig);
 
     final viewModel = SpaceViewModel.of(time, config, size);
 
@@ -261,16 +261,14 @@ class SpaceClockPainter extends AnimatedPainter {
   /// sunspot
   void drawSun(
       Canvas canvas, Size size, SpaceViewModel viewModel, SpaceConfig config) {
-
     sunBasePaint.shader = config.sunGradient.createShader(Rect.fromCircle(
-        center: viewModel.sunOffset,
-        radius: viewModel.sunBaseRadius));
+        center: viewModel.sunOffset, radius: viewModel.sunBaseRadius));
 
     canvas.drawCircle(
         viewModel.sunOffset, viewModel.sunBaseRadius, sunBasePaint);
 
     //We are going to go through layers 1-3 twice, once flipped
-    for (var layer in config.sunLayers) {
+    for (final layer in config.sunLayers) {
       sunLayerPaint.blendMode = layer.mode;
       _imageMap[layer.image].drawRotatedSquare(
           canvas: canvas,
