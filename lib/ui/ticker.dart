@@ -85,23 +85,27 @@ class _TickerWidgetState extends State<TickerWidget> {
   ///  3) Return that row.
   @override
   Widget build(BuildContext context) =>
-      widget.builder().chain((currentString) => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ...List.generate(
-                  currentString.length,
-                  (idx) => _TickerCharacterView(
-                      duration: Duration(
-                          milliseconds: widget.tickerBaseTimeMs +
-                              (_random[idx % _random.length] *
-                                      widget.tickerRandomnessMs)
-                                  .toInt()),
-                      first: idx == 0,
-                      last: idx == (currentString.length - 1),
-                      builder: widget.digitBuilder,
-                      digit: currentString.charAt(idx)))
-            ],
-          ));
+      Semantics(
+        header: true,
+        value: widget.builder(),
+        child: widget.builder().chain((currentString) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ...List.generate(
+                    currentString.length,
+                    (idx) => _TickerCharacterView(
+                        duration: Duration(
+                            milliseconds: widget.tickerBaseTimeMs +
+                                (_random[idx % _random.length] *
+                                        widget.tickerRandomnessMs)
+                                    .toInt()),
+                        first: idx == 0,
+                        last: idx == (currentString.length - 1),
+                        builder: widget.digitBuilder,
+                        digit: currentString.charAt(idx)))
+              ],
+            )),
+      );
 }
 
 /// Ticker Character View
