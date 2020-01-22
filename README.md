@@ -1,5 +1,9 @@
 # Time and Space clock
+## How to run
 
+    flutter create .
+    flutter run
+    
 ## Time and Space 
 
 ![6:30:30 Light](https://raw.githubusercontent.com/ahammer/adams_clock/master/screenshots/light063030.png) 
