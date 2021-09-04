@@ -1,4 +1,8 @@
 # Time and Space clock
+## !UPDATED TO FLUTTER 2.X and Null Safety!
+
+Should work with modern flutter now!!
+
 ## How to run
 
     flutter create .
