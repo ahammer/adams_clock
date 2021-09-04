@@ -3,10 +3,10 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_clock_helper/model.dart';
 
 import '../../config/space.dart';
 import '../../config/time.dart';
+import '../../model.dart';
 import '../../ui/animated_painter.dart';
 import '../../util/extensions.dart';
 import '../../util/image_loader.dart';
@@ -63,7 +63,7 @@ class SpaceClockScene extends StatelessWidget {
   /// SpaceClockScene
   ///
   /// Constructs the space_clock, give it a ClockModel
-  const SpaceClockScene(this.model, {Key key}) : super(key: key);
+  const SpaceClockScene(this.model, {Key? key}) : super(key: key);
 
   /// ClockModel from the challenge
   final ClockModel model;
@@ -126,7 +126,7 @@ bool _startedLoadingImages = false;
 ///  - Theme Light/Dark is passed to the painter through the SpaceClockScene.build() method
 class SpaceClockPainter extends AnimatedPainter {
   /// Constructor for the painter
-  SpaceClockPainter({@required this.isDark});
+  SpaceClockPainter({required this.isDark});
 
   /// Whether to draw dark config or not
   /// Note: This is mutating state
@@ -242,7 +242,7 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   ///
   void drawBackground(Canvas canvas, Size size, SpaceViewModel viewModel) =>
-      _imageMap["stars"].drawRotatedSquare(
+      _imageMap["stars"]?.drawRotatedSquare(
           canvas: canvas,
           size: viewModel.backgroundSize,
           offset: viewModel.centerOffset,
@@ -270,7 +270,7 @@ class SpaceClockPainter extends AnimatedPainter {
     //We are going to go through layers 1-3 twice, once flipped
     for (final layer in config.sunLayers) {
       sunLayerPaint.blendMode = layer.mode;
-      _imageMap[layer.image].drawRotatedSquare(
+      _imageMap[layer.image]?.drawRotatedSquare(
           canvas: canvas,
           size: viewModel.sunSize,
           offset: viewModel.sunOffset,
@@ -291,14 +291,14 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   void drawMoon(
       Canvas canvas, Size size, SpaceViewModel viewModel, SpaceConfig config) {
-    _imageMap["moon"].drawRotatedSquare(
+    _imageMap["moon"]?.drawRotatedSquare(
         canvas: canvas,
         size: viewModel.moonSize,
         offset: viewModel.moonOffset,
         rotation: viewModel.moonRotation,
         paint: standardPaint);
 
-    _imageMap["shadow"].drawRotatedSquare(
+    _imageMap["shadow"]?.drawRotatedSquare(
         canvas: canvas,
         size: viewModel.moonSize,
         offset: viewModel.moonOffset,
@@ -316,14 +316,14 @@ class SpaceClockPainter extends AnimatedPainter {
   ///
   void drawEarth(
       Canvas canvas, Size size, SpaceViewModel viewModel, SpaceConfig config) {
-    _imageMap["earth"].drawRotatedSquare(
+    _imageMap["earth"]?.drawRotatedSquare(
         canvas: canvas,
         size: viewModel.earthSize,
         offset: viewModel.earthOffset,
         rotation: viewModel.earthRotation,
         paint: standardPaint);
 
-    _imageMap["shadow"].drawRotatedSquare(
+    _imageMap["shadow"]?.drawRotatedSquare(
         canvas: canvas,
         size: viewModel.earthSize,
         offset: viewModel.earthOffset,

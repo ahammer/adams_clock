@@ -12,7 +12,7 @@ SpaceConfig get lightSpaceConfig => _LightSpaceConfig();
 SpaceConfig get darkSpaceConfig => _DarkSpaceConfig();
 
 /// For Development: Locks to a theme
-SpaceConfig get overrideTheme => null;
+SpaceConfig? get overrideTheme => null;
 
 /// Default Values for the Space Config
 /// Also used for "Light"
@@ -131,10 +131,10 @@ class _DarkSpaceConfig extends SpaceConfig {
 class SunLayer {
   /// Construct a sun layer
   SunLayer(
-      {@required this.image,
-      @required this.mode,
-      @required this.flipped,
-      @required this.speed});
+      {required this.image,
+      required this.mode,
+      required this.flipped,
+      required this.speed});
 
   /// The image name, e.g. sun_1 or sun_2, that would be in the map
   final String image;

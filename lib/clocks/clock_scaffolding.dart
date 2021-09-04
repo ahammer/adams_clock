@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_clock_helper/model.dart';
 
+import '../model.dart';
 import 'space/space_clock.dart';
 import 'ticker/ticker_clock.dart';
 
@@ -13,7 +13,7 @@ import 'ticker/ticker_clock.dart';
 ///
 class ClockScaffolding extends StatelessWidget {
   /// Construct a clock scaffolding given a model
-  const ClockScaffolding({@required this.model, Key key}) : super(key: key);
+  const ClockScaffolding({required this.model, Key? key}) : super(key: key);
 
   /// The ClockModel, needed by things to make decisions about what to draw
   final ClockModel model;

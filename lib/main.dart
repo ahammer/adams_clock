@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_clock_helper/customizer.dart';
+
 import 'clocks/clock_scaffolding.dart';
+import 'customizer.dart';
 
 void main() {
   /// Fuschia should run fine all around here
@@ -16,7 +17,7 @@ void main() {
 class MainWidget extends StatelessWidget {
   /// Main Screen
   const MainWidget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

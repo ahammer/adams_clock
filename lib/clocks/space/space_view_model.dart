@@ -8,19 +8,19 @@ import '../../config/space.dart';
 class SpaceViewModel {
   /// Construct a Space Clock View Model
   SpaceViewModel({
-    @required this.moonRotation,
-    @required this.moonSize,
-    @required this.sunRotation,
-    @required this.sunSize,
-    @required this.sunOffset,
-    @required this.sunBaseRadius,
-    @required this.earthOffset,
-    @required this.earthSize,
-    @required this.moonOffset,
-    @required this.backgroundRotation,
-    @required this.centerOffset,
-    @required this.backgroundSize,
-    @required this.earthRotation,
+    required this.moonRotation,
+    required this.moonSize,
+    required this.sunRotation,
+    required this.sunSize,
+    required this.sunOffset,
+    required this.sunBaseRadius,
+    required this.earthOffset,
+    required this.earthSize,
+    required this.moonOffset,
+    required this.backgroundRotation,
+    required this.centerOffset,
+    required this.backgroundSize,
+    required this.earthRotation,
   });
 
   /// Create a VM out of a time/config/screen size
@@ -43,9 +43,8 @@ class SpaceViewModel {
             pi;
 
     /// The suns rotation (0-360 every 12 hours)
-    final sunOrbit =
-        (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
-    
+    final sunOrbit = (time.hour / 12.0) * 2 * pi + (1 / 12.0 * earthOrbit);
+
     /// The "Rotation" of the sun
     /// Is the base speed of the rotational perlin noise for the sun
     final sunRotation = sunOrbit * config.sunSpeed;
@@ -72,7 +71,7 @@ class SpaceViewModel {
         size.height *
         config.earthOrbitMultiplierY;
 
-    /// We use this in the Y offset of the Moon and the Scale     
+    /// We use this in the Y offset of the Moon and the Scale
     final moonSin = sin(moonOrbit - config.angleOffset);
 
     //Moon orbits 1/4 a screen distance away from the earth as well
@@ -81,7 +80,7 @@ class SpaceViewModel {
         config.moonOrbitMultiplierX;
     final moonOffsetY = moonSin * size.height * config.moonOrbitMultiplierY;
 
-    /// The scale of the moon, adjusts with SIN of the rotation 
+    /// The scale of the moon, adjusts with SIN of the rotation
     /// (bigger at bottom, smaller at top)
     final moonScale = moonSin * config.moonSizeVariation;
     final moonSize = size.width * (config.moonSize + moonScale);
@@ -89,7 +88,6 @@ class SpaceViewModel {
     /// The rotating of the background image
     final backgroundRotation =
         earthOrbit * config.backgroundRotationSpeedMultiplier;
-
 
     /// The rotation of the moon
     final moonRotation = earthOrbit * config.moonRotationSpeed;
@@ -107,7 +105,6 @@ class SpaceViewModel {
 
     final sunOffset =
         Offset(size.width / 2 + sunOffsetX, size.height / 2 + sunOffsetY);
-  
 
     /// Create the view model we draw with
     return SpaceViewModel(

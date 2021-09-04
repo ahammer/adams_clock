@@ -11,11 +11,11 @@ final Rect kTargetRect =
 extension ImageHelpers on ui.Image {
   /// Draws a Square Image rotated at offset around it's axis
   void drawRotatedSquare(
-      {Canvas canvas,
-      double size,
-      Offset offset,
-      double rotation,
-      Paint paint,
+      {required Canvas canvas,
+      required double size,
+      required Offset offset,
+      required double rotation,
+      required Paint paint,
       bool flip = false}) {
     canvas
       ..save()

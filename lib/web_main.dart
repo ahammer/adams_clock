@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_clock_helper/customizer.dart';
 import 'clocks/ticker/ticker_clock.dart';
+import 'customizer.dart';
 import 'main.dart' as full_main;
+import 'model.dart';
 
 ///
 /// This is the Canvas free version of the clock
@@ -33,7 +33,7 @@ void main() {
 ///
 class ClockScaffolding extends StatelessWidget {
   /// Construct a clock scaffolding given a model
-  const ClockScaffolding({@required this.model, Key key}) : super(key: key);
+  const ClockScaffolding({required this.model, Key? key}) : super(key: key);
 
   /// The ClockModel, needed by things to make decisions about what to draw
   final ClockModel model;

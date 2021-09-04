@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_clock_helper/model.dart';
 import 'package:intl/intl.dart';
 import '../../config/time.dart';
+import '../../model.dart';
 import '../../ui/ticker.dart';
 import '../../util/extensions.dart';
 import '../../util/string_util.dart';
@@ -82,10 +82,10 @@ String buildTickerString(ClockModel clockModel) {
 class DateTimeAndWeatherTicker extends StatelessWidget {
   /// Constructs this ticker widget
   const DateTimeAndWeatherTicker({
-    @required this.clockModel,
+    required this.clockModel,
     this.height = 20,
     this.fontSize = 12,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   /// The ClockModel we get the Weather from
@@ -149,9 +149,9 @@ class TickerWeatherIcon extends StatelessWidget {
   /// Constructor for the WeatherIcon in the ticker
   /// Takes height to define a fixed square size
   const TickerWeatherIcon({
-    @required this.clockModel,
-    @required this.height,
-    Key key,
+    required this.clockModel,
+    required this.height,
+    Key? key,
   }) : super(key: key);
 
   /// We get the weather from the ClockModel
@@ -178,9 +178,9 @@ class TickerCharacterWidget extends StatelessWidget {
   /// Requires the "glyph" a single character
   /// And the font size
   const TickerCharacterWidget({
-    @required this.glyph,
-    @required this.fontSize,
-    Key key,
+    required this.glyph,
+    required this.fontSize,
+    Key? key,
   }) : super(key: key);
 
   /// The character to draw
@@ -196,7 +196,7 @@ class TickerCharacterWidget extends StatelessWidget {
         glyph,
         style: Theme.of(context)
             .textTheme
-            .subhead
+            .subhead!
             .withNovaMono()
             .copyWith(fontSize: fontSize),
       )));

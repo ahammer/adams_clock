@@ -1,4 +1,4 @@
-import 'package:flutter_clock_helper/model.dart';
+import '../../model.dart';
 
 ///🕓🕓🕓🕓🕓🕓🕓🕓🕓
 /// Helpers for the ClockModel
@@ -15,9 +15,8 @@ const weatherMap = {
   WeatherCondition.windy: 'weather_icons/wind.png'
 };
 
-
 /// Add ability to get the weather asset name from the clock model
 extension ClockModelHelpers on ClockModel {
   /// When we want to show the weather as a Icon
-  String get weatherAsset => weatherMap[weatherCondition];
+  String get weatherAsset => weatherMap[weatherCondition] ?? "Unknown";
 }

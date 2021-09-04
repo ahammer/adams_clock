@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../util/extensions.dart';
 
-// For building the current string to display
+/// For building the current string to display
 typedef StringBuilder = String Function();
 
-// For building a widget for a individual character in the string
+/// For building a widget for a individual character in the string
 typedef BuildDigitWidget = Widget Function(String value, bool first, bool last);
 
 ///
@@ -29,8 +29,8 @@ typedef BuildDigitWidget = Widget Function(String value, bool first, bool last);
 class TickerWidget extends StatefulWidget {
   /// Construct a Ticker Widget
   const TickerWidget(
-      {this.builder,
-      this.digitBuilder,
+      {required this.builder,
+      required this.digitBuilder,
       this.tickerRandomnessMs = 500,
       this.tickerBaseTimeMs = 200});
 
@@ -56,7 +56,7 @@ class TickerWidget extends StatefulWidget {
 /// It'll rebuild once a second.
 ///
 class _TickerWidgetState extends State<TickerWidget> {
-  Timer _timer;
+  late final Timer _timer;
 
   //100 randoms we can use to offset the Ticker timings
   final List<double> _random =
@@ -84,8 +84,7 @@ class _TickerWidgetState extends State<TickerWidget> {
   ///  2) Build a row full of _TickerCharacterViews
   ///  3) Return that row.
   @override
-  Widget build(BuildContext context) =>
-      Semantics(
+  Widget build(BuildContext context) => Semantics(
         header: true,
         value: widget.builder(),
         child: widget.builder().chain((currentString) => Row(
@@ -113,12 +112,12 @@ class _TickerWidgetState extends State<TickerWidget> {
 ///
 class _TickerCharacterView extends StatelessWidget {
   const _TickerCharacterView(
-      {@required this.digit,
-      @required this.builder,
-      @required this.first,
-      @required this.last,
+      {required this.digit,
+      required this.builder,
+      required this.first,
+      required this.last,
       this.duration = const Duration(milliseconds: 500),
-      Key key})
+      Key? key})
       : super(key: key);
 
   final String digit;
@@ -147,10 +146,10 @@ class _TickerCharacterView extends StatelessWidget {
 /// Changed the X scale to be fixed at 1.
 class _TickerCharacterTransition extends AnimatedWidget {
   const _TickerCharacterTransition({
-    @required this.scale,
+    required this.scale,
+    required this.child,
     this.alignment = Alignment.center,
-    this.child,
-    Key key,
+    Key? key,
   })  : assert(scale != null),
         super(key: key, listenable: scale);
 
